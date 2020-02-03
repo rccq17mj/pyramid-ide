@@ -191,7 +191,6 @@ const PropertyManage: FunctionComponent<IProps> = props => {
           closeModal={success => {
             setAddModalVisible(false);
             if (success) {
-              // setProcessModalVisible(true);
               //simpleTable.loadData();
             }
           }}

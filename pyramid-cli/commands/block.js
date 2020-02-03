@@ -44,11 +44,16 @@ module.exports = (options) => {
         const args1 = program.args[1];
         const projectName = program.args[1][0];
 
-        let {initBlockUrl} = options;
+        let {initBlockPackageUrl, initBlockPackageType, initBlockPackageGitUrl} = options;
 
         // 默认初始化地址
-        if (!initBlockUrl) {
-            initBlockUrl = blockProjectGitRepo;
+        if (!initBlockPackageUrl) {
+            initBlockPackageUrl = blockProjectGitRepo;
+        }
+
+        if (initBlockPackageType !== 'pc' && initBlockPackageType !== 'mobile') {
+            console.log(chalk.red('参数类型错误'));
+            process.exit();
         }
 
         if (!args1 || !projectName) {
@@ -70,7 +75,7 @@ module.exports = (options) => {
         const spinner = ora();
         spinner.start('🔥  正在下载区块项目模板');
 
-        download(initBlockUrl, projectPath, null, (err) => {
+        download(initBlockPackageUrl, projectPath, null, (err) => {
             if (err) {
                 spinner.fail();
                 console.log(symbols.error, chalk.red(err));
@@ -78,15 +83,15 @@ module.exports = (options) => {
             }
 
             // TODO 替换 json 文件模板
-            // const meta = {
-            //     blockPackageName: 'blockPackageName',
-            //     blockPackageType: 'pc | mobile',
-            //     blockPackageGitUrl: 'blockPackageGitUrl'
-            // };
-            // const pyramidBlockJsonFile = `${projectPath}/pyramid-blocks.json`;
-            // const pyramidBlockJsonContent = fs.readFileSync(pyramidBlockJsonFile).toString();
-            // const result = handlebars.compile(pyramidBlockJsonContent)(meta);
-            // fs.writeFileSync(pyramidBlockJsonFile, result);
+            const meta = {
+                blockPackageName: projectName,
+                blockPackageType: initBlockPackageType,
+                blockPackageGitUrl: initBlockPackageGitUrl
+            };
+            const pyramidBlockJsonFile = `${projectPath}/pyramid-blocks.json`;
+            const pyramidBlockJsonContent = fs.readFileSync(pyramidBlockJsonFile).toString();
+            const result = handlebars.compile(pyramidBlockJsonContent)(meta);
+            fs.writeFileSync(pyramidBlockJsonFile, result);
 
             spinner.succeed();
 

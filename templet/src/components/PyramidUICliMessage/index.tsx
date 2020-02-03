@@ -4,11 +4,12 @@ import styles from './index.less';
 import { Terminal } from 'xterm';
 import 'xterm/css/xterm.css'
 import {
-  PyramidUIReceiveCliMessage,
+  PyramidUIReceiveCliMessage, PyramidUISendBlockGetAction, PyramidUISendBlockItemGetAction,
   PyramidUISendProjectOpenWindowAction
 } from '@/core/pyramid-ui/action/pyramid-ui.action';
 import {CliMessageTypes} from "../../../../core/config/cliMessageType.config";
 import {pyramidUiService} from "@/core/pyramid-ui/service/pyramid-ui.service";
+import {urlParames} from "@/utils/utils";
 
 const FormItem = Form.Item;
 
@@ -32,8 +33,22 @@ const CliModal: FunctionComponent<IProps> = props => {
     if (props.receiveMsgFn) {
       props.receiveMsgFn(receiveMsgFn);
     }
-
   }, []);
+
+  useEffect(() => {
+    if (messageEnd) {
+      if (props.action.payload.type === CliMessageTypes.CHILDREN_PROJECT_LAYOUT_CREATE) {
+        props.closeCallBack();
+        setModalShow(false);
+      } else if (props.action.payload.type === CliMessageTypes.CHILDREN_PROJECT_BLOCK_CREATE) {
+        props.closeCallBack();
+        setModalShow(false);
+      } else if (props.action.payload.type === CliMessageTypes.CHILDREN_PROJECT_MODULE_CREATE) {
+        props.closeCallBack();
+        setModalShow(false);
+      }
+    }
+  }, [messageEnd]);
 
   /**
    * 渲染Title
@@ -56,6 +71,12 @@ const CliModal: FunctionComponent<IProps> = props => {
       case CliMessageTypes.CHILDREN_PROJECT_START:
         title = '启动项目';
         break;
+      case CliMessageTypes.PROJECT_BLOCK_PACKAGE_CREATE:
+        title = '创建区块包';
+        break;
+      case CliMessageTypes.PROJECT_BLOCK_ITEM_CREATE:
+        title = '创建区块';
+        break;
       default:
         break;
     }
@@ -76,43 +97,38 @@ const CliModal: FunctionComponent<IProps> = props => {
           }
         }}>确定</Button>
       );
-    } else if (props.action.payload.type === CliMessageTypes.CHILDREN_PROJECT_MODULE_CREATE) {
-      return (
-        <Button type="primary" disabled={!messageEnd} htmlType="button" onClick={()=>{
-          if (props.closeCallBack) {
-            props.closeCallBack();
-            // TODO 如果要通知事件，可以在这里进行处理，（SendMessage、或者dva）
-            setModalShow(false);
-          }
-        }}>确定</Button>
-      );
-    } else if (props.action.payload.type === CliMessageTypes.CHILDREN_PROJECT_LAYOUT_CREATE) {
-      return (
-        <Button type="primary" disabled={!messageEnd} htmlType="button" onClick={()=>{
-          if (props.closeCallBack) {
-            props.closeCallBack();
-            // TODO 如果要通知事件，可以在这里进行处理，（SendMessage、或者dva）
-            setModalShow(false);
-          }
-        }}>确定</Button>
-      );
-    } else if (props.action.payload.type === CliMessageTypes.CHILDREN_PROJECT_BLOCK_CREATE) {
-      return (
-        <Button type="primary" disabled={!messageEnd} htmlType="button" onClick={()=>{
-          if (props.closeCallBack) {
-            props.closeCallBack();
-            // TODO 如果要通知事件，可以在这里进行处理，（SendMessage、或者dva）
-            setModalShow(false);
-          }
-        }}>确定</Button>
-      );
-    } else if (props.action.payload.type === CliMessageTypes.CHILDREN_PROJECT_START) {
+    }
+    else if (props.action.payload.type === CliMessageTypes.CHILDREN_PROJECT_START) {
       return (
         <Button type="primary" disabled={!messageEnd} htmlType="button" onClick={()=>{
           if (props.closeCallBack) {
             props.closeCallBack();
             // 通知可以打开窗口
             pyramidUiService.sendMessageFn(new PyramidUISendProjectOpenWindowAction());
+            setModalShow(false);
+          }
+        }}>打开项目</Button>
+      );
+    } else if (props.action.payload.type === CliMessageTypes.PROJECT_BLOCK_PACKAGE_CREATE) {
+      return (
+        <Button type="primary" disabled={!messageEnd} htmlType="button" onClick={()=>{
+          if (props.closeCallBack) {
+            props.closeCallBack();
+            // 通知刷新区块包
+            pyramidUiService.sendMessageFn(new PyramidUISendBlockGetAction(true));
+            // TODO 如果要通知事件，可以在这里进行处理，（SendMessage、或者dva）
+            setModalShow(false);
+          }
+        }}>确定</Button>
+      );
+    } else if (props.action.payload.type === CliMessageTypes.PROJECT_BLOCK_ITEM_CREATE) {
+      return (
+        <Button type="primary" disabled={!messageEnd} htmlType="button" onClick={()=>{
+          if (props.closeCallBack) {
+            props.closeCallBack();
+            // TODO 如果要通知事件，可以在这里进行处理，（SendMessage、或者dva）
+            // 通知刷新区块
+            pyramidUiService.sendMessageFn(new PyramidUISendBlockItemGetAction({parentId:urlParames().parentId}));
             setModalShow(false);
           }
         }}>确定</Button>

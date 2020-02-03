@@ -14,4 +14,8 @@ exports.CliMessageTypes = {
     CHILDREN_PROJECT_LAYOUT_CREATE: 'pyramid.ui.cli.message.children.project.layout.create',
     // 创建子项目区块
     CHILDREN_PROJECT_BLOCK_CREATE: 'pyramid.ui.cli.message.children.project.block.create',
+    // 创建区块包
+    PROJECT_BLOCK_PACKAGE_CREATE: 'pyramid.ui.cli.message.block.package.create',
+    // 创建区块
+    PROJECT_BLOCK_ITEM_CREATE: 'pyramid.ui.cli.message.block.item.create',
 };

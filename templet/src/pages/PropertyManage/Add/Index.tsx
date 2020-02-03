@@ -12,7 +12,7 @@ import {
 import {API_CONFIG} from "@/core/configs/api.config";
 import { urlParames } from '@/utils/utils';
 import {mainRequest} from '../../../requests/main.request';
-import styles from './Process.less';
+import styles from './Index.less';
 
 const FormItem = Form.Item;
 
@@ -173,9 +173,9 @@ const Component: FunctionComponent<IProps> = props => {
         </FormItem>
         <FormItem className={styles.uploadImg}>
           图片描述{getFieldDecorator(`img`, {
-   /*       rules: [
+          rules: [
             { required: true, message: '必填' }
-          ],*/
+          ],
         })(
           <Upload
             name="avatar"

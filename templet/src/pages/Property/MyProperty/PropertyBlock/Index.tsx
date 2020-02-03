@@ -7,7 +7,6 @@ import block from "@/assets/block.png";
 import FeaturesGrid from "@/library/components/FeaturesGrid/FeaturesGrid"
 
 import Add from '@/pages/Property/Add/Index';
-import Process from '@/pages/Property/Add/Process';
 import {pyramidUiService} from "@/core/pyramid-ui/service/pyramid-ui.service";
 import {
   PyramidUIActionTypes,
@@ -30,7 +29,6 @@ const ProperytBlock: FunctionComponent<IProps> = (props) =>{
 
   const [extraParams, setExtraParams] = useState<object>({});
   const [addModalVisible, setAddModalVisible] = useState<boolean>(false);
-  const [processModalVisible, setProcessModalVisible] = useState<boolean>(false);
   const [cards, setCards] = useState<any[]>([]);
 
   // 管理模式
@@ -217,24 +215,11 @@ const ProperytBlock: FunctionComponent<IProps> = (props) =>{
           closeModal={success => {
             setAddModalVisible(false);
             if (success) {
-               setProcessModalVisible(true);
               //simpleTable.loadData();
             }
           }}
         />
       ) : null}
-        {processModalVisible ? (
-          <Process
-            modalVisible={processModalVisible}
-            closeModal={success => {
-              setProcessModalVisible(false);
-              if (success) {
-                setProcessModalVisible(true);
-                //simpleTable.loadData();
-              }
-            }}
-          />
-        ) : null}
     </Layout>
   )
 }

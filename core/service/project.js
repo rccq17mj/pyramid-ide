@@ -160,7 +160,7 @@ class project {
           cmdStr: `pyramid block init ${blockInfo.menuNameEn}`,
           // cmdStr: `pyramid block init ${blockInfo.menuNameEn} --init-block-url=${blockInfo.gitUrl}`,
           cwd: `${blockInfo.filePath}`,
-          flag: 'cmd-children-project-create'
+          flag: 'cmd-block-package-create'
       }
 
       console.log('createBlock-cmdArg', cmdArg)
@@ -180,7 +180,7 @@ class project {
             channel: 'cmd-message',
             cmdStr: `pyramid block create ${blockInfo.menuNameEn} --create-block-type=${blockInfo.type} --create-block-name-zh=${blockInfo.menuNameZh} --create-block-description=${blockInfo.description} --create-block-categories=${blockInfo.categories} --create-block-image=${blockInfo.remarkImg}`,
             cwd: `${blockInfo.filePath}`,
-            flag: 'cmd-children-project-create'
+            flag: 'cmd-block-item-create',
         }
 
         // 将此命令发送给渲染窗口执行

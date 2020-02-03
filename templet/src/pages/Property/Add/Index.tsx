@@ -11,7 +11,7 @@ import {
 } from "@/core/pyramid-ui/action/pyramid-ui.action";
 import {API_CONFIG} from "@/core/configs/api.config";
 import {mainRequest} from '../../../requests/main.request';
-import styles from './Process.less';
+import styles from './Index.less';
 
 const FormItem = Form.Item;
 
@@ -193,7 +193,7 @@ const Component: FunctionComponent<IProps> = props => {
           )}
         </FormItem>
 
-       <FormItem>
+{/*        <FormItem>
           模板工程
           {getFieldDecorator('gitUrl', { initialValue: templetOptions[0].value })(
             <Select
@@ -209,7 +209,7 @@ const Component: FunctionComponent<IProps> = props => {
               })}
             </Select>
           )}
-        </FormItem>
+        </FormItem>*/}
 
         <FormItem className={styles.uploadImg}>
           图片描述{getFieldDecorator(`img`, {

@@ -53,7 +53,9 @@ program
     .option('--index <index>', 'add the block to editable section at index', 0)
 
     // init -- options
-    .option('--init-block-url <initBlockUrl>', 'create block template project with url')
+    .option('--init-block-package-url <initBlockPackageUrl>', 'create block template project with url')
+    .option('--init-block-package-type <initBlockPackageType>', 'create block template project with type pc | mobile', 'pc')
+    .option('--init-block-package-git-url <initBlockPackageGitUrl>', 'create block template project with git url', '')
 
     // create -- options
     .option('--create-block-type <createBlockType>', 'create block with type （block | template）')

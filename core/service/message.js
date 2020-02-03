@@ -131,6 +131,27 @@ class message {
                     }
                 }
             }
+
+            // 区块包创建
+            if (arg.flag === 'cmd-block-package-create') {
+                if (self.window_objs.mainWindow != null) {
+                    // 发送CLI消息回显，带上类型
+                    self.window_objs.mainWindow.webContents.send('site-message', {
+                        type: ActionTypes.RECEIVE_CLI_MESSAGE,
+                        payload: {...arg, type: CliMessageTypes.PROJECT_BLOCK_PACKAGE_CREATE}
+                    });
+                }
+            }
+            // 区块创建
+            if (arg.flag === 'cmd-block-item-create') {
+                if (self.window_objs.mainWindow != null) {
+                    // 发送CLI消息回显，带上类型
+                    self.window_objs.mainWindow.webContents.send('site-message', {
+                        type: ActionTypes.RECEIVE_CLI_MESSAGE,
+                        payload: {...arg, type: CliMessageTypes.PROJECT_BLOCK_ITEM_CREATE}
+                    });
+                }
+            }
         })
     }
 
