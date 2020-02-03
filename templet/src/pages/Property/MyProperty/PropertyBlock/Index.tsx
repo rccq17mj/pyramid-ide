@@ -1,21 +1,21 @@
-import React, {FunctionComponent, useState, useEffect} from 'react';
+import React, { FunctionComponent, useState, useEffect } from 'react';
 import { Layout, Pagination, Breadcrumb, Form, Button, Input, Select, Card, Icon, Checkbox } from 'antd';
-import {FormComponentProps} from "antd/lib/form";
-import style from "../../Property.less";
-import plus from "@/assets/plus.png";
-import block from "@/assets/block.png";
-import FeaturesGrid from "@/library/components/FeaturesGrid/FeaturesGrid"
+import { FormComponentProps } from 'antd/lib/form';
+import plus from '@/assets/plus.png';
+import block from '@/assets/block.png';
+import FeaturesGrid from '@/library/components/FeaturesGrid/FeaturesGrid'
 
 import Add from '@/pages/Property/Add/Index';
-import {pyramidUiService} from "@/core/pyramid-ui/service/pyramid-ui.service";
+import { pyramidUiService } from '@/core/pyramid-ui/service/pyramid-ui.service';
 import {
   PyramidUIActionTypes,
   PyramidUISendBlockGetAction,
   PyramidUIReceiveBlockListAction,
   PyramidUISendBlockRemoveAction,
-  PyramidUIReceiveBlockRemoveAction
-} from "@/core/pyramid-ui/action/pyramid-ui.action";
-import Router from "umi/router";
+  PyramidUIReceiveBlockRemoveAction,
+} from '@/core/pyramid-ui/action/pyramid-ui.action';
+import Router from 'umi/router';
+import style from '../../Property.less';
 
 const { Header, Content, Sider } = Layout;
 const FormItem = Form.Item;
@@ -25,8 +25,7 @@ const { Option } = Select;
 interface IProps extends FormComponentProps {
 }
 
-const ProperytBlock: FunctionComponent<IProps> = (props) =>{
-
+const ProperytBlock: FunctionComponent<IProps> = props => {
   const [extraParams, setExtraParams] = useState<object>({});
   const [addModalVisible, setAddModalVisible] = useState<boolean>(false);
   const [cards, setCards] = useState<any[]>([]);
@@ -35,7 +34,7 @@ const ProperytBlock: FunctionComponent<IProps> = (props) =>{
   const [isManege, setIsManege] = useState<boolean>(false)
   const [selectList, setSelectList] = useState<any[]>([])
 
-  const {form, form: { getFieldDecorator } } = props;
+  const { form, form: { getFieldDecorator } } = props;
 
   const extraParamsChange = () => {
     const params = { ...form.getFieldsValue() };
@@ -44,9 +43,9 @@ const ProperytBlock: FunctionComponent<IProps> = (props) =>{
 
 
   useEffect(() => {
-    let selectList = []
-    cards.forEach((item)=>{
-      if(item.checked){
+    const selectList = []
+    cards.forEach(item => {
+      if (item.checked) {
         selectList.push(item._id)
       }
     })
@@ -56,11 +55,11 @@ const ProperytBlock: FunctionComponent<IProps> = (props) =>{
 
   useEffect(() => {
     getBlockData()
-  },[extraParams]);
+  }, [extraParams]);
 
-  const startProject = (projectInfo) => {
+  const startProject = projectInfo => {
       console.log('projectInfo', projectInfo)
-    Router.push('/property-manage?parentId='+projectInfo._id)
+    Router.push(`/property-manage?parentId=${projectInfo._id}`)
   };
 
 
@@ -76,20 +75,20 @@ const ProperytBlock: FunctionComponent<IProps> = (props) =>{
   }
 
   // 管理模式
-  const management = (flag) =>{
+  const management = flag => {
     setIsManege(flag)
-    let newCards = [...cards];
-    newCards.forEach((item)=>{
+    const newCards = [...cards];
+    newCards.forEach(item => {
       item.checked = false
     })
     setCards(newCards)
   }
 
   // 选中项
-  const checkOnChange = (id) =>{
-    let newCards = [...cards];
-    newCards.forEach((item)=>{
-      if(item._id == id){
+  const checkOnChange = id => {
+    const newCards = [...cards];
+    newCards.forEach(item => {
+      if (item._id == id) {
         item.checked = !item.checked
       }
     })
@@ -97,12 +96,12 @@ const ProperytBlock: FunctionComponent<IProps> = (props) =>{
   }
 
   // 全选
-  const allCheckOnChange = (e) =>{
-    let newCards = [...cards];
-    newCards.forEach((item)=>{
-      if(e.target.checked){
+  const allCheckOnChange = e => {
+    const newCards = [...cards];
+    newCards.forEach(item => {
+      if (e.target.checked) {
         item.checked = true
-      }else{
+      } else {
         item.checked = false
       }
     })
@@ -119,12 +118,12 @@ const ProperytBlock: FunctionComponent<IProps> = (props) =>{
     });
   }
 
-  return(
+  return (
       <Layout style={{ padding: '0 24px 24px' }}>
 {/*        <Breadcrumb style={{color:'#fff'}}>
           <Breadcrumb.Item>区块</Breadcrumb.Item>
           <Breadcrumb.Item>移动端</Breadcrumb.Item>
-        </Breadcrumb>*/}
+        </Breadcrumb> */}
         <Content
           style={{
             background: '#212121',
@@ -142,17 +141,17 @@ const ProperytBlock: FunctionComponent<IProps> = (props) =>{
             }}
           >
             <FormItem>
-              {getFieldDecorator('applyType',{
-                initialValue:'0',
+              {getFieldDecorator('applyType', {
+                initialValue: '0',
               })(
                 <Select
-                  size={'default'}
-                  style={{minWidth:'80px'}}
+                  size="default"
+                  style={{ minWidth: '80px' }}
                 >
                   <Option value="0">全部</Option>
                   <Option value="2">移动端</Option>
                   <Option value="1">PC端</Option>
-                </Select>
+                </Select>,
               )}
             </FormItem>
             <FormItem>
@@ -160,9 +159,10 @@ const ProperytBlock: FunctionComponent<IProps> = (props) =>{
             </FormItem>
             {isManege ?
               <FormItem>
-                <Button disabled={selectList.length <= 0} onClick={(e)=>{
+                <Button disabled={selectList.length <= 0} onClick={e => {
                   e.stopPropagation()
-                  deleteItem()}
+                  deleteItem()
+}
                 }>
                   删除
                 </Button>
@@ -196,17 +196,15 @@ const ProperytBlock: FunctionComponent<IProps> = (props) =>{
             <p>注册区块包</p>
           </Card>
           {
-            cards.map((card, index) => {
-              return (
-                <Card className={style.cards} key={index} onClick={() => {startProject(card)}}>
+            cards.map((card, index) => (
+                <Card className={style.cards} key={index} onClick={() => { startProject(card) }}>
                   <img src={block} width={50} height={50}></img>
                   <p>{card.menuNameZh}</p>
                   <div>{card.menuNameEn}</div>
                   <span>{card.filePath}</span>
-                  { isManege ?  <Checkbox className={style.checkBox} checked={card.checked} onClick={(e)=>{e.stopPropagation()}} onChange={()=>{checkOnChange(card._id)}}></Checkbox> : null}
+                  { isManege ? <Checkbox className={style.checkBox} checked={card.checked} onClick={e => { e.stopPropagation() }} onChange={() => { checkOnChange(card._id) }}></Checkbox> : null}
                 </Card>
-              )
-            })
+              ))
           }
         </Content>
       {addModalVisible ? (
@@ -215,7 +213,7 @@ const ProperytBlock: FunctionComponent<IProps> = (props) =>{
           closeModal={success => {
             setAddModalVisible(false);
             if (success) {
-              //simpleTable.loadData();
+              // simpleTable.loadData();
             }
           }}
         />

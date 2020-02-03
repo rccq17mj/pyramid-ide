@@ -238,9 +238,7 @@ const Component: FunctionComponent<IProps> = props => {
             取消
           </Button>
         </FormItem>
-
       </Form>
-
     </Modal>
   );
 };
