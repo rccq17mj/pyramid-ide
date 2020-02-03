@@ -25,7 +25,7 @@ class init {
         return this.cmdPromise('pyramid -v', (resolve, reject, e) => {
             switch (process.env.ELE_ENV) {
                 case ENV.ELE_ENV_LOCAL:
-                    console.log('cd pyramid-cli && npm link');
+                    console.log('cd pyramid-cli && yarn install && npm link');
                     this.cmd('cd pyramid-cli && npm link').then(msg => {
                         resolve(msg);
                         console.log(msg);

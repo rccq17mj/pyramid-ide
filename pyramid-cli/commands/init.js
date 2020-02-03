@@ -18,7 +18,7 @@ const download = require('download-git-repo');
 // GITHUB
 // const pcProjectGitRepo = 'direct:https://github.com/guccihuiyuan/pyramid-pro#master';
 // GITLAB
-const pcProjectGitRepo = 'direct:http://10.10.11.151:10080/product/bigdata-cloudplatform/templet/templet#new';
+const pcProjectGitRepo = 'direct:https://github.com/guccihuiyuan/pyramid-pro#master';
 const mobileProjectGitRepo = 'direct:http://10.10.11.151:10080/product/bigdata-cloudplatform/mini-program/gcongo-mobile-ts#master';
 
 module.exports = (options) => {

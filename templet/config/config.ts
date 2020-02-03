@@ -215,7 +215,7 @@ export default {
     'primary-color': primaryColor,
   },
   proxy: {
-    '/sso-api': {
+    '/sso-api': { 
       target: 'http://222.85.178.178:28400',
       changeOrigin: true,
       pathRewrite: { '^/sso-api': '' },
