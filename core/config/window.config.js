@@ -13,7 +13,7 @@ module.exports = {
         loadUrl: process.env.ELE_ENV === ENV.ELE_ENV_LOCAL? `http://localhost:8100/` : `file://${__dirname}/../../templet/dist/index.html`,
         show: true,
         webPreferences: {
-            devTools: true,
+            devTools: false,
             nodeIntegration: true,
             nodeIntegrationInWorker: true,
             preload: path.resolve(__dirname, '../../','preload.js')
@@ -67,7 +67,7 @@ module.exports = {
         parent: null,
         show: true,
         webPreferences: {
-          devTools: true,
+          devTools: false,
           preload: path.resolve(__dirname, '../../','preload.js'),
         },
       }
