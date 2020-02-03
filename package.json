@@ -6,7 +6,7 @@
   "scripts": {
     "prestart": "tsc",
     "devOpen": "concurrently \"npm run start --prefix templet\" \"npm run start:electron\"",
-    "init": "yarn install && concurrently \"cd templet && yarn install\"",
+    "init": "yarn install && concurrently \"cd templet && yarn install\" && concurrently \"cd pyramid-cli && yarn install\"",
     "start": "concurrently \"npm run kill\" && concurrently \"npm run start:ui\" \"wait-on http://localhost:8100 && cross-env ELE_ENV=local electron .\"",
     "start:pro": "concurrently \"npm run kill\" && concurrently \"npm run start:ui\" \"wait-on http://localhost:8100 && cross-env ELE_ENV=pro electron .\"",
     "start:ui": "cross-env BROWSER=none npm run start --prefix templet",
