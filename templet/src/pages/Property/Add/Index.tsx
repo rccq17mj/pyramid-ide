@@ -31,8 +31,8 @@ const Component: FunctionComponent<IProps> = props => {
   } = props;
 
   const templetOptions = [{
-    label: 'http://10.10.11.151:10080/product/bigdata-cloudplatform/templet/templet#new',
-    value: 'http://10.10.11.151:10080/product/bigdata-cloudplatform/templet/templet#new'
+    label: 'https://github.com/guccihuiyuan/pyramid-pro#master',
+    value: 'https://github.com/guccihuiyuan/pyramid-pro#master'
   }];
   const pkgmtOptions = [
     { label: 'yarn', value: 'yarn' },

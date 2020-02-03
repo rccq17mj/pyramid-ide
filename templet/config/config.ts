@@ -216,12 +216,12 @@ export default {
   },
   proxy: {
     '/sso-api': {
-      target: 'http://10.10.11.104:28400',
+      target: 'http://222.85.178.178:28400',
       changeOrigin: true,
       pathRewrite: { '^/sso-api': '' },
     },
     '/man-api': {
-      target: 'http://10.10.11.107:25017',
+      target: 'http://222.85.178.178:25017',
       changeOrigin: true,
       pathRewrite: { '^/man-api': '' },
     },
