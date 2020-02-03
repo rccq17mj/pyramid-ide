@@ -1,0 +1,43 @@
+.homeBody{
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  .homeItem{
+    flex: 1;
+    height: 100%;
+    .textItem{
+      margin: 0 5rem;
+      h1{
+        font-size:1.88rem;
+        font-weight:400;
+        color:rgba(255,255,255,0.85);
+        line-height:2.38rem;
+      }
+      .spanText{
+        font-size:1.5rem;
+        font-weight:400;
+        color:rgba(255,255,255,0.65);
+        line-height:2rem;
+      }
+      .List{
+        margin-top:3rem;
+        :global{
+          .ant-list-item{
+            margin-top:3rem;
+          }
+          .ant-list-item-meta-title{
+            color: #fff !important;
+          }
+          .ant-list-item-meta-description{
+            color: rgba(255,255,255,0.65) !important;
+          }
+        }
+      }
+    }
+  }
+  .homeLogo{
+    text-align: center;
+    flex: 1;
+    height: 100%;
+  }
+}

@@ -1,0 +1,51 @@
+import {BaseRequest} from "@/requests/base.request";
+import {API_CONFIG} from "@/core/configs/api.config";
+import {httpService} from "@react-kit/http";
+import {HTTP_CONTENT_TYPE} from "@/core/configs/http.config";
+
+class BlockPackageRequest extends BaseRequest {
+  blockPackageAddOrUpdate(params: any): Promise<boolean> {
+    return this.add(API_CONFIG.MAIN.BLOCK_PACKAGE.ADD_OR_UPDATE, params);
+  }
+
+  blockPackageListPage(params: any): Promise<{total: number, list: any[]}> {
+/*    return httpService.request('POST', API_CONFIG.MAIN.BLOCK_PACKAGE.LIST_PAGE, params).then(res => {
+      return res.flag ? res.data['data'] : null
+    });*/
+    return this.list(API_CONFIG.MAIN.BLOCK_PACKAGE.LIST_PAGE, params);
+
+  }
+  blockPackageSubscribePage(params: any): Promise<{total: number, list: any[]}> {
+    return this.list(API_CONFIG.MAIN.BLOCK_PACKAGE.SUBSCRIBE_PAGE, params);
+
+  }
+
+  blockPackageDetail(blockId: number): Promise<any> {
+    return this.object(API_CONFIG.MAIN.BLOCK_PACKAGE.DETAIL, {blockId});
+  }
+
+  blockPackageDelete(blockId: number): Promise<boolean> {
+    return this.delete(API_CONFIG.MAIN.BLOCK_PACKAGE.DELETE, {blockId});
+  }
+
+  blockUnsubscribe(params: object): Promise<boolean> {
+    return this.delete(API_CONFIG.MAIN.BLOCK_PACKAGE.UNSUBSCRIBE, params, { ...{options: HTTP_CONTENT_TYPE.JSON}});
+  }
+
+  blockPackageSubmitVersion(params: any): Promise<boolean> {
+    return this.add(API_CONFIG.MAIN.BLOCK_PACKAGE.SUBMIT_VERSION, params);
+  }
+
+  blockPackageUpdateHistoryListPage(params: any): Promise<boolean> {
+    return this.add(API_CONFIG.MAIN.BLOCK_PACKAGE.UPDATE_HISTORY_LIST_PAGE, params);
+  }
+  blockPackageSubscribe(params: any): Promise<boolean> {
+/*    const formData = new FormData();
+    Object.keys(params).forEach((key) => {
+        formData.append(key, params[key]);
+    });*/
+    return this.add(API_CONFIG.MAIN.BLOCK_PACKAGE.UPDATE_HISTORY_SUBSCRIBE, params,  { ...{options: HTTP_CONTENT_TYPE.JSON}});
+  }
+}
+
+export const blockPackageRequest = new BlockPackageRequest();

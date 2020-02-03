@@ -1,0 +1,273 @@
+
+@form-line: 22px;
+@input-height: 38px;
+.animation(@n:fly,@t:1s,@fn:ease-in-out,@i:1,@dur:alternate){
+  animation: @n @t @fn @i @dur;
+  -webkit-animation: @n @t @fn @i @dur;
+  -o-animation: @n @t @fn @i @dur;
+  -moz-animation: @n @t @fn @i @dur;
+}
+@-webkit-keyframes showLogin {
+  0% {
+    opacity: 0;
+    -webkit-transform: translateY(2000px);
+    -ms-transform: translateY(2000px);
+    transform: translateY(2000px)
+  }
+
+  100% {
+    opacity: 1;
+    -webkit-transform: translateY(0px);
+    -ms-transform: translateY(px);
+    transform: translateY(px)
+  }
+}
+
+@keyframes showLogin {
+  0% {
+    opacity: 0;
+    -webkit-transform: translateY(2000px);
+    -ms-transform: translateY(2000px);
+    transform: translateY(2000px)
+  }
+
+  100% {
+    opacity: 1;
+    -webkit-transform: translateY(0px);
+    -ms-transform: translateY(px);
+    transform: translateY(px)
+  }
+}
+
+.login_module {
+  width: 380px;
+  //height: 380px;
+  padding-top: @form-line - 2px;
+  border: none;
+  position: absolute;
+  // right: 0;
+  background: rgba(255,255,255,0.999);
+  border-radius: 6px;
+  .animation(showLogin);
+  .from {
+    width: 330px;
+    margin: 0 auto;
+
+    .title {
+      font-size: 18px;
+      font-weight: 400;
+      padding-bottom: @form-line;
+    }
+
+    :global(.ant-btn-primary) {
+      width: 100%;
+      height:@input-height;
+    }
+  }
+
+  p{
+    color: silver;
+    float: left;
+  }
+
+  img{
+    top:0 !important;
+    display: block !important;
+    float: right;
+    position: relative !important;
+  }
+
+  :global{
+    // 扫码登录
+    .code-login{
+      position: absolute;
+      right: 5px;
+      top:5px;
+      width: 18%;
+      z-index: 99;
+      *{
+        cursor:hand;
+        cursor:pointer;
+      }
+      img{
+        width: 100%;
+        display: block;
+      }
+
+      p {
+        border-radius: 4px;
+        right: 85%;
+        top: @form-line - 3px;
+        width: 5rem;
+        height: 1.5rem;
+        line-height: 1.5rem;
+        background-color: #fffbe6;
+        position: absolute;
+        border: 1px solid #ffe58f;
+        color: rgba(173, 111, 26, 0.99);
+        text-align: center;
+        &:after, &:before {
+          border: solid transparent;
+          content: ' ';
+          height: 0;
+          left: 100%;
+          position: absolute;
+          width: 0;
+        }
+
+        &:after {
+          border-width: 3px;
+          border-left-color: #fffbe6;
+          top: 8px;
+        }
+
+        &:before {
+          border-width: 5px;
+          border-left-color: #ffe58f;
+          top: 6px;
+        }
+      }
+    }
+
+    .ant-tabs-bar{
+      margin-bottom: @form-line;
+    }
+
+    .ant-tabs-nav .ant-tabs-tab{
+      margin-right: 0;
+      color: rgba(0, 0, 0, 0.4);
+    }
+
+    .ant-tabs-nav .ant-tabs-tab-active{
+      color: #fdb514;
+      //font-weight:400;
+      color: rgba(0, 0, 0, 0.65);
+    }
+
+    .ant-tabs-ink-bar{
+      background-color: #fdb514;
+    }
+    .msg h2{
+      margin: 0;
+      color: rgba(0, 0, 0, 0.85);
+      font-weight: 500;
+      font-size: 16px;
+      line-height: 22px;
+    }
+  }
+}
+
+:global{
+  .codeImg{
+    height: @input-height;
+    float: right;
+  }
+  :global(.ant-input){
+    height: @input-height;
+  }
+  .login-form{
+    .msg{
+      margin: 0 auto;
+      display: table;
+      img{
+        width: 4rem;
+        float: left;
+        margin-right: 0.5rem;
+      }
+      p, a{
+        line-height: 2rem;
+        float: left;
+      }
+      h2{
+        margin: 0;
+        color: rgba(0, 0, 0, 0.85);
+        font-weight: 400;
+        font-size: 18px;
+        line-height: 22px;
+        float: left;
+      }
+      button{
+        width: 80%;
+        left: 10%;
+      }
+    }
+    a {
+      position: relative;
+      width: auto;
+      display: inline-block;
+      -moz-user-select: none;
+      -khtml-user-select: none;
+      user-select: none;
+      color: rgba(202, 117, 2, 0.99);
+    }
+
+    .success {
+      i {
+        font-size: 3rem;
+        margin: 0 auto;
+        display: block;
+        color: #b7eb8f;
+      }
+
+      p {
+        text-align: center;
+      }
+
+      button{
+        width: 80%;
+        left: 10%;
+      }
+    }
+    :global(.ant-btn-primary) {
+      height: @input-height;
+      background: linear-gradient(to top right, #fdb514, #f2bd47);
+      border: none;
+    }
+    .ant-btn{
+      height:  @input-height;
+    }
+  }
+  .ant-steps-item-process .ant-steps-item-icon{
+    background-color: #fdb514 !important;
+  }
+  .ant-steps-item-process .ant-steps-item-icon{
+    border-color: #fdb514 !important;
+  }
+  .ant-steps-item-finish .ant-steps-item-icon > .ant-steps-icon{
+    color: #fdb514 !important;
+  }
+  .ant-steps-item-finish .ant-steps-item-icon{
+    border-color: #fdb514 !important;
+  }
+  .ant-steps-item-finish > .ant-steps-item-content > .ant-steps-item-title::after{
+    background-color: #fdb514 !important;
+  }
+}
+
+canvas{
+  margin: 0px auto;
+  position: relative;
+  display: block;
+}
+
+.forgot {
+  float: right;
+}
+
+.dCloud{
+  button{
+    background: linear-gradient(to top right, #fdb514, #f2bd47);
+    border: none;
+    width: 100%;
+    margin-bottom: 5px;
+  }
+
+  button:hover, button:focus {
+    color: #ffff;
+    background: linear-gradient(to top right, #fdbb4a, #f2bd47);
+  }
+
+  p, a{
+    font-size: 14px;
+  }
+}

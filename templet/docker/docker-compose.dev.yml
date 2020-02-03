@@ -1,0 +1,12 @@
+version: '3.5'
+
+services:
+  template-pc-web:
+    build:
+      context: ../
+      dockerfile: Dockerfile.dev
+    container_name: 'template-pc-web'
+    ports:
+      - 37500:80
+    # 重启机制
+    restart: unless-stopped

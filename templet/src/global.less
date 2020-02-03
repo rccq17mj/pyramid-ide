@@ -1,0 +1,116 @@
+@import '~antd/es/style/themes/default.less';
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+.colorWeak {
+  filter: invert(80%);
+}
+
+.ant-layout {
+  min-height: 100vh;
+  background-color: #212121 !important;
+}
+
+canvas {
+  display: block;
+}
+
+body {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+@media (max-width: @screen-xs) {
+  .ant-table {
+    width: 100%;
+    overflow-x: auto;
+    &-thead > tr,
+    &-tbody > tr {
+      > th,
+      > td {
+        white-space: pre;
+        > span {
+          display: block;
+        }
+      }
+    }
+  }
+}
+
+
+// 修改滚动条样式
+#root {
+  overflow-y: auto;
+}
+/*滚动条样式*/
+#root::-webkit-scrollbar {/*滚动条整体样式*/
+  width: 4px;     /*高宽分别对应横竖滚动条的尺寸*/
+  height: 4px;
+}
+#root::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
+  border-radius: 5px;
+  -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+  background: rgba(0,0,0,0.2);
+}
+#root::-webkit-scrollbar-track {/*滚动条里面轨道*/
+  -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+  border-radius: 0;
+  background: rgba(0,0,0,0.1);
+}
+
+/*滚动条样式*/
+.ant-pro-sider-menu-sider.fix-sider-bar .ant-menu-root::-webkit-scrollbar {/*滚动条整体样式*/
+  width: 4px;     /*高宽分别对应横竖滚动条的尺寸*/
+  height: 4px;
+  color: white;
+}
+.ant-pro-sider-menu-sider.fix-sider-bar .ant-menu-root::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
+  border-radius: 5px;
+  -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+  background: rgba(0,0,0,0.2);
+}
+.ant-pro-sider-menu-sider.fix-sider-bar .ant-menu-root::-webkit-scrollbar-track {/*滚动条里面轨道*/
+  -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+  border-radius: 0;
+  //background: rgba(0,0,0,0.1);
+  background: white;
+}
+
+/*svg icon 图标颜色替换支持*/
+.ant-menu-dark >.ant-menu-item .anticon img,
+.ant-menu-dark > .ant-menu-item .anticon img{
+  filter: drop-shadow(@white 0 0);
+  -webkit-transition: opacity 0.3s cubic-bezier(0.645, 0.045, 0.355, 1), width 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+  transition: opacity 0.3s cubic-bezier(0.645, 0.045, 0.355, 1), width 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+  opacity: 0.65;
+}
+
+.ant-menu-dark > .ant-menu-item-active .anticon img,
+.ant-menu-dark > .ant-menu-item-selected .anticon img{
+  filter: drop-shadow(@white 0 0);
+  opacity: 1;
+}
+
+.ant-menu-inline > .ant-menu-item  > a svg path {
+  -webkit-transition: opacity 0.3s cubic-bezier(0.645, 0.045, 0.355, 1), width 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+  transition: opacity 0.3s cubic-bezier(0.645, 0.045, 0.355, 1), width 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+  fill: @black;
+  opacity: 0.65;
+}
+
+.ant-menu-inline > .ant-menu-item-active  > a svg path,
+.ant-menu-inline > .ant-menu-item-selected > a svg path,
+.ant-menu-inline > .ant-menu-item-selected > a:hover svg path {
+  fill: @primary-color !important;
+  opacity: 1;
+}

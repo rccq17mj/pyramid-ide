@@ -1,0 +1,81 @@
+{
+  "name": "electron-quick-start",
+  "version": "1.0.0",
+  "description": "A minimal Electron application",
+  "main": "main.js",
+  "scripts": {
+    "prestart": "tsc",
+    "devOpen": "concurrently \"npm run start --prefix templet\" \"npm run start:electron\"",
+    "init": "yarn install && concurrently \"cd templet && yarn install\"",
+    "start": "concurrently \"npm run kill\" && concurrently \"npm run start:ui\" \"wait-on http://localhost:8100 && cross-env ELE_ENV=local electron .\"",
+    "start:pro": "concurrently \"npm run kill\" && concurrently \"npm run start:ui\" \"wait-on http://localhost:8100 && cross-env ELE_ENV=pro electron .\"",
+    "start:ui": "cross-env BROWSER=none npm run start --prefix templet",
+    "kill": "concurrently \"cd core && cd service && node killPort.js 8100\"",
+    "electron": "electron .",
+    "dist:pro": "concurrently \"npm run build:pro --prefix templet\" \"cross-env ELE_ENV=pro electron-builder --mac --x64\"",
+    "test_ele": "cross-env ELE_ENV=test electron ."
+  },
+  "repository": "https://github.com/electron/electron-quick-start",
+  "keywords": [
+    "Electron",
+    "quick",
+    "start",
+    "tutorial",
+    "demo"
+  ],
+  "author": "GitHub",
+  "license": "CC0-1.0",
+  "dependencies": {
+    "2015": "0.0.1",
+    "concurrently": "^5.0.0",
+    "cross-env": "^6.0.3",
+    "fs-jetpack": "^2.2.3",
+    "nedb": "^1.8.0",
+    "pid-from-port": "^1.1.3",
+    "typescript": "^3.7.5",
+    "wait-on": "^3.3.0"
+  },
+  "devDependencies": {
+    "devtron": "^1.4.0",
+    "electron": "^6.1.5",
+    "electron-rebuild": "^1.8.8"
+  },
+  "build": {
+    "productName": "congo",
+    "copyright": "gzdsy",
+    "appId": "org.congo.electron-vue",
+    "compression": "store",
+    "dmg": {
+      "window": {
+        "x": 100,
+        "y": 100,
+        "width": 500,
+        "height": 300
+      }
+    },
+    "directories": {
+      "output": "pkgfile"
+    },
+    "asar": false,
+    "files": [
+      "./bin/*/**",
+      "./build/*/**/**",
+      "./node_modules/*",
+      "./binding.gyp",
+      "./index.html",
+      "./hello.js",
+      "./main.js",
+      "./package.json",
+      "./preload.js",
+      "./renderer.js",
+      "./yarn.lock"
+    ],
+    "mac": {
+      "icon": "hosts.icns",
+      "target": [
+        "dmg",
+        "zip"
+      ]
+    }
+  }
+}
