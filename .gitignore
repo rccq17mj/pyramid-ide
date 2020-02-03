@@ -2,3 +2,5 @@ node_modules
 .DS_Store
 .idea
 build/*
+core/config/cliMessageType.config.js
+core/config/event.config.js
