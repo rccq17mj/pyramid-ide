@@ -40,10 +40,30 @@ program
         require('../commands/init')(options.opts())
     });
 
+// 区块包 (新增init、修改update、删除delete、获取get) 相关
+program
+    .command('block-package <cmd> [options...]')
+    .description('block-package actions')
+
+    // init -- options
+    .option('--init-project-url <initProjectUrl>', 'create block template project with url')
+    .option('--init-project-type <initProjectType>', 'create block template project with type 1 | 2', '1')
+    .option('--init-project-git-url <initProjectGitUrl>', 'create block template project with git url', '')
+
+    // get -- options
+    .option('--get-project-path <getProjectPath>', 'query block template info with projectPath')
+    .option('--get-project-url <getProjectUrl>', 'query block template info with projectUrl')
+    .option('--get-project-branch <getProjectBranch>', 'query block template info with projectBranch', 'master')
+
+    .action((_a, _b, options) => {
+        require('../commands/block-package')(options.opts());
+    });
+
 // block 相关
 program
     .command('block <cmd> [options...]')
     .description('block actions')
+
     // add -- options
     .option('--page', 'add the block to a independent directory as a page')
     .option('--layout', 'add as a layout block (add route with empty children)')
@@ -51,11 +71,6 @@ program
     .option('--route-path <routePath>', 'the route path, default the name in package.json')
     .option('--route-name <routeName>', 'the route name, default the name in package.json')
     .option('--index <index>', 'add the block to editable section at index', 0)
-
-    // init -- options
-    .option('--init-block-package-url <initBlockPackageUrl>', 'create block template project with url')
-    .option('--init-block-package-type <initBlockPackageType>', 'create block template project with type pc | mobile', 'pc')
-    .option('--init-block-package-git-url <initBlockPackageGitUrl>', 'create block template project with git url', '')
 
     // create -- options
     .option('--create-block-type <createBlockType>', 'create block with type （block | template）')
