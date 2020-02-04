@@ -5,7 +5,7 @@
   "description": "An out-of-box UI solution for enterprise applications",
   "scripts": {
     "analyze": "cross-env ANALYZE=1 umi build",
-    "build": "umi build",
+    "build": "cross-env ENV_TYPE=dev umi build",
     "build:dev": "cross-env ENV_TYPE=dev umi build",
     "build:test": "cross-env ENV_TYPE=test umi build",
     "build:pro": "cross-env ENV_TYPE=pro umi build",
