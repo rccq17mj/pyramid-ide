@@ -58,15 +58,17 @@ function runCmd(arg) {
     worker.postMessage(arg);
     worker.onmessage = (ev) => {
         let msg = ev.data;
-
         // if (arg.channel === 'project-start') {
         //     ipc.send('project-start', msg);
         // }
 
         if (arg.channel === 'cmd-message') {
-            if (arg.flag) {
+            if (arg.flag) 
                 msg.flag = arg.flag;
-            }
+            
+            if (arg.callbackId) 
+                msg.callbackId = arg.callbackId;
+            
 
             // 这里需要单独处理
             if (arg.flag === 'cmd-children-project-start') {
@@ -104,6 +106,7 @@ function runCmd(arg) {
 }
 
 ipc.on('cmd-message', function (event, arg) {
+    console.log('收到控制台请求:', arg)
     runCmd(arg)
 })
 

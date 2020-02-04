@@ -3,9 +3,11 @@
 // 所有指令集合（注意格式：pyramid.ui + send | receive + 模块 + 功能 + 定义）
 export const ActionTypes = {
     /******************** 全局 ********************/
-    SEND_OPEN_CONSOLE: 'pyramid.ui.send.public.console',
-    // 接收Cli消息
-    RECEIVE_CLI_MESSAGE: 'pyramid.ui.receive.public.console',
+    // 打开devTools
+    SEND_PUBLIC_OPEN_CONSOLE: 'pyramid.ui.send.public.console',
+    // 直接请求执行某条命令
+    SEND_PUBLIC_CMD: 'pyramid.ui.send.public.env.cmd',
+    RECEIVE_PUBLIC_CMD:  'pyramid.ui.receive.public.env.cmd',
     /******************** 全局 ********************/
 
     /******************** 项目 ********************/

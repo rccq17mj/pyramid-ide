@@ -28,19 +28,15 @@ class init {
                     console.log('cd pyramid-cli && yarn install && npm link');
                     this.cmd('cd pyramid-cli && yarn install && npm link').then(msg => {
                         resolve(msg);
-                        console.log(msg);
                     }).catch(e => {
                         reject(e);
-                        console.log(e);
                     })
                     break;
                 case ENV.ELE_ENV_PRO:
                     this.cmd('npm install pyramid-cli -g').then(msg => {
                         resolve(msg);
-                        console.log(msg);
                     }).catch(e => {
                         reject(e);
-                        console.log(e);
                     })
                     break;
                 default:
@@ -55,7 +51,6 @@ class init {
             /** 检测Pyramid-cli */
             this.cmd(cmd).then(flag => {
                 // 检测通过，不做操作
-                console.log('flag:' , flag);
                 resolve(flag);
             }).catch(e => { 
                 if(callback)
@@ -71,10 +66,8 @@ class init {
                     try {
                         let worker = new Worker(this.cmdRun);
                         worker.postMessage({ cmdStr });
-                        console.log('cmd:' , cmdStr);
                         worker.onmessage = (ev) => {
                             let msg = ev.data;
-                            console.log(msg);
                             if (msg.flag === 'stderr' || msg.flag === 'error') {
                                 reject(msg.msg);
                             } else if(msg.status === 'progress') {

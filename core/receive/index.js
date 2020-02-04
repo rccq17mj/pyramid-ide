@@ -48,13 +48,26 @@ class receive {
                         }
                         break;
                     // 显示控制台    
-                    case ActionTypes.SEND_OPEN_CONSOLE:
+                    case ActionTypes.SEND_PUBLIC_OPEN_CONSOLE:
                         if (!this.showDevTools)
                             this.window_objs.mainWindow.openDevTools();
                         else
                             this.window_objs.mainWindow.closeDevTools();
 
-                            this.showDevTools = !this.showDevTools;
+                        this.showDevTools = !this.showDevTools;
+                        break;
+                    // 直接执行命令
+                    case ActionTypes.SEND_PUBLIC_CMD:
+                        const payload = arg.payload;
+                        // 用项目信息拼接创建执行命令
+                        const cmdArg = {
+                            channel: 'cmd-message',
+                            cmdStr: payload.cmd,
+                            flag: 'cmd-public-cmd',
+                            callbackId: payload.callbackId
+                        }
+                        // 将此命令发送给渲染窗口执行
+                        this.window_objs.runWindow.webContents.send('cmd-message', cmdArg);
                         break;
                     // 项目删除    
                     case ActionTypes.SEND_PROJECT_REMOVE:
@@ -266,9 +279,9 @@ class receive {
     getModuleWindow() {
         return this.moduleWindow;
     }
-      /**
-     * 调节项目窗口尺寸时view的变化
-     */
+    /**
+   * 调节项目窗口尺寸时view的变化
+   */
     resizeWin(view) {
         const options = { width: true, height: true, horizontal: true, vertical: true }
         view.setAutoResize(options);

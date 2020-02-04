@@ -48,6 +48,16 @@ class message {
     listenCmdCreate() {
         ipcMain.on('cmd-message', (event, arg) => {
 
+            // 直接执行某条命令(这里增加了callbackId)
+            if (arg.flag === 'cmd-public-cmd') {
+                if (this.window_objs.mainWindow != null) {
+                    this.window_objs.mainWindow.webContents.send('site-message', {
+                        type: ActionTypes.RECEIVE_PUBLIC_CMD,
+                        payload: arg
+                    });
+                }
+            }
+
             // 项目创建
             if (arg.flag === 'cmd-children-project-create') {
                 if (this.window_objs.mainWindow != null) {

@@ -94,6 +94,12 @@ class PyramidUiService {
     return this.messageCallbackMaxKey.toString();
   };
 
+  public getCMDFn = (callback: string) => {
+    // this.messageCallbackMaxKey += 1;
+    // this.messageCallbackMap.set(this.messageCallbackMaxKey.toString(), callback);
+    return callback;
+  };
+
   /**
    * 清除 pyramid ui 消息
    * @param key 监听返回的消息Key
