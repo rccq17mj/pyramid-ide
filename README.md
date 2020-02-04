@@ -40,7 +40,17 @@
     sudo mkdir ~/.electron
 
     sudo cp -r ./mac_64_dep/electron-v6.1.7-darwin-x64.zip ~/.electron
-    
+
+3. 打包构建时
+
+    同样将electron-v6.1.7-darwin-x64.zip 拷贝到：
+
+    Linux: $XDG_CACHE_HOME or ~/.cache/electron/
+
+    MacOS: ~/Library/Caches/electron/
+
+    Windows: $LOCALAPPDATA/electron/Cache or ~/AppData/Local/electron/Cache/
+
 ## 命令：
 
 1. 安装yarn
