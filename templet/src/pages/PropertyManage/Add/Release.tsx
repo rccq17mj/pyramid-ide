@@ -9,6 +9,7 @@ import {API_CONFIG} from "@/core/configs/api.config";
 import { urlParames } from '@/utils/utils';
 import {mainRequest} from '../../../requests/main.request';
 import styles from './Index.less';
+import {blockPackageRequest} from "@/requests/block-package.request";
 
 const FormItem = Form.Item;
 
@@ -41,7 +42,17 @@ const Component: FunctionComponent<IProps> = props => {
         let params = fieldsValue;
         params['applyType'] = urlParames().applyType;
         params['packageManager'] = urlParames().package;
+        params['isPublic'] = '0';
+        if(isPublic){
+          params['isPublic'] = '1';
+        }
         console.log('最终params数据', params)
+        blockPackageRequest.blockPackageAdd(params).then(res => {
+          if(res){
+            console.log('res122223',res);
+          }
+        })
+
        // pyramidUiService.sendMessageFn(new PyramidUISendProjectBlockItemCreateAction(params));
 
       //  props.closeModal(true)
@@ -104,7 +115,14 @@ const Component: FunctionComponent<IProps> = props => {
           rules: [
             { required: true, message: '必填' }
           ],
-        })(<Input placeholder="备注" />)}
+        })(<Input placeholder="git地址" />)}
+        </FormItem>
+        <FormItem>
+          git令牌{getFieldDecorator(`repoToken`, {
+          rules: [
+            { required: true, message: '必填' }
+          ],
+        })(<Input placeholder="git令牌" />)}
         </FormItem>
         <FormItem >
           <p style={{ margin: '0' }}>是否公开？</p>

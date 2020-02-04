@@ -4,8 +4,12 @@ import {httpService} from "@react-kit/http";
 import {HTTP_CONTENT_TYPE} from "@/core/configs/http.config";
 
 class BlockPackageRequest extends BaseRequest {
-  blockPackageAddOrUpdate(params: any): Promise<boolean> {
-    return this.add(API_CONFIG.MAIN.BLOCK_PACKAGE.ADD_OR_UPDATE, params);
+  blockPackageGet(params: any): Promise<boolean> {
+    return this.add(API_CONFIG.MAIN.BLOCK_PACKAGE.GET, params);
+  }
+
+  blockPackageAdd(params: any): Promise<boolean> {
+    return this.add(API_CONFIG.MAIN.BLOCK_PACKAGE.ADD, params,{ ...{options: HTTP_CONTENT_TYPE.JSON}});
   }
 
   blockPackageListPage(params: any): Promise<{total: number, list: any[]}> {
@@ -13,8 +17,8 @@ class BlockPackageRequest extends BaseRequest {
       return res.flag ? res.data['data'] : null
     });*/
     return this.list(API_CONFIG.MAIN.BLOCK_PACKAGE.LIST_PAGE, params);
-
   }
+
   blockPackageSubscribePage(params: any): Promise<{total: number, list: any[]}> {
     return this.list(API_CONFIG.MAIN.BLOCK_PACKAGE.SUBSCRIBE_PAGE, params);
 
