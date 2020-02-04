@@ -65,7 +65,7 @@ class receive {
                         })
 
                         event.sender.send('site-message', {
-                            type: 'pyramid.ui.receive.project.remove',
+                            type: ActionTypes.RECEIVE_PROJECT_REMOVE,
                             payload: {
                                 removed: true
                             }
@@ -77,7 +77,7 @@ class receive {
                         this.pyramidControl.findProject(option, (res) => {
                             this.window_objs.mainWindow.webContents.send('site-message',
                                 {
-                                    type: 'pyramid.ui.receive.project.list',
+                                    type: ActionTypes.RECEIVE_PROJECT_LIST,
                                     payload: {
                                         data: res
                                     }
@@ -97,7 +97,7 @@ class receive {
                             properties: ['openDirectory', 'createDirectory', 'promptToCreate']
                         }, function (files) {
                             if (files) event.sender.send('site-message', {
-                                type: 'pyramid.ui.receive.project.choosePath',
+                                type: ActionTypes.RECEIVE_PROJECT_CHOOSE_PATH,
                                 payload: {
                                     files: files[0]
                                 }
