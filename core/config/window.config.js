@@ -4,7 +4,7 @@ const path      = require('path')
 // const root = '../../'
 module.exports = {
     'mainWin':{
-        devToolsShow: true,
+        devToolsShow: false,
         width: 1600,
         height:  1000,
         minWidth: 800,
@@ -13,7 +13,7 @@ module.exports = {
         loadUrl: process.env.ELE_ENV === ENV.ELE_ENV_LOCAL? `http://localhost:8100/` : `file://${__dirname}/../../templet/dist/index.html`,
         show: true,
         webPreferences: {
-            devTools: false,
+            devTools: true,
             nodeIntegration: true,
             nodeIntegrationInWorker: true,
             preload: path.resolve(__dirname, '../../','preload.js')
@@ -57,7 +57,7 @@ module.exports = {
       },
 
       'moduleWin': {
-        devToolsShow: true,
+        devToolsShow: false,
         width: 1200,
         height: 800,
         minWidth: 1200,
@@ -67,7 +67,7 @@ module.exports = {
         parent: null,
         show: true,
         webPreferences: {
-          devTools: false,
+          devTools: true,
           preload: path.resolve(__dirname, '../../','preload.js'),
         },
       }
