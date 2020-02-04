@@ -157,7 +157,7 @@ var Datastore = require('nedb'), db = new Datastore({
         // 用项目信息拼接创建执行命令
         const cmdArg  = {
             channel: 'cmd-message',
-            cmdStr: `pyramid block init ${blockInfo.menuNameEn}`,
+            cmdStr: `pyramid block-package init ${blockInfo.menuNameEn} --init-project-type=${blockInfo.applyType}`,
             // cmdStr: `pyramid block init ${blockInfo.menuNameEn} --init-block-url=${blockInfo.gitUrl}`,
             cwd: `${blockInfo.filePath}`,
             flag: 'cmd-block-package-create'

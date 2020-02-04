@@ -151,9 +151,30 @@ class receive {
                     case ActionTypes.SEND_PROJECT_BLOCK_GET:
                         this.pyramidControl.findBlock((res) => {
                             if (res.length != 0) {
+                                let fatherBlock = [...res]
+                                if(arg.payload.applyType){
+                                    if(arg.payload.applyType != '100'){
+                                        let arr = []
+                                        fatherBlock.forEach((item)=>{
+                                            if(item.applyType == arg.payload.applyType){
+                                                arr.push(item)
+                                            }
+                                        })
+                                        fatherBlock = arr
+                                    }
+                                }
+                                if(arg.payload.chineseName){
+                                    let arr = []
+                                    fatherBlock.forEach((item)=>{
+                                        if(item.menuNameZh.indexOf(arg.payload.chineseName) != -1){
+                                            arr.push(item)
+                                        }
+                                    })
+                                    fatherBlock = arr
+                                }
                                 this.window_objs.mainWindow.webContents.send('site-message', {
                                     type: ActionTypes.RECEIVE_PROJECT_BLOCK_LIST,
-                                    payload: res
+                                    payload: fatherBlock
                                 });
                             }
                         })
@@ -179,7 +200,7 @@ class receive {
                         const blockId = arg.payload;
                         console.log('blockId:', blockId)
                         this.pyramidControl.removeBlock(blockId, (num) => {
-                            cliBridge.findBlock((res) => {
+                            this.pyramidControl.findBlock((res) => {
                                 let newRes = [...res]
                                 this.window_objs.mainWindow.webContents.send('site-message', {
                                     type: ActionTypes.RECEIVE_PROJECT_BLOCK_LIST,

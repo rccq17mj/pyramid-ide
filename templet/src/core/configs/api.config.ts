@@ -68,8 +68,9 @@ export const API_CONFIG = {
     GET_CURRENT_USER_ACL: API_MAIN_PREFIX + '/menu/getMenu',
     // 区块包
     BLOCK_PACKAGE: {
-      ADD_OR_UPDATE: API_MAIN_PREFIX + '/block/get',
+      GET: API_MAIN_PREFIX + '/block/get',
       LIST_PAGE: API_MAIN_PREFIX + '/block/page',
+      ADD: API_MAIN_PREFIX + '/block/add',
       DELETE: API_MAIN_PREFIX + '/block/delete',
       DETAIL: API_MAIN_PREFIX + '/block/get',
       SUBMIT_VERSION: API_MAIN_PREFIX + '/block/submitNewVersion',

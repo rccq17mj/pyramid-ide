@@ -3,7 +3,6 @@ import { pyramidUiService } from '@/core/pyramid-ui/service/pyramid-ui.service';
 
 export interface PyramidUIAction {
   type: string;
-
 }
 
 // 所有指令集合（注意格式：pyramid.ui + send | receive + 模块 + 功能 + 定义）
@@ -13,7 +12,7 @@ export const PyramidUIActionTypes = ActionTypes;
 /******************** 全局 ********************/
 export class PyramidUISendPublicConsole implements PyramidUIAction {
   readonly type = PyramidUIActionTypes.SEND_PUBLIC_OPEN_CONSOLE;
-  constructor(public payload: void) { }
+  constructor(public payload: void) {}
 }
 // 接收Cli返回消息，统一使用这个Action
 export class PyramidUIReceiveCliMessage implements PyramidUIAction {
@@ -27,15 +26,15 @@ export class PyramidUIReceiveCliMessage implements PyramidUIAction {
     data: any;
     // 一般数据（根据壳工程传回，看可工程是否需要统一）
     msg: string;
-  }) { }
+  }) {}
 }
+/******************** 全局 ********************/
 const guid = () => {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
     var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
     return v.toString(16);
   });
 }
-/******************** 全局 ********************/
 /**
  * 直接请求执行某个命令
  */
@@ -71,7 +70,7 @@ export class PyramidUIReceiveProjectPublicCMD implements PyramidUIAction {
  */
 export class PyramidUISendProjectOpenWindowAction implements PyramidUIAction {
   readonly type = PyramidUIActionTypes.SEND_PROJECT_OPENWINDOW;
-  constructor(public payload: void) { }
+  constructor(public payload: void) {}
 }
 
 /**
@@ -79,14 +78,14 @@ export class PyramidUISendProjectOpenWindowAction implements PyramidUIAction {
  */
 export class PyramidUISendProjectListAction implements PyramidUIAction {
   readonly type = PyramidUIActionTypes.SEND_PROJECT_LIST;
-  constructor(public payload: any) { }
+  constructor(public payload: any) {}
 }
 /**
  * 返回项目列表
  */
 export class PyramidUIReceiveProjectListAction implements PyramidUIAction {
   readonly type = PyramidUIActionTypes.RECEIVE_PROJECT_LIST;
-  constructor(public payload: any) { }
+  constructor(public payload: any) {}
 }
 
 /**
@@ -94,50 +93,50 @@ export class PyramidUIReceiveProjectListAction implements PyramidUIAction {
  */
 export class PyramidUISendProjectStartAction implements PyramidUIAction {
   readonly type = PyramidUIActionTypes.SEND_PROJECT_START;
-  constructor(public payload: any) { }
+  constructor(public payload: any) {}
 }
 /**
  * 返回启动项目信息
  */
 export class PyramidUIReceiveProjectStartAction implements PyramidUIAction {
   readonly type = PyramidUIActionTypes.RECEIVE_PROJECT_START;
-  constructor(public payload: any) { }
+  constructor(public payload: any) {}
 }
 
 
 
 export class PyramidUISendProjectChoosePathAction implements PyramidUIAction {
   readonly type = PyramidUIActionTypes.SEND_PROJECT_CHOOSE_PATH;
-  constructor(public payload: void) { }
+  constructor(public payload: void) {}
 }
 export class PyramidUISendProjectToolBar implements PyramidUIAction {
   readonly type = PyramidUIActionTypes.SEND_PROJECT_TOOLBAR;
-  constructor(public payload: {}) { }
+  constructor(public payload: {}) {}
 }
 export class PyramidUIReceiveProjectChoosePathAction implements PyramidUIAction {
   readonly type = PyramidUIActionTypes.RECEIVE_PROJECT_CHOOSE_PATH;
   constructor(public payload: {
     files: string;
-  }) { }
+  }) {}
 }
 export class PyramidUIReceiveProjectRemoveAction implements PyramidUIAction {
   readonly type = PyramidUIActionTypes.RECEIVE_PROJECT_REMOVE;
   constructor(public payload: {
     files: string;
-  }) { }
+  }) {}
 }
 export class PyramidUISendProjectCreateAction implements PyramidUIAction {
   readonly type = PyramidUIActionTypes.SEND_PROJECT_CREATE;
-  constructor(public payload: any) { }
+  constructor(public payload: any) {}
 }
 export class PyramidUISendProjectRemoveAction implements PyramidUIAction {
   readonly type = PyramidUIActionTypes.SEND_PROJECT_REMOVE;
-  constructor(public payload: any) { }
+  constructor(public payload: any) {}
 }
 
 export class PyramidUIReceiveProjectCreatAction implements PyramidUIAction {
   readonly type = PyramidUIActionTypes.RECEIVE_PROJECT_CREATE;
-  constructor(public payload: any) { }
+  constructor(public payload: any) {}
 }
 
 
@@ -150,7 +149,7 @@ export class PyramidUISendProjectLayoutChooseAction implements PyramidUIAction {
   readonly type = PyramidUIActionTypes.SEND_PROJECT_LAYOUT_CHOOSE;
   constructor(public payload: {
     column: number
-  }) { }
+  }) {}
 }
 /******************** 布局 ********************/
 
@@ -167,16 +166,16 @@ export class PyramidUISendProjectModuleCreateAction implements PyramidUIAction {
     package: string;
     remark: string;
     gitUrl: string;
-  }) { }
+  }) {}
 }
 export class PyramidUIReceiveProjectModuleCreateAction implements PyramidUIAction {
   readonly type = PyramidUIActionTypes.RECEIVE_PROJECT_MODULE_CREATE;
-  constructor(public payload: { msg: string }) { }
+  constructor(public payload: {msg: string}) {}
 }
 // 发送获取路由树消息
 export class PyramidUISendProjectModuleGetRouteTreeAction implements PyramidUIAction {
   readonly type = PyramidUIActionTypes.SEND_PROJECT_MODULE_GET_ROUTE_TREE;
-  constructor(public payload: void) { }
+  constructor(public payload: void) {}
 }
 // 接收获取路由树消息
 export interface IPyramidUiRouterTree {
@@ -185,7 +184,7 @@ export interface IPyramidUiRouterTree {
 }
 export class PyramidUIReceiveProjectModuleGetRouteTreeAction implements PyramidUIAction {
   readonly type = PyramidUIActionTypes.RECEIVE_PROJECT_MODULE_GET_ROUTE_TREE;
-  constructor(public payload: { routerTree: IPyramidUiRouterTree[] }) { }
+  constructor(public payload: {routerTree: IPyramidUiRouterTree[]}) {}
 }
 /******************** 模块 ********************/
 
@@ -194,47 +193,51 @@ export class PyramidUIReceiveProjectModuleGetRouteTreeAction implements PyramidU
 /******************** 区块 ********************/
 export class PyramidUISendProjectBlockSelectAction implements PyramidUIAction {
   readonly type = PyramidUIActionTypes.SEND_PROJECT_BLOCK_SELECT;
-  constructor(public payload: { key?: string, gitUrl: string }) { }
+  constructor(public payload: {key?: string, gitUrl: string}) {}
 }
 
 export class PyramidUISendProjectBlockCreateAction implements PyramidUIAction {
   readonly type = PyramidUIActionTypes.SEND_PROJECT_BLOCK_CREATE;
-  constructor(public payload: any) { }
+  constructor(public payload: any) {}
+}
+
+export class PyramidUISendProjectBlockTypesCreateAction implements PyramidUIAction {
+  readonly type = PyramidUIActionTypes.SEND_PROJECT_BLOCK_TYPES_CREATE;
+  constructor(public payload: any) {}
 }
 
 export class PyramidUISendProjectBlockItemCreateAction implements PyramidUIAction {
   readonly type = PyramidUIActionTypes.SEND_PROJECT_BLOCK_ITEM_CREATE;
-  constructor(public payload: any) { }
+  constructor(public payload: any) {}
 }
-
 
 export class PyramidUISendBlockGetAction implements PyramidUIAction {
   readonly type = PyramidUIActionTypes.SEND_PROJECT_BLOCK_GET;
-  constructor(public payload: any) { }
+  constructor(public payload: any) {}
 }
 export class PyramidUISendBlockItemGetAction implements PyramidUIAction {
   readonly type = PyramidUIActionTypes.SEND_PROJECT_BLOCK_ITEM_GET;
-  constructor(public payload: { parentId: string }) { }
+  constructor(public payload: {parentId:string}) {}
 }
 
 export class PyramidUIReceiveBlockListAction implements PyramidUIAction {
   readonly type = PyramidUIActionTypes.RECEIVE_PROJECT_BLOCK_LIST;
-  constructor(public payload: any) { }
+  constructor(public payload: any) {}
 }
 
 export class PyramidUIReceiveBlockItemListAction implements PyramidUIAction {
   readonly type = PyramidUIActionTypes.RECEIVE_PROJECT_BLOCK_ITEM_LIST;
-  constructor(public payload: any) { }
+  constructor(public payload: any) {}
 }
 
 export class PyramidUISendBlockRemoveAction implements PyramidUIAction {
   readonly type = PyramidUIActionTypes.SEND_PROJECT_BLOCK_REMOVE;
-  constructor(public payload: any) { }
+  constructor(public payload: any) {}
 }
 
 export class PyramidUIReceiveBlockRemoveAction implements PyramidUIAction {
   readonly type = PyramidUIActionTypes.RECEIVE_PROJECT_BLOCK_REMOVE;
-  constructor(public payload: any) { }
+  constructor(public payload: any) {}
 }
 /******************** 区块 ********************/
 
