@@ -15,6 +15,8 @@ strictEslint.rules['space-infix-ops'] = 0;
 strictEslint.rules['react/jsx-curly-brace-presence'] = 0;
 strictEslint.rules['import/order'] = 0;
 strictEslint.rules['dot-notation'] = 0;
+strictEslint.rules['no-plusplus'] = 0;
+strictEslint.rules['no-shadow'] = 0;
 
 module.exports = {
   ...strictEslint,

@@ -59,10 +59,10 @@ pyramid config set --open-pyramid-ui=false
 
 区块包相关
 1.下载区块模板工程
-pyramid block init 项目名称 --init-block-package-url=区块工程地址（可不传，从默认地址拉） --init-block-package-type=区块包类型（可不传，pc | mobile 默认pc） --init-block-package-git-url=区块包git地址（暂时不传，预留）
+pyramid block-package 项目名称 --init-project-url=区块工程地址（可不传，从默认地址拉） --iinit-project-type=区块包类型（可不传，1 | 2 默认1） --init-project-git-url=区块包git地址（暂时不传，预留）
 
 例如：
-pyramid block init test
+pyramid block-package init test
 
 2.创建区块和模块
 pyramid block create 区块名称（英文名称，作为目录名称，内部会按照名称在处理一遍目录规则） 
