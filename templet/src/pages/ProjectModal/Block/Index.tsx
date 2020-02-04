@@ -1,18 +1,20 @@
 import React, {FunctionComponent, useEffect, useState} from "react";
 import styles from './Index.less';
-import {Button, Form, Icon, Input, Menu, Pagination} from "antd";
+import {Button, Form, Icon, Input, Menu, Pagination, Tabs} from "antd";
 import AddModal from './Add/Index';
 import {IBlockCard} from "@/interfaces/block/block.interface";
 import {pyramidUiService} from "@/core/pyramid-ui/service/pyramid-ui.service";
 import {PyramidUISendProjectBlockSelectAction} from "@/core/pyramid-ui/action/pyramid-ui.action";
 
 const { SubMenu } = Menu;
+const { TabPane } = Tabs;
 
 interface IProps {
   location: {query: {projectName?: string}}
 }
 
 const Component: FunctionComponent<IProps> = props => {
+  const [tabActiveKey, setTabActiveKey] = useState<string>('1');
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [modalParams, setModalParams] = useState<IBlockCard>(null);
   const [current, setCurrent] = useState<number>(1);
@@ -66,40 +68,71 @@ const Component: FunctionComponent<IProps> = props => {
   return (
     <div className={styles.container}>
       <div className={styles.left}>
-        <Menu
-          defaultSelectedKeys={['1']}
-          mode="inline"
-          theme="dark"
-        >
-          <SubMenu
-            key="sub-0"
-            title={
-              <span>
+        <div className={styles['left-container']}>
+          <Tabs className={styles.tabs} activeKey={tabActiveKey} onChange={key => setTabActiveKey(key)}>
+            <TabPane tab="社区" key="1">
+            </TabPane>
+            <TabPane tab="私有" key="2">
+            </TabPane>
+          </Tabs>
+          {/* 菜单 */}
+          <div className={styles.menu}>
+            <Menu
+              defaultSelectedKeys={['1']}
+              mode="inline"
+              theme="dark"
+            >
+              <SubMenu
+                key="sub-0"
+                title={
+                  <span>
                 <Icon type="mail" />
                 <span>pyramid-ui</span>
               </span>
-            }
-          >
-            <Menu.Item key="sub-0-0">空白页</Menu.Item>
-            <Menu.Item key="sub-0-1">个人中心</Menu.Item>
-            <Menu.Item key="sub-0-2">个人设置</Menu.Item>
-            <Menu.Item key="sub-0-3">异常</Menu.Item>
-          </SubMenu>
-          <SubMenu
-            key="sub-1"
-            title={
-              <span>
+                }
+              >
+                <Menu.Item key="sub-0-0">空白页</Menu.Item>
+                <Menu.Item key="sub-0-1">个人中心</Menu.Item>
+                <Menu.Item key="sub-0-2">个人设置</Menu.Item>
+                <Menu.Item key="sub-0-3">异常</Menu.Item>
+              </SubMenu>
+              <SubMenu
+                key="sub-1"
+                title={
+                  <span>
                 <Icon type="mail" />
-                <span>社区</span>
+                <span>pyramid-ui-1</span>
               </span>
-            }
-          >
-            <Menu.Item key="sub-1-0">空白页</Menu.Item>
-            <Menu.Item key="sub-1-1">个人中心</Menu.Item>
-            <Menu.Item key="sub-1-2">个人设置</Menu.Item>
-            <Menu.Item key="sub-1-3">异常</Menu.Item>
-          </SubMenu>
-        </Menu>
+                }
+              >
+                <Menu.Item key="sub-1-0">空白页</Menu.Item>
+                <Menu.Item key="sub-1-1">个人中心</Menu.Item>
+                <Menu.Item key="sub-1-2">个人设置</Menu.Item>
+                <Menu.Item key="sub-1-3">异常</Menu.Item>
+              </SubMenu>
+              <SubMenu
+                key="sub-2"
+                title={
+                  <span>
+                <Icon type="mail" />
+                <span>pyramid-ui-1</span>
+              </span>
+                }
+              >
+                <Menu.Item key="sub-1-0">空白页</Menu.Item>
+                <Menu.Item key="sub-1-1">个人中心</Menu.Item>
+                <Menu.Item key="sub-1-2">个人设置</Menu.Item>
+                <Menu.Item key="sub-1-3">异常</Menu.Item>
+              </SubMenu>
+            </Menu>
+          </div>
+          {/* 底部订阅标题 */}
+          <div className={styles['bottom-toolbar']} onClick={() => {
+          }}>
+            <Icon type="plus-circle" style={{ marginRight: 10 }} />
+            <span>订阅</span>
+          </div>
+        </div>
       </div>
       <div className={styles.right}>
         <div>
@@ -116,7 +149,7 @@ const Component: FunctionComponent<IProps> = props => {
             {
               cards.map((card, index) => {
                 return (
-                  <div className={styles['item']} key={card.key}>
+                  <div className={styles.item} key={card.key}>
                     <div className={styles['item-top']} onMouseEnter={e => handleMouse(index, true)} onMouseLeave={e => handleMouse(index, false)}>
                       {
                         card.hover ? (
@@ -138,7 +171,7 @@ const Component: FunctionComponent<IProps> = props => {
           </div>
 
           {/* 分页 */}
-          <div className={styles['pagination']} style={{textAlign: 'right', color: 'white', marginTop: 20}}>
+          <div className={styles.pagination} style={{textAlign: 'right', color: 'white', marginTop: 20}}>
             <Pagination size="small" current={current} total={total} onChange={paginationChange} />
           </div>
         </div>

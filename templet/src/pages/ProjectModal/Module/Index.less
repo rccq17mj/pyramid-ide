@@ -4,9 +4,45 @@
 
   .left {
     width: 216px;
-    background: #212121;
-    color: #FFFFFF;
     height: 100%;
+    background: #212121;
+
+    .left-container {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+
+      .tabs {
+      }
+
+      .menu {
+        flex: 1;
+        overflow-y: auto;
+      }
+
+      .bottom-toolbar {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 60px;
+        color: #FFF;
+        background: #42403A;
+        cursor: pointer;
+      }
+    }
+
+    :global {
+      .ant-menu {
+        background: #212121;
+      }
+      .ant-tabs-bar {
+        margin: 0;
+      }
+      .ant-tabs-tab {
+        color: white;
+      }
+    }
   }
 
   .right {
