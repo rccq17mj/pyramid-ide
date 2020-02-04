@@ -59,7 +59,7 @@ pyramid config set --open-pyramid-ui=false
 
 区块包相关
 1.下载区块模板工程
-pyramid block-package 项目名称 --init-project-url=区块工程地址（可不传，从默认地址拉） --iinit-project-type=区块包类型（可不传，1 | 2 默认1） --init-project-git-url=区块包git地址（暂时不传，预留）
+pyramid block-package 项目名称 --init-project-url=区块工程地址（可不传，从默认地址拉） --init-project-type=区块包类型（可不传，1 | 2 默认1） --init-project-git-url=区块包git地址（暂时不传，预留）
 
 例如：
 pyramid block-package init test
@@ -99,6 +99,9 @@ pyramid block category add 开关 --category-type=blocks
 pyramid block category update 开关 --category-update-name=新开关 --category-type=blocks
 删除：
 pyramid block category delete 开关 --category-type=blocks
+
+5.获取区块包配置信息
+pyramid block-package get --get-project-path=项目路径 --get-project-url=项目git地址（和 --get-project-path 选其一） --get-project-branch=项目git分支
 
 
 配置相关
