@@ -115,6 +115,91 @@ module.exports = (options) => {
             // process.exit();
         });
     }
+    else if (cmdStr === 'update') {// 修改区块信息
+        // 获取区块名称，根据这个名称修改
+        const args1 = program.args[1];
+        const blockName = program.args[1][0];
+        if (!args1 || !blockName) {
+            console.log(chalk.red('缺少区块名称'));
+            process.exit();
+        }
+
+        // 当前项目路径（必须在项目路径下面）
+        const currentPath = process.cwd();
+
+        // 参数验证
+        let {updateBlockType, updateBlockNameZh, updateBlockDescription, updateBlockImage, updateBlockGitUrl, updateBlockGitBranch, updateBlockCategories} = options;
+
+        if (!updateBlockType) {
+            console.log(chalk.red('缺少类型'));
+            process.exit();
+        }
+
+        let categories = [];
+        if (updateBlockCategories && updateBlockCategories.trim() !== '') {
+            categories = updateBlockCategories.trim().split(",");
+        }
+
+        let blockTypeCatalog;
+        let blockFoldName;
+        let pyramidBlockJsonKey;
+
+        switch (updateBlockType) {
+            case 'block':
+                blockTypeCatalog = 'blocks';
+                pyramidBlockJsonKey = 'blocks';
+                blockFoldName = camelToHorizontalLine(blockName);
+                break;
+            case 'template':
+                blockTypeCatalog = 'templates';
+                pyramidBlockJsonKey = 'templates';
+                blockFoldName = firstWordToUpperCase(blockName);
+                break;
+            default:
+                break;
+        }
+
+        // 修改项目区块列表描述文件
+        const pyramidBlocksJsonContent = fs.readFileSync(path.join(currentPath, 'pyramid-blocks.json')).toString();
+        const pyramidBlocksJsonObject = JSON.parse(pyramidBlocksJsonContent);
+
+        let isFind = false;
+        pyramidBlocksJsonObject[pyramidBlockJsonKey].forEach(item => {
+            if (item.key === blockFoldName) {
+                isFind = true;
+                if (updateBlockNameZh) {
+                    item.name = updateBlockNameZh;
+                }
+                if (updateBlockDescription) {
+                    item.description = updateBlockDescription;
+                }
+                if (updateBlockGitUrl && updateBlockGitBranch) {
+                    item.gitUrl = updateBlockGitUrl + '/tree/' + updateBlockGitBranch + '/' + blockTypeCatalog + '/' + blockFoldName;
+                }
+                if (updateBlockImage) {
+                    item.previewImg = updateBlockImage;
+                }
+                if (categories.length > 0) {
+                    item.tags = categories;
+                }
+            }
+        });
+
+        if (!isFind) {
+            console.log(chalk.red('没有找到相应的区块'));
+            process.exit();
+        }
+
+        const writeJsonContent = JSON.stringify(pyramidBlocksJsonObject);
+        const prettierCode = prettier.format(writeJsonContent, {
+            tabWidth: 4,
+            semi: false,
+            singleQuote: true,
+            parser: 'json',
+        });
+        fs.writeFileSync(path.join(currentPath, 'pyramid-blocks.json'), prettierCode);
+        process.exit();
+    }
     else if (cmdStr === 'create') {// 在区块模板工程下创建区块
         // 获取区块名称
         const args1 = program.args[1];

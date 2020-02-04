@@ -66,6 +66,15 @@ program
     .option('--create-block-image <createBlockImage>', 'create block with image')
     .option('--create-block-categories <createBlockCategories>', 'create block with categories')
 
+    // update -- options
+    .option('--update-block-type <updateBlockType>', 'update block with type （block | template）')
+    .option('--update-block-name-zh <updateBlockNameZh>', 'update block with name zh')
+    .option('--update-block-description <updateBlockDescription>', 'update block with description')
+    .option('--update-block-git-url <updateBlockGitUrl>', 'update block with gitUrl')
+    .option('--update-block-git-branch <updateBlockGitBranch>', 'update block with gitBranch', 'master')
+    .option('--update-block-image <updateBlockImage>', 'update block with image')
+    .option('--update-block-categories <updateBlockCategories>', 'update block with categories')
+
     // category --options
     .option('--category-type <categoryType>', 'create block category with type', 'blocks')
     .option('--category-update-name <categoryUpdateName>', 'create block category with updateName', 'blocks')
