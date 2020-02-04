@@ -37,7 +37,7 @@ const ProperytBlock: FunctionComponent<IProps> = props => {
   const { form, form: { getFieldDecorator } } = props;
 
   const extraParamsChange = () => {
-    const params = { ...form.getFieldsValue() };
+    const params = { ...form.getFieldsValue()};
     setExtraParams(params);
   };
 
@@ -59,12 +59,13 @@ const ProperytBlock: FunctionComponent<IProps> = props => {
 
   const startProject = projectInfo => {
       console.log('projectInfo', projectInfo)
-    Router.push(`/property-manage?parentId=${projectInfo._id}`)
+    Router.push(`/property-manage?parentId=${projectInfo._id}&package=${projectInfo.package}&applyType=${projectInfo.applyType}`)
   };
 
 
   const getBlockData = () => {
-    pyramidUiService.sendMessageFn(new PyramidUISendBlockGetAction(true));
+    console.log('extraParams', extraParams)
+    pyramidUiService.sendMessageFn(new PyramidUISendBlockGetAction(extraParams));
 
     pyramidUiService.getMessageFn((action: PyramidUIReceiveBlockListAction) => {
       if (action.type === PyramidUIActionTypes.RECEIVE_PROJECT_BLOCK_LIST) {
@@ -142,13 +143,13 @@ const ProperytBlock: FunctionComponent<IProps> = props => {
           >
             <FormItem>
               {getFieldDecorator('applyType', {
-                initialValue: '0',
+                initialValue: '100',
               })(
                 <Select
                   size="default"
                   style={{ minWidth: '80px' }}
                 >
-                  <Option value="0">全部</Option>
+                  <Option value="100">全部</Option>
                   <Option value="2">移动端</Option>
                   <Option value="1">PC端</Option>
                 </Select>,

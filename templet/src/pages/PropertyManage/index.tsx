@@ -13,6 +13,8 @@ import {
 } from "@/core/pyramid-ui/action/pyramid-ui.action";
 import {pyramidUiService} from "@/core/pyramid-ui/service/pyramid-ui.service";
 import Add from '@/pages/PropertyManage/Add/Index';
+import Release from '@/pages/PropertyManage/Add/Release';
+import Types from '@/pages/PropertyManage/Add/Types';
 import {urlParames} from "@/utils/utils";
 
 interface ILeftBtn {
@@ -40,6 +42,8 @@ const PropertyManage: FunctionComponent<IProps> = props => {
   ]);
   const [cards, setCards] = useState<any[]>([]);
   const [addModalVisible, setAddModalVisible] = useState<boolean>(false);
+  const [releaseModalVisible, setReleaseModalVisible] = useState<boolean>(false);
+  const [typesModalVisible, setTypesModalVisible] = useState<boolean>(false);
 
   const getBlockList = () =>{
     pyramidUiService.sendMessageFn(new PyramidUISendBlockItemGetAction({parentId:urlParames().parentId}));
@@ -50,19 +54,6 @@ const PropertyManage: FunctionComponent<IProps> = props => {
         setCards(action.payload)
       }
     });
-
-/*    setCards([
-      {
-        id:'664902700814700544',
-        chineseName: "测试区块",
-        englishName: "test block",
-      },
-      {
-        id:'66490270081433700544',
-        chineseName: "测试区块333",
-        englishName: "test block",
-      }
-    ])*/
   }
 
   useEffect(() => {
@@ -159,7 +150,7 @@ const PropertyManage: FunctionComponent<IProps> = props => {
             <div style={{ float: 'right' }}>
               <Row gutter={[6, 18]}>
                 <Col span={13}>
-                  <Button  onClick={()=>{handleClick('module')}} type="default" icon="build">发布</Button>
+                  <Button onClick={()=>{setReleaseModalVisible(true)}} type="default" icon="build">发布</Button>
                 </Col>
               </Row>
             </div>
@@ -168,6 +159,9 @@ const PropertyManage: FunctionComponent<IProps> = props => {
       </div>
       <div className={styles.container}>
         <div className={styles.left}>
+          <div className={styles['left-btn']} onClick={() => {setTypesModalVisible(true)}}>
+            <span>新建分类</span>
+          </div>
           {
             leftButtons.map((leftBtn, index) => {
               return (
@@ -181,15 +175,37 @@ const PropertyManage: FunctionComponent<IProps> = props => {
         <div className={styles.right}>
           {renderList()}
         </div>
-        <div>
+{/*        <div>
           预览
-        </div>
+        </div>*/}
       </div>
       {addModalVisible ? (
         <Add
           modalVisible={addModalVisible}
           closeModal={success => {
             setAddModalVisible(false);
+            if (success) {
+              //simpleTable.loadData();
+            }
+          }}
+        />
+      ) : null}
+      {releaseModalVisible ? (
+        <Release
+          modalVisible={releaseModalVisible}
+          closeModal={success => {
+            setReleaseModalVisible(false);
+            if (success) {
+              //simpleTable.loadData();
+            }
+          }}
+        />
+      ) : null}
+      {typesModalVisible ? (
+        <Types
+          modalVisible={typesModalVisible}
+          closeModal={success => {
+            setTypesModalVisible(false);
             if (success) {
               //simpleTable.loadData();
             }

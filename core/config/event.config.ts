@@ -40,6 +40,7 @@ export const ActionTypes = {
     /******************** 区块 ********************/
     SEND_PROJECT_BLOCK_SELECT: 'pyramid.ui.send.project.block.select',
     SEND_PROJECT_BLOCK_CREATE: 'pyramid.ui.send.project.block.create',
+    SEND_PROJECT_BLOCK_TYPES_CREATE: 'pyramid.ui.send.project.block.types.create',
     SEND_PROJECT_BLOCK_ITEM_CREATE: 'pyramid.ui.send.project.block.item.create',
     SEND_PROJECT_BLOCK_GET: 'pyramid.ui.send.project.block.get',
     SEND_PROJECT_BLOCK_ITEM_GET: 'pyramid.ui.send.project.block.item.get',

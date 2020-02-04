@@ -30,10 +30,9 @@ const Component: FunctionComponent<IProps> = props => {
     form: { getFieldDecorator },
   } = props;
 
-  const templetOptions = [{
-    label: 'https://github.com/guccihuiyuan/pyramid-pro#master',
-    value: 'https://github.com/guccihuiyuan/pyramid-pro#master'
-  }];
+  const templetOptions = [
+    { label: 'PC端', value: '1' },
+    { label: '移动端', value: '2' }];
   const pkgmtOptions = [
     { label: 'yarn', value: 'yarn' },
     { label: 'npm', value: 'npm' }
@@ -193,11 +192,11 @@ const Component: FunctionComponent<IProps> = props => {
           )}
         </FormItem>
 
-{/*        <FormItem>
-          模板工程
-          {getFieldDecorator('gitUrl', { initialValue: templetOptions[0].value })(
+        <FormItem>
+          类型
+          {getFieldDecorator('applyType', { initialValue: templetOptions[0].value })(
             <Select
-              placeholder="模板工程"
+              placeholder="类型"
               allowClear={true}
             >
               {templetOptions.map(data => {
@@ -209,7 +208,7 @@ const Component: FunctionComponent<IProps> = props => {
               })}
             </Select>
           )}
-        </FormItem>*/}
+        </FormItem>
 
         <FormItem className={styles.uploadImg}>
           图片描述{getFieldDecorator(`img`, {
