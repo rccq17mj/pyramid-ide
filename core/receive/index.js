@@ -17,19 +17,19 @@ class receive {
                 switch (arg.type) {
                     // 打开指定项目操作窗口
                     case ActionTypes.SEND_PROJECT_OPENWINDOW:
-                        let view = new BrowserView({
+                        this.view = new BrowserView({
                             webPreferences: {
                                 nodeIntegration: false,
                                 preload: path.resolve(__dirname, '../../', 'preload.js')
                             }
                         })
 
-                        this.window_objs.mainWindow.setBrowserView(view);
+                        this.window_objs.mainWindow.setBrowserView(this.view);
                         this.window_objs.mainWindow.loadURL(config.projectWin.loadUrl);
-                        view.setBounds({ x: 0, y: 64, width: 1600, height: 1000 })
-                        view.webContents.loadURL('http://localhost:9100')
-                        view.webContents.openDevTools({ mode: 'right' });
-                        this.resizeWin(view)
+                        this.view.setBounds({ x: 0, y: 64, width: 1600, height: 1000 })
+                        this.view.webContents.loadURL('http://localhost:9100')
+                        this.view.webContents.openDevTools({ mode: 'right' });
+                        this.resizeWin(this.view)
                         break;
                     // 项目工具栏打开    
                     case ActionTypes.SEND_PROJECT_TOOLBAR:
@@ -38,7 +38,7 @@ class receive {
                         if (msg.hasOwnProperty('back')) {
                             // 初始化主窗口
                             //self.window_objs.mainWindow.loadURL(config.mainWin.loadUrl);
-                            view.destroy();
+                            this.view.destroy();
                             this.window_objs.mainWindow.destroy()
                             this.window_objs.mainWindow = _window(config.mainWin);
 
@@ -107,7 +107,7 @@ class receive {
                     case ActionTypes.SEND_PROJECT_BLOCK_SELECT:
                         this.window_objs.mainWindow.focus();
                         const { key, gitUrl } = arg.payload;
-                        view.webContents.send('site-message', {
+                        this.view.webContents.send('site-message', {
                             type: 'pyramid.ui.children.receive.project.block.select',
                             payload: {
                                 key,
@@ -201,7 +201,7 @@ class receive {
                         // 关闭该设置窗口
                         // self.moduleWindow.close();
                         this.window_objs.mainWindow.focus();
-                        view.webContents.send('site-message', {
+                        this.view.webContents.send('site-message', {
                             type: 'pyramid.ui.children.receive.project.layout.selectColumn',
                             payload: {
                                 column: column
@@ -244,7 +244,7 @@ class receive {
 
             //  传递给内部工程的测试
             if (arg.hasOwnProperty('publish')) {
-                view.webContents.executeJavaScript(`window.postMessage(
+                this.view.webContents.executeJavaScript(`window.postMessage(
                   JSON.stringify({
                       action:  'umi.ui.enable.GUmiUIFlag',
                   }),
