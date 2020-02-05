@@ -29,22 +29,29 @@ class receive {
                         this.view.setBounds({ x: 0, y: 64, width: 1600, height: 1000 })
                         this.view.webContents.loadURL('http://localhost:9100')
                         this.view.webContents.openDevTools({ mode: 'right' });
-                        this.resizeWin(this.view)
+                        this.resizeWin(this.view);
                         break;
                     // 项目工具栏打开    
                     case ActionTypes.SEND_PROJECT_TOOLBAR:
-                        const msg = arg.payload;
-                        // console.log('msg--', msg)
-                        if (msg.hasOwnProperty('back')) {
-                            // 初始化主窗口
-                            //self.window_objs.mainWindow.loadURL(config.mainWin.loadUrl);
-                            this.view.destroy();
-                            this.window_objs.mainWindow.destroy()
-                            this.window_objs.mainWindow = _window(config.mainWin);
-
-                        } else {
-                            this.moduleWindow = _window(config.moduleWin);
-                            this.moduleWindow.show()
+                        const { type } = arg.payload;
+                        switch (type) {
+                            case 'back':
+                                this.view.destroy();
+                                this.window_objs.mainWindow.destroy();
+                                this.window_objs.mainWindow = _window(config.mainWin);
+                                break;
+                            case 'layout':
+                            case 'module':
+                            case 'block':
+                                const moduleWin = JSON.parse(JSON.stringify(config.moduleWin));
+                                moduleWin.loadUrl = moduleWin.loadUrl + type;
+                                this.moduleWindow = _window(moduleWin);
+                                this.moduleWindow.show();
+                                break;
+                            case 'build':
+                                break;
+                            default:
+                                break;
                         }
                         break;
                     // 显示控制台    
