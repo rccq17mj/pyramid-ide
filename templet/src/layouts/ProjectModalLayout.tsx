@@ -11,6 +11,7 @@ interface ILeftBtn {
 }
 
 interface IProps {
+  location: {pathname: string, query?: any, state: any}
 }
 
 const Component: FunctionComponent<IProps> = props => {
@@ -42,7 +43,7 @@ const Component: FunctionComponent<IProps> = props => {
   ]);
 
   useEffect(() => {
-    const pathname = window.location.pathname;
+    const pathname = props.location.pathname;
     leftButtons.forEach((leftButton, index) => {
       if (leftButton.url === pathname) {
         clickLeftBtn(leftButton, index);

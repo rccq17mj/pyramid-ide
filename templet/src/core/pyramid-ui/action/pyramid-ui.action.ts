@@ -1,7 +1,7 @@
 import { ActionTypes } from '../../../../../core/config/event.config';
 import {CliMessageTypes} from '../../../../../core/config/cliMessageType.config';
 import { pyramidUiService } from '@/core/pyramid-ui/service/pyramid-ui.service';
- 
+
 export interface PyramidUIAction {
   type: string;
 }
@@ -23,7 +23,7 @@ export class PyramidUIReceiveCliMessage implements PyramidUIAction {
     cwd: string,
     // 如果为true则显示cli命令拦截弹窗
     cli: boolean,
-    // cli为true 时生效 templet/src/components/PyramidUICliMessage 中底部的按钮类型 
+    // cli为true 时生效 templet/src/components/PyramidUICliMessage 中底部的按钮类型
     // 类型详见 core/config/cliMessageType.config.ts
     cliType: string,
     // 类型，用来判断 CLI 的类型
@@ -50,7 +50,7 @@ export class PyramidUISendPublicCMD implements PyramidUIAction {
   readonly type = PyramidUIActionTypes.SEND_PUBLIC_CMD;
   /**
    * @param payload {
-   *    @param cmd     执行命令 
+   *    @param cmd     执行命令
    *    @param cwd     执行路径（特别要注意windows、Mac的路径差异）
    *    @param cli     如果为true则显示cli命令拦截弹窗
    *    @param cliType cli为true 时生效 components/PyramidUICliMessage 中底部的按钮类型
@@ -95,7 +95,7 @@ export class PyramidUIReceiveProjectPublicCMD implements PyramidUIAction {
     cwd: string,
     // 如果为true则显示cli命令拦截弹窗
     cli: boolean,
-    // cli为true 时生效 templet/src/components/PyramidUICliMessage 中底部的按钮类型 
+    // cli为true 时生效 templet/src/components/PyramidUICliMessage 中底部的按钮类型
     // 类型详见 core/config/cliMessageType.config.ts
     cliType: string,
     // 判断比较
@@ -130,7 +130,7 @@ export class PyramidUISendProjectCreateAction implements PyramidUIAction {
   readonly type = PyramidUIActionTypes.SEND_PROJECT_CREATE;
   constructor(public payload: any) {}
 }
-  
+
 /**
  * 打开指定项目操作窗口
  */
@@ -183,7 +183,9 @@ export class PyramidUISendProjectChoosePathAction implements PyramidUIAction {
 }
 export class PyramidUISendProjectToolBar implements PyramidUIAction {
   readonly type = PyramidUIActionTypes.SEND_PROJECT_TOOLBAR;
-  constructor(public payload: {}) { }
+  constructor(public payload: {
+    type: 'back' | 'build' | 'layout' | 'module' | 'block'
+  }) { }
 }
 export class PyramidUIReceiveProjectChoosePathAction implements PyramidUIAction {
   readonly type = PyramidUIActionTypes.RECEIVE_PROJECT_CHOOSE_PATH;

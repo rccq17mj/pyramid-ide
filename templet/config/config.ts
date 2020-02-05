@@ -168,7 +168,7 @@ export default {
               name: 'propertyLibrary',
               component: '../layouts/PropertyLibraryLayout',
               routes: [
-                { path: '/property/PropertyLibrary', redirect: '/property/PropertyLibrary/PropertyLibraryModule' },
+                { path: '/property/PropertyLibrary', redirect: '/property/PropertyLibrary/PropertyLibraryBlock' },
                 {
                   path: '/property/propertyLibrary/propertyLibraryModule',
                   name: 'module',
@@ -188,7 +188,7 @@ export default {
               name: 'myProperty',
               component: '../layouts/PropertyLayout',
               routes: [
-                 { path: '/property/myProperty', redirect: '/property/myProperty/propertyModule' },
+                 { path: '/property/myProperty', redirect: '/property/myProperty/PropertyBlock' },
                  {
                   path: '/property/myProperty/propertyModule',
                   name: 'module',

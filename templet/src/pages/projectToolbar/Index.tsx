@@ -1,14 +1,11 @@
-import React, { FunctionComponent, useEffect, useState } from "react";
+import React, { FunctionComponent } from "react";
 import { Row, Col, Button } from 'antd';
 import { pyramidUiService } from '@/core/pyramid-ui/service/pyramid-ui.service';
- import { PyramidUISendProjectToolBar } from "@/core/pyramid-ui/action/pyramid-ui.action";
-
+import { PyramidUISendProjectToolBar } from "@/core/pyramid-ui/action/pyramid-ui.action";
 
 const Component: FunctionComponent = props => {
-    const handleClick = (e: string) => {
-        let msg = {};
-        msg[e] = true;
-        pyramidUiService.sendMessageFn(new PyramidUISendProjectToolBar(msg));
+    const handleClick = (type: 'back' | 'build' | 'layout' | 'module' | 'block') => {
+        pyramidUiService.sendMessageFn(new PyramidUISendProjectToolBar({type}));
     };
 
     return (
@@ -30,7 +27,7 @@ const Component: FunctionComponent = props => {
                                 <Button  onClick={()=>{handleClick('module')}} type="default" icon="build">模块</Button>
                             </Col>
                             <Col span={6}>
-                                <Button  onClick={()=>{handleClick('component')}} type="default" icon="gateway">区块</Button>
+                                <Button  onClick={()=>{handleClick('block')}} type="default" icon="gateway">区块</Button>
                             </Col>
                         </Row>
                     </div>
@@ -38,6 +35,6 @@ const Component: FunctionComponent = props => {
             </Row>
         </div>
     )
-}
+};
 
 export default Component;

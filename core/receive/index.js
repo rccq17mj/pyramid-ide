@@ -29,22 +29,29 @@ class receive {
                         this.view.setBounds({ x: 0, y: 64, width: 1600, height: 1000 })
                         this.view.webContents.loadURL('http://localhost:9100')
                         this.view.webContents.openDevTools({ mode: 'right' });
-                        this.resizeWin(this.view)
+                        this.resizeWin(this.view);
                         break;
                     // 项目工具栏打开    
                     case ActionTypes.SEND_PROJECT_TOOLBAR:
-                        const msg = arg.payload;
-                        // console.log('msg--', msg)
-                        if (msg.hasOwnProperty('back')) {
-                            // 初始化主窗口
-                            //self.window_objs.mainWindow.loadURL(config.mainWin.loadUrl);
-                            this.view.destroy();
-                            this.window_objs.mainWindow.destroy()
-                            this.window_objs.mainWindow = _window(config.mainWin);
-
-                        } else {
-                            this.moduleWindow = _window(config.moduleWin);
-                            this.moduleWindow.show()
+                        const { type } = arg.payload;
+                        switch (type) {
+                            case 'back':
+                                this.view.destroy();
+                                this.window_objs.mainWindow.destroy();
+                                this.window_objs.mainWindow = _window(config.mainWin);
+                                break;
+                            case 'layout':
+                            case 'module':
+                            case 'block':
+                                const moduleWin = JSON.parse(JSON.stringify(config.moduleWin));
+                                moduleWin.loadUrl = moduleWin.loadUrl + type;
+                                this.moduleWindow = _window(moduleWin);
+                                this.moduleWindow.show();
+                                break;
+                            case 'build':
+                                break;
+                            default:
+                                break;
                         }
                         break;
                     // 显示控制台    
@@ -137,14 +144,14 @@ class receive {
                         break;
                     // 区块创建     
                     case ActionTypes.SEND_PROJECT_BLOCK_ITEM_CREATE:
-                        blockInfo = arg.payload;
+                        const blockItemInfo = arg.payload;
                         this.pyramidControl.findBlock((res) => {
                             console.log('查找区块包', res)
                             const fatherBlock = res.filter((val) => {
-                                return val._id == blockInfo.parentId
+                                return val._id == blockItemInfo.parentId
                             })[0]
                             console.log('fatherBlock', fatherBlock)
-                            let newBlockInfo = { ...blockInfo }
+                            let newBlockInfo = { ...blockItemInfo }
                             newBlockInfo['filePath'] = fatherBlock['filePath'] + '/' + fatherBlock['menuNameEn']
                             this.pyramidControl.createBlockItem(newBlockInfo, this.window_objs.runWindow)
                         })

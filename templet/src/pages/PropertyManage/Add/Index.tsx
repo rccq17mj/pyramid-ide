@@ -38,8 +38,29 @@ const Component: FunctionComponent<IProps> = props => {
 
 
   useEffect(()=>{
-    console.log('filePath', urlParames().filePath)
+   // console.log('filePath', urlParames().filePath)
   },[])
+
+  /**
+   * 正则表达式
+   */
+  const validateChineseName = (rule, value, callback) => {
+    const regex = /^[\u4e00-\u9fa5]+$/;
+    if (value && regex.test(value)) {
+      callback();
+    } else {
+      callback(new Error('中文名必须输入汉字'));
+    }
+  };
+
+  const validateEnglishnName = (rule, value, callback) => {
+    const regex = /^\w+$/;
+    if (value && regex.test(value)) {
+      callback();
+    } else {
+      callback(new Error('英文名必须输入字母或数字'));
+    }
+  };
 
 
   const handleSubmit = (e: FormEvent) => {
@@ -136,7 +157,10 @@ const Component: FunctionComponent<IProps> = props => {
         <FormItem>
           中文名称{getFieldDecorator(`menuNameZh`, {
           rules: [
-            { required: true, message: '必填' }
+            { required: true, message: '必填' },
+            {
+              validator: validateChineseName,
+            }
           ],
         })(<Input placeholder="中文名称" />)}
         </FormItem>
@@ -144,6 +168,9 @@ const Component: FunctionComponent<IProps> = props => {
           英文名称 {getFieldDecorator(`menuNameEn`, {
           rules: [
             { required: true, message: '必填' },
+            {
+              validator: validateEnglishnName,
+            }
           ],
         })(<Input placeholder="英文名称" />)}
         </FormItem>
@@ -173,9 +200,9 @@ const Component: FunctionComponent<IProps> = props => {
         </FormItem>
         <FormItem className={styles.uploadImg}>
           图片描述{getFieldDecorator(`img`, {
-          rules: [
+    /*      rules: [
             { required: true, message: '必填' }
-          ],
+          ],*/
         })(
           <Upload
             name="avatar"
