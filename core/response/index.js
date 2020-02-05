@@ -16,86 +16,109 @@ class response {
         })
 
         ipcMain.on('cmd-message', (event, arg) => {
-            let reData = {
-                type: ActionTypes.RECEIVE_CLI_MESSAGE,
-                payload: {...arg, cliType: null}
+           // 直接执行某条命令(这里增加了callbackId)
+           if (arg.flag === 'cmd-public-cmd') {
+            if (this.window_objs.mainWindow != null) {
+                this.window_objs.mainWindow.webContents.send('site-message', {
+                    type: arg.cli? ActionTypes.RECEIVE_CLI_MESSAGE : ActionTypes.RECEIVE_PUBLIC_CMD,
+                    payload: arg
+                });
             }
-            let reWindow = this.window_objs.mainWindow;
-         
-                switch (arg.flag) {
-                    // 获取区块包信息
-                    case 'cmd-get-block-package-info':
-                        if (typeof arg.msg === 'string' && arg.msg.indexOf('pyramid-blocks-info:') !== -1) {
-                            const treeJSON = arg.msg.split('pyramid-blocks-info:')[1].trim();
-                            const tree = JSON.parse(treeJSON);
-                            // 发送消息到子工程
-                            if (this.receive.getModuleWindow() != null) {
-                                reData.type = ActionTypes.RECEIVE_PROJECT_BLOCK_PACKAGE_INFO;
-                                reData.payload.blockInfo = tree;
-                            }else
-                                reData = null;
+        }
+
+        // 项目创建
+        if (arg.flag === 'cmd-children-project-create') {
+            if (this.window_objs.mainWindow != null) {
+                // 发送CLI消息回显，带上类型
+                this.window_objs.mainWindow.webContents.send('site-message', {
+                    type: ActionTypes.RECEIVE_CLI_MESSAGE,
+                    payload: { ...arg, cliType: CliMessageTypes.CHILDREN_PROJECT_CREATE }
+                });
+            }
+        }
+
+        // 项目启动
+        if (arg.flag === 'cmd-children-project-start') {
+            if (this.window_objs.mainWindow != null) {
+                this.window_objs.mainWindow.webContents.send('site-message', {
+                    type: ActionTypes.RECEIVE_CLI_MESSAGE,
+                    payload: { ...arg, cliType: CliMessageTypes.CHILDREN_PROJECT_START }
+                });
+            }
+        }
+
+        // 添加模块到项目
+        if (arg.flag === 'cmd-children-project-module-create') {
+            if (this.receive.getModuleWindow() != null) {
+                // self.moduleWindow.webContents.send('site-message', {
+                //     type: 'pyramid.ui.receive.project.module.create',
+                //     payload: arg
+                // });
+                this.receive.getModuleWindow().webContents.send('site-message', {
+                    type: ActionTypes.RECEIVE_CLI_MESSAGE,
+                    payload: { ...arg, cliType: CliMessageTypes.CHILDREN_PROJECT_MODULE_CREATE }
+                });
+            }
+        }
+
+        // 添加布局到项目
+        if (arg.flag === 'cmd-children-project-layout-create') {
+            if (this.receive.getModuleWindow() != null) {
+                this.receive.getModuleWindow().webContents.send('site-message', {
+                    type: ActionTypes.RECEIVE_CLI_MESSAGE,
+                    payload: { ...arg, cliType: CliMessageTypes.CHILDREN_PROJECT_LAYOUT_CREATE }
+                });
+            }
+        }
+
+        // 添加区块到项目
+        if (arg.flag === 'cmd-children-project-block-create') {
+            if (this.receive.getModuleWindow() != null) {
+                this.receive.getModuleWindow().webContents.send('site-message', {
+                    type: ActionTypes.RECEIVE_CLI_MESSAGE,
+                    payload: { ...arg, cliType: CliMessageTypes.CHILDREN_PROJECT_BLOCK_CREATE }
+                });
+            }
+        }
+
+        // 获取子项目路由树
+        if (arg.flag === 'cmd-children-project-get-route-tree') {
+            const msg = arg.msg;
+            if (typeof msg === 'string' && msg.indexOf('routes:') !== -1) {
+                const treeJSON = msg.split('routes:')[1].trim();
+                const tree = JSON.parse(treeJSON);
+                // 发送消息到子工程
+                if (this.receive.getModuleWindow() != null) {
+                    this.receive.getModuleWindow().webContents.send('site-message', {
+                        type: ActionTypes.RECEIVE_PROJECT_MODULE_GET_ROUTE_TREE,
+                        payload: {
+                            routerTree: tree
                         }
-                        break;
-                    // 直接调用命令行    
-                    case 'cmd-public-cmd':
-                        reData.type = arg.cli ? ActionTypes.RECEIVE_CLI_MESSAGE : ActionTypes.RECEIVE_PUBLIC_CMD
-                        break;
-                    // 项目创建    
-                    case 'cmd-children-project-create':
-                        reData.payload.cliType = CliMessageTypes.CHILDREN_PROJECT_CREATE
-                        break;
-                    // 启动项目        
-                    case 'cmd-children-project-start':
-                        reData.payload.cliType = CliMessageTypes.CHILDREN_PROJECT_START
-                        break;
-                    // 添加模块到项目    
-                    case 'cmd-children-project-start':
-                        reData.payload.cliType = CliMessageTypes.CHILDREN_PROJECT_MODULE_CREATE
-                        reWindow = this.receive.getModuleWindow();
-                        break;
-                     // 添加布局到项目    
-                    case 'cmd-children-project-layout-create':
-                        reData.payload.cliType = CliMessageTypes.CHILDREN_PROJECT_LAYOUT_CREATE
-                        reWindow = this.receive.getModuleWindow();
-                        break;
-                    // 添加模版到项目
-                    case 'cmd-children-project-module-create':
-                        reData.payload.cliType = CliMessageTypes.CHILDREN_PROJECT_MODULE_CREATE
-                        reWindow = this.receive.getModuleWindow();
-                        break; 
-                    // 添加区块到项目    
-                    case 'cmd-children-project-block-create':
-                        reData.payload.cliType = CliMessageTypes.CHILDREN_PROJECT_BLOCK_CREATE
-                        reWindow = this.receive.getModuleWindow();
-                        break;
-                    // 区块包创建    
-                    case 'cmd-block-package-create':
-                        reData.payload.cliType = CliMessageTypes.PROJECT_BLOCK_PACKAGE_CREATE
-                        break;    
-                    // 区块创建    
-                    case 'cmd-block-item-create':
-                        reData.payload.cliType = CliMessageTypes.PROJECT_BLOCK_ITEM_CREATE
-                        break; 
-                    // 获取子项目路由树    
-                    case 'cmd-children-project-get-route-tree':
-                        const msg = arg.msg;
-                        if (typeof msg === 'string' && msg.indexOf('routes:') !== -1) {
-                            const treeJSON = msg.split('routes:')[1].trim();
-                            const tree = JSON.parse(treeJSON);
-                            // 发送消息到子工程
-                            if (this.receive.getModuleWindow() != null) {
-                                reData.type = ActionTypes.RECEIVE_PROJECT_MODULE_GET_ROUTE_TREE
-                                reData.payload.routerTree = tree;
-                            }else
-                            reData = null;
-                        }
-                    break;    
+                    });
                 }
-            
-            if(reData && reWindow){
-                console.log('回复templet工程消息:', reData);
-                reWindow.webContents.send('site-message', reData);
             }
+        }
+
+        // 区块包创建
+        if (arg.flag === 'cmd-block-package-create') {
+            if (this.window_objs.mainWindow != null) {
+                // 发送CLI消息回显，带上类型
+                this.window_objs.mainWindow.webContents.send('site-message', {
+                    type: ActionTypes.RECEIVE_CLI_MESSAGE,
+                    payload: { ...arg, cliType: CliMessageTypes.PROJECT_BLOCK_PACKAGE_CREATE }
+                });
+            }
+        }
+        // 区块创建
+        if (arg.flag === 'cmd-block-item-create') {
+            if (this.window_objs.mainWindow != null) {
+                // 发送CLI消息回显，带上类型
+                this.window_objs.mainWindow.webContents.send('site-message', {
+                    type: ActionTypes.RECEIVE_CLI_MESSAGE,
+                    payload: { ...arg, cliType: CliMessageTypes.PROJECT_BLOCK_ITEM_CREATE }
+                });
+            }
+        }
         })
     }
 }
