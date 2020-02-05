@@ -144,14 +144,14 @@ class receive {
                         break;
                     // 区块创建     
                     case ActionTypes.SEND_PROJECT_BLOCK_ITEM_CREATE:
-                        blockInfo = arg.payload;
+                        const blockItemInfo = arg.payload;
                         this.pyramidControl.findBlock((res) => {
                             console.log('查找区块包', res)
                             const fatherBlock = res.filter((val) => {
-                                return val._id == blockInfo.parentId
+                                return val._id == blockItemInfo.parentId
                             })[0]
                             console.log('fatherBlock', fatherBlock)
-                            let newBlockInfo = { ...blockInfo }
+                            let newBlockInfo = { ...blockItemInfo }
                             newBlockInfo['filePath'] = fatherBlock['filePath'] + '/' + fatherBlock['menuNameEn']
                             this.pyramidControl.createBlockItem(newBlockInfo, this.window_objs.runWindow)
                         })

@@ -16,21 +16,21 @@ interface IProps {
 const Component: FunctionComponent<IProps> = props => {
 
   const [leftButtons, setLeftButtons] = useState<ILeftBtn[]>([
-    {
+/*    {
       icon: 'border',
       name: '模块',
       url: '/property/PropertyLibrary/PropertyLibraryModule',
       open: true
-    },
+    },*/
     {
       icon: 'appstore',
       name: '区块',
       url: '/property/PropertyLibrary/PropertyLibraryBlock',
-      open: false
+      open: true
     }
   ]);
 
-  useEffect(() => {
+/*  useEffect(() => {
     // clickLeftBtn(leftButtons[2], 2);
     leftButtons.forEach((item)=>{
       if(item.url == window.location.pathname){
@@ -40,7 +40,7 @@ const Component: FunctionComponent<IProps> = props => {
       }
     })
     setLeftButtons(leftButtons)
-  });
+  });*/
 
   const clickLeftBtn = (btn: ILeftBtn, index: number) => {
     router.push(btn.url);

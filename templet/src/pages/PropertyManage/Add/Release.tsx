@@ -1,14 +1,8 @@
 import React, {FormEvent, FunctionComponent, useEffect, useState} from 'react';
 import {Avatar, Button, Select, Empty, Form, Input, message, Modal, Upload, Icon, Switch} from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
-import { pyramidUiService } from '@/core/pyramid-ui/service/pyramid-ui.service';
-import {
- PyramidUISendProjectBlockItemCreateAction
-} from "@/core/pyramid-ui/action/pyramid-ui.action";
-import {API_CONFIG} from "@/core/configs/api.config";
 import { urlParames } from '@/utils/utils';
-import {mainRequest} from '../../../requests/main.request';
-import styles from './Index.less';
+
 import {blockPackageRequest} from "@/requests/block-package.request";
 
 const FormItem = Form.Item;
@@ -50,16 +44,42 @@ const Component: FunctionComponent<IProps> = props => {
         blockPackageRequest.blockPackageAdd(params).then(res => {
           if(res){
             console.log('res122223',res);
+            props.closeModal(true)
           }
         })
-
-       // pyramidUiService.sendMessageFn(new PyramidUISendProjectBlockItemCreateAction(params));
-
-      //  props.closeModal(true)
       }
     });
   };
 
+  /**
+   * 正则表达式
+   */
+  const validateChineseName = (rule, value, callback) => {
+    const regex = /^[\u4e00-\u9fa5]+$/;
+    if (value && regex.test(value)) {
+      callback();
+    } else {
+      callback(new Error('中文名必须输入汉字'));
+    }
+  };
+
+  const validateEnglishnName = (rule, value, callback) => {
+    const regex = /^\w+$/;
+    if (value && regex.test(value)) {
+      callback();
+    } else {
+      callback(new Error('英文名必须输入字母或数字'));
+    }
+  };
+
+  const validateVersion = (rule, value, callback) => {
+    const regex = /^([1-9]\d|[1-9])(\.([1-9]\d|\d)){2}$/;
+    if (value && regex.test(value)) {
+      callback();
+    } else {
+      callback(new Error('版本号格式必须为1.0.0'));
+    }
+  };
 
   const onSwitchChange = (checked) => {
     setIsPublic(checked)
@@ -78,14 +98,21 @@ const Component: FunctionComponent<IProps> = props => {
         <FormItem>
           中文名称{getFieldDecorator(`chineseName`, {
           rules: [
-            { required: true, message: '必填' }
+            { required: true, message: '必填' },
+            {
+              validator: validateChineseName,
+            },
           ],
+
         })(<Input placeholder="中文名称" />)}
         </FormItem>
         <FormItem>
           英文名称 {getFieldDecorator(`englishnName`, {
           rules: [
             { required: true, message: '必填' },
+            {
+              validator: validateEnglishnName,
+            },
           ],
         })(<Input placeholder="英文名称" />)}
         </FormItem>
@@ -99,14 +126,20 @@ const Component: FunctionComponent<IProps> = props => {
         <FormItem>
           版本号{getFieldDecorator(`currentVersion`, {
           rules: [
-            { required: true, message: '必填' }
+            { required: true, message: '必填' },
+            {
+              validator: validateVersion,
+            },
           ],
         })(<Input placeholder="版本号" />)}
         </FormItem>
         <FormItem>
           支撑平台版本{getFieldDecorator(`platformVersion`, {
           rules: [
-            { required: true, message: '必填' }
+            { required: true, message: '必填' },
+            {
+              validator: validateVersion,
+            },
           ],
         })(<Input placeholder="支撑平台版本" />)}
         </FormItem>

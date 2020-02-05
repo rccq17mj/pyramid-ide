@@ -15,6 +15,9 @@
  ├─ core                     // 业务核心
  │  ├─ service               // 调用各用api的控制类
  │  ├─ config                // 应用各种配置
+ │  ├─ core/receive          // 接收｜用于接收templet的请求
+ │  ├─ core/pyramidControl   // 处理｜用于处理templet请求的相关逻辑
+ │  ├─ core/response         // 回复｜用于将命令行异步执行结果返回给templet
  ├─ pages                    // 客户端工程用到的其他非UI界面
  │  ├─ command               // 用于命令行交互和客户端初始化相关的处理
  ├── templet                 // 客户端工程的UI界面渲染工程
