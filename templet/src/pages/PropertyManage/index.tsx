@@ -1,7 +1,6 @@
 import React, {FunctionComponent, useEffect, useState} from 'react';
-import { Row, Col, Button } from 'antd';
+import { Row, Col, Button, Card } from 'antd';
 import styles from './PropertyManage.less';
-import {Card, Button} from "antd";
 import plus from "@/assets/plus.png";
 import block from "@/assets/block.png";
 import router from "umi/router";
@@ -47,17 +46,21 @@ const PropertyManage: FunctionComponent<IProps> = props => {
 
   const getBlockList = () =>{
     pyramidUiService.sendMessageFn(new PyramidUISendBlockItemGetAction({parentId:urlParames().parentId}));
+  }
 
-    pyramidUiService.getMessageFn((action: PyramidUIReceiveBlockItemListAction) => {
+  useEffect(() => {
+    getBlockList();
+
+    const messageKey = pyramidUiService.getMessageFn((action: PyramidUIReceiveBlockItemListAction) => {
       if (action.type === PyramidUIActionTypes.RECEIVE_PROJECT_BLOCK_ITEM_LIST) {
         console.log('blockItemData', action.payload)
         setCards(action.payload)
       }
     });
-  }
 
-  useEffect(() => {
-    getBlockList();
+    return () => {
+      pyramidUiService.clearMessageFn(messageKey);
+    }
   },[]);
 
 /*  useEffect(() => {

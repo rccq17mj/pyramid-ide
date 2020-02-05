@@ -13,6 +13,7 @@ import {
   PyramidUIReceiveBlockListAction,
   PyramidUISendBlockRemoveAction,
   PyramidUIReceiveBlockRemoveAction,
+  PyramidUIActionsUnion
 } from '@/core/pyramid-ui/action/pyramid-ui.action';
 import Router from 'umi/router';
 import style from '../../Property.less';
@@ -52,6 +53,23 @@ const ProperytBlock: FunctionComponent<IProps> = props => {
     setSelectList(selectList)
   }, [cards]);
 
+  useEffect(() => {
+    // 统一监听
+    const messageKey = pyramidUiService.getMessageFn((action: PyramidUIActionsUnion) => {
+      if (action.type === PyramidUIActionTypes.RECEIVE_PROJECT_BLOCK_LIST) {
+        console.log('blockData', action.payload)
+        setCards(action.payload)
+      }
+
+      if (action.type === PyramidUIActionTypes.RECEIVE_PROJECT_BLOCK_REMOVE) {
+        console.log('删除的action', action)
+      }
+    });
+
+    return () => {
+      pyramidUiService.clearMessageFn(messageKey);
+    }
+  }, []);
 
   useEffect(() => {
     getBlockData()
@@ -66,13 +84,6 @@ const ProperytBlock: FunctionComponent<IProps> = props => {
   const getBlockData = () => {
     console.log('extraParams', extraParams)
     pyramidUiService.sendMessageFn(new PyramidUISendBlockGetAction(extraParams));
-
-    pyramidUiService.getMessageFn((action: PyramidUIReceiveBlockListAction) => {
-      if (action.type === PyramidUIActionTypes.RECEIVE_PROJECT_BLOCK_LIST) {
-        console.log('blockData', action.payload)
-        setCards(action.payload)
-      }
-    });
   }
 
   // 管理模式
@@ -112,11 +123,6 @@ const ProperytBlock: FunctionComponent<IProps> = props => {
   // 删除项
   const deleteItem = () => {
     pyramidUiService.sendMessageFn(new PyramidUISendBlockRemoveAction(selectList));
-    pyramidUiService.getMessageFn((action: PyramidUIReceiveBlockRemoveAction) => {
-      if (action.type === PyramidUIActionTypes.RECEIVE_PROJECT_BLOCK_REMOVE) {
-        console.log('删除的action', action)
-      }
-    });
   }
 
   return (
