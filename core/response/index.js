@@ -20,7 +20,8 @@ class response {
                 type: ActionTypes.RECEIVE_CLI_MESSAGE,
                 payload: {...arg, cliType: null}
             }
-            if (this.window_objs.mainWindow != null || this.window_objs.runWindow != null) {
+            let reWindow = this.window_objs.mainWindow;
+         
                 switch (arg.flag) {
                     // 直接调用命令行    
                     case 'cmd-public-cmd':
@@ -37,18 +38,22 @@ class response {
                     // 添加模块到项目    
                     case 'cmd-children-project-start':
                         reData.payload.cliType = CliMessageTypes.CHILDREN_PROJECT_MODULE_CREATE
+                        reWindow = this.receive.getModuleWindow();
                         break;
                      // 添加布局到项目    
-                    case 'cmd-children-project-start':
+                    case 'cmd-children-project-layout-create':
                         reData.payload.cliType = CliMessageTypes.CHILDREN_PROJECT_LAYOUT_CREATE
+                        reWindow = this.receive.getModuleWindow();
                         break;
                     // 添加模版到项目
                     case 'cmd-children-project-module-create':
-                        reData.payload.cliType = CliMessageTypes.CHILDREN_PROJECT_MODULE_CREATE;
+                        reData.payload.cliType = CliMessageTypes.CHILDREN_PROJECT_MODULE_CREATE
+                        reWindow = this.receive.getModuleWindow();
                         break; 
                     // 添加区块到项目    
                     case 'cmd-children-project-block-create':
                         reData.payload.cliType = CliMessageTypes.CHILDREN_PROJECT_BLOCK_CREATE
+                        reWindow = this.receive.getModuleWindow();
                         break;
                     // 区块包创建    
                     case 'cmd-block-package-create':
@@ -73,10 +78,10 @@ class response {
                         }
                     break;    
                 }
-            }
-            if(reData){
+            
+            if(reData && reWindow){
                 console.log('回复templet工程消息:', reData);
-                this.window_objs.mainWindow.webContents.send('site-message', reData);
+                reWindow.webContents.send('site-message', reData);
             }
         })
     }
