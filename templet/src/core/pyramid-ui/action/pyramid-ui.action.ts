@@ -76,8 +76,6 @@ export class PyramidUIReceiveProjectPublicCMD implements PyramidUIAction {
     data: any;
     // 一般数据（根据壳工程传回，看可工程是否需要统一）
     msg: string;
-    // 关键数据，需要在壳工程做统一处理（用于一些命令的回传数据）
-    KeyData?: string;
   }) { }
 }
 /******************** 项目 ********************/
