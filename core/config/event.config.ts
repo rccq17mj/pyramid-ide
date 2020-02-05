@@ -22,7 +22,7 @@ export const ActionTypes = {
     SEND_PROJECT_TOOLBAR: 'pyramid.ui.send.project.SEND_PROJECT_TOOLBAR',
     RECEIVE_PROJECT_REMOVE:'pyramid.ui.receive.project.remove',
     RECEIVE_PROJECT_CHOOSE_PATH: 'pyramid.ui.receive.project.choosePath',
-    SEND_PROJECT_REMOVE: 'pyramid.ui.send.project.remove'
+    SEND_PROJECT_REMOVE: 'pyramid.ui.send.project.remove',
     /******************** 项目 ********************/
 
 
