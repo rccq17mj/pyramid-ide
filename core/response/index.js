@@ -42,6 +42,10 @@ class response {
                     case 'cmd-children-project-start':
                         reData.payload.cliType = CliMessageTypes.CHILDREN_PROJECT_LAYOUT_CREATE
                         break;
+                    // 添加模版到项目
+                    case 'cmd-children-project-module-create':
+                        reData.payload.cliType = CliMessageTypes.CHILDREN_PROJECT_MODULE_CREATE;
+                        break; 
                     // 添加区块到项目    
                     case 'cmd-children-project-block-create':
                         reData.payload.cliType = CliMessageTypes.CHILDREN_PROJECT_BLOCK_CREATE
