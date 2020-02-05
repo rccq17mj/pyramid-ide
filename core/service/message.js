@@ -52,7 +52,7 @@ class message {
             if (arg.flag === 'cmd-public-cmd') {
                 if (this.window_objs.mainWindow != null) {
                     this.window_objs.mainWindow.webContents.send('site-message', {
-                        type: ActionTypes.RECEIVE_PUBLIC_CMD,
+                        type: arg.cli? ActionTypes.RECEIVE_CLI_MESSAGE : ActionTypes.RECEIVE_PUBLIC_CMD,
                         payload: arg
                     });
                 }

@@ -2,7 +2,7 @@ import React, {FormEvent, FunctionComponent, useEffect, useState} from 'react';
 import { Tabs, Button, Select, Form, Input, Modal, Switch, Icon } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 import { pyramidUiService } from '@/core/pyramid-ui/service/pyramid-ui.service';
-import { PyramidUISendProjectCreateAction, PyramidUISendProjectChoosePathAction, PyramidUIReceiveProjectChoosePathAction, PyramidUIActionTypes } from "@/core/pyramid-ui/action/pyramid-ui.action";
+import { PyramidUISendPublicCMD,PyramidUIPushCMD, PyramidUISendProjectChoosePathAction, PyramidUIReceiveProjectChoosePathAction, PyramidUIActionTypes } from "@/core/pyramid-ui/action/pyramid-ui.action";
 import styles from './Index.less';
 
 const FormItem = Form.Item;
@@ -55,13 +55,13 @@ const Component: FunctionComponent<IProps> = props => {
 
     form.validateFields((err, fieldsValue) => {
       // sendMessage({'project': true, msg: 'create', 'projectInfo': fieldsValue});
-      let urlName = window.location.pathname;
-      if(urlName==='/pc'){
-        pyramidUiService.sendMessageFn(new PyramidUISendProjectCreateAction({...fieldsValue,platform:'pc'}));
-      }else{
-        pyramidUiService.sendMessageFn(new PyramidUISendProjectCreateAction({...fieldsValue,platform:'mobile'}));
-      }
-
+      const urlName = window.location.pathname;
+      const type = urlName ==='/pc'? 'pc' : 'mobile';
+      const param = new PyramidUIPushCMD({...fieldsValue,platform: type}).projectCreateAction();
+      pyramidUiService.sendMessageFn(new PyramidUISendPublicCMD(param, (payload) => {
+        console.log(payload);
+        
+      }));
       // getMessage((msg)=>{
       //   if(msg.hasOwnProperty('cmd-create')) {
       //     console.log('msg:', msg);

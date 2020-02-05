@@ -68,8 +68,13 @@ function runCmd(arg) {
             
             if (arg.callbackId) 
                 msg.callbackId = arg.callbackId;
-            
 
+            if (arg.cwd) 
+                msg.cwd = arg.cwd;
+
+            if (arg.cli) 
+                msg.cli = arg.cli;
+            
             // 这里需要单独处理
             if (arg.flag === 'cmd-children-project-start') {
                 waitOn(opts).then(function() {

@@ -62,8 +62,10 @@ class receive {
                         // 用项目信息拼接创建执行命令
                         const cmdArg = {
                             channel: 'cmd-message',
-                            cmdStr: payload.cmd,
                             flag: 'cmd-public-cmd',
+                            cmdStr: payload.cmd,
+                            cwd: payload.cwd,
+                            cli: payload.cli,
                             callbackId: payload.callbackId
                         }
                         // 将此命令发送给渲染窗口执行
