@@ -5,6 +5,30 @@ import AddModal from './Add/Index';
 import {IBlockCard} from "@/interfaces/block/block.interface";
 import {pyramidUiService} from "@/core/pyramid-ui/service/pyramid-ui.service";
 import {PyramidUISendProjectBlockSelectAction} from "@/core/pyramid-ui/action/pyramid-ui.action";
+import {blockPackageRequest} from "@/requests/block-package.request";
+import * as _ from 'lodash';
+
+enum EFetchStatus {
+  noFetch = 'noFetch',
+  fetching = 'fetching',
+  fetchEnd = 'fetchEnd'
+}
+
+interface IMenu {
+  applyType: string;
+  chineseName: string;
+  currentVersion: string;
+  englishName: string;
+  id: string;
+  isRegisted: number;
+  packageManager: string;
+  platformVersion: string;
+  storeAddress: string;
+  categories: string[];
+
+  // 拉取状态
+  fetchStatus: EFetchStatus;
+}
 
 const { SubMenu } = Menu;
 const { TabPane } = Tabs;
@@ -16,7 +40,7 @@ interface IProps {
   }
 }
 
-const Component: FunctionComponent<IProps> = props => {
+const Component: FunctionComponent<IProps> = () => {
   const [tabActiveKey, setTabActiveKey] = useState<string>('1');
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [modalParams, setModalParams] = useState<IBlockCard>(null);
@@ -42,10 +66,33 @@ const Component: FunctionComponent<IProps> = props => {
       hover: false
     }
   ]);
+  const [menus, setMenus] = useState<IMenu[]>([]);
+  const [menuOpenKeys, setMenuOpenKeys] = useState<string[]>([]);
 
   useEffect(() => {
     setTotal(50);
   }, []);
+
+  useEffect(() => {
+    queryPackages();
+  }, [current]);
+
+  const queryPackages = () => {
+    const params = {};
+    params['pageNum'] = current;
+    params['pageSize'] = 10;
+    blockPackageRequest.blockPackageSubscribePage(params).then(res => {
+      if (res) {
+        if (res.list.length > 0) {
+          res.list.forEach(item => {
+            item.fetchStatus = EFetchStatus.noFetch;
+          });
+          setMenus(res.list);
+          setTotal(res.total);
+        }
+      }
+    })
+  };
 
   const handleSubmit = () => {
 
@@ -64,8 +111,18 @@ const Component: FunctionComponent<IProps> = props => {
     }));
   };
 
-  const paginationChange = (page: number, pageSize?: number) => {
+  const paginationChange = (page: number) => {
     setCurrent(page);
+  };
+
+  const findMenuByKey = (key: string) => {
+    let findMenu: IMenu = null;
+    menus.forEach(menu => {
+      if (menu.id === key) {
+        findMenu = menu;
+      }
+    });
+    return findMenu;
   };
 
   return (
@@ -81,52 +138,70 @@ const Component: FunctionComponent<IProps> = props => {
           {/* 菜单 */}
           <div className={styles.menu}>
             <Menu
-              defaultSelectedKeys={['1']}
               mode="inline"
               theme="dark"
+              openKeys={menuOpenKeys}
+              onOpenChange={param => {
+                const diffArr = _.difference(param, menuOpenKeys);
+                if (diffArr.length > 0) {
+                  const key = diffArr[0];
+                  const findMenu = findMenuByKey(key);
+                  if (findMenu && findMenu.fetchStatus === 'noFetch') {
+                    findMenu.fetchStatus = EFetchStatus.fetching;
+                  }
+                }
+                setMenuOpenKeys(param);
+              }}
             >
-              <SubMenu
-                key="sub-0"
-                title={
-                  <span>
-                <Icon type="mail" />
-                <span>pyramid-ui</span>
-              </span>
-                }
-              >
-                <Menu.Item key="sub-0-0">空白页</Menu.Item>
-                <Menu.Item key="sub-0-1">个人中心</Menu.Item>
-                <Menu.Item key="sub-0-2">个人设置</Menu.Item>
-                <Menu.Item key="sub-0-3">异常</Menu.Item>
-              </SubMenu>
-              <SubMenu
-                key="sub-1"
-                title={
-                  <span>
-                <Icon type="mail" />
-                <span>pyramid-ui-1</span>
-              </span>
-                }
-              >
-                <Menu.Item key="sub-1-0">空白页</Menu.Item>
-                <Menu.Item key="sub-1-1">个人中心</Menu.Item>
-                <Menu.Item key="sub-1-2">个人设置</Menu.Item>
-                <Menu.Item key="sub-1-3">异常</Menu.Item>
-              </SubMenu>
-              <SubMenu
-                key="sub-2"
-                title={
-                  <span>
-                <Icon type="mail" />
-                <span>pyramid-ui-1</span>
-              </span>
-                }
-              >
-                <Menu.Item key="sub-1-0">空白页</Menu.Item>
-                <Menu.Item key="sub-1-1">个人中心</Menu.Item>
-                <Menu.Item key="sub-1-2">个人设置</Menu.Item>
-                <Menu.Item key="sub-1-3">异常</Menu.Item>
-              </SubMenu>
+              {
+                menus.map((menu) => {
+                  return (
+                    <SubMenu
+                      key={menu.id}
+                      title={
+                        <span>
+                          <Icon type="mail" />
+                          <span>{menu.chineseName}</span>
+                        </span>
+                      }
+                    >
+                      <Menu.Item key="sub-0-0">空白页</Menu.Item>
+                      <Menu.Item key="sub-0-1">个人中心</Menu.Item>
+                      <Menu.Item key="sub-0-2">个人设置</Menu.Item>
+                      <Menu.Item key="sub-0-3">异常</Menu.Item>
+                    </SubMenu>
+                  )
+                })
+              }
+
+              {/*<SubMenu*/}
+              {/*  key="sub-1"*/}
+              {/*  title={*/}
+              {/*    <span>*/}
+              {/*  <Icon type="mail" />*/}
+              {/*  <span>pyramid-ui-1</span>*/}
+              {/*</span>*/}
+              {/*  }*/}
+              {/*>*/}
+              {/*  <Menu.Item key="sub-1-0">空白页</Menu.Item>*/}
+              {/*  <Menu.Item key="sub-1-1">个人中心</Menu.Item>*/}
+              {/*  <Menu.Item key="sub-1-2">个人设置</Menu.Item>*/}
+              {/*  <Menu.Item key="sub-1-3">异常</Menu.Item>*/}
+              {/*</SubMenu>*/}
+              {/*<SubMenu*/}
+              {/*  key="sub-2"*/}
+              {/*  title={*/}
+              {/*    <span>*/}
+              {/*  <Icon type="mail" />*/}
+              {/*  <span>pyramid-ui-1</span>*/}
+              {/*</span>*/}
+              {/*  }*/}
+              {/*>*/}
+              {/*  <Menu.Item key="sub-1-0">空白页</Menu.Item>*/}
+              {/*  <Menu.Item key="sub-1-1">个人中心</Menu.Item>*/}
+              {/*  <Menu.Item key="sub-1-2">个人设置</Menu.Item>*/}
+              {/*  <Menu.Item key="sub-1-3">异常</Menu.Item>*/}
+              {/*</SubMenu>*/}
             </Menu>
           </div>
           {/* 底部订阅标题 */}
@@ -153,11 +228,11 @@ const Component: FunctionComponent<IProps> = props => {
               cards.map((card, index) => {
                 return (
                   <div className={styles.item} key={card.key}>
-                    <div className={styles['item-top']} onMouseEnter={e => handleMouse(index, true)} onMouseLeave={e => handleMouse(index, false)}>
+                    <div className={styles['item-top']} onMouseEnter={() => handleMouse(index, true)} onMouseLeave={() => handleMouse(index, false)}>
                       {
                         card.hover ? (
                           <div className={styles['item-top-mask']}>
-                            <Button type={"primary"} style={{marginBottom: 10}} onClick={(e) => add(card)}>添加到页面</Button>
+                            <Button type={"primary"} style={{marginBottom: 10}} onClick={() => add(card)}>添加到页面</Button>
                             <Button>预览</Button>
                           </div>
                         ): null
@@ -185,7 +260,7 @@ const Component: FunctionComponent<IProps> = props => {
           <AddModal
             modalVisible={modalVisible}
             params={modalParams}
-            closeModal={success => {
+            closeModal={() => {
               setModalVisible(false);
               setModalParams(null);
             }}

@@ -87,7 +87,6 @@ const CliModal: FunctionComponent<IProps> = props => {
    * 然后底部按钮
    */
   const renderFooter = () => {
-    debugger
     if (props.action.payload.cliType === CliMessageTypes.CHILDREN_PROJECT_CREATE) {
       return (
         <Button type="primary" disabled={!messageEnd} htmlType="button" onClick={()=>{
