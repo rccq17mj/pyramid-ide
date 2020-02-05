@@ -206,9 +206,6 @@ const Component: FunctionComponent<IProps> = props => {
           }}
         />
       ) : null}
-      {
-         getProjectsData()
-      }
     </div>
 
   )
