@@ -30,11 +30,11 @@ export class PyramidUIReceiveCliMessage implements PyramidUIAction {
 }
 /******************** 全局 ********************/
 const guid = () => {
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
     var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
     return v.toString(16);
   });
-}
+};
 /**
  * 直接请求执行某个命令
  */
@@ -45,23 +45,40 @@ export class PyramidUISendPublicCMD implements PyramidUIAction {
     callbackId?: string,
     callback?: Function,
   }, public callback: Function , public callbackId?: string) {
-   
+
     this.callbackId = payload.callbackId = guid();
-    if (payload.callback)
+
+    if (payload.callback) {
       this.callback = payload.callback;
- 
-     // 这里其实只要拿次协议的 callbackId 作为返回监听即可，必须要声明一大堆 PyramidUIReceive
-    pyramidUiService.getMessageFn((action: PyramidUIReceiveProjectPublicCMD) => {
+    }
+
+    // 这里其实只要拿次协议的 callbackId 作为返回监听即可，必须要声明一大堆 PyramidUIReceive
+    const messageId = pyramidUiService.getMessageFn((action: PyramidUIReceiveProjectPublicCMD) => {
       const payload = action.payload;
       // 这里完全可以通过 callbackId 判断要不要执行回调
-      if(payload.callbackId === this.callbackId)
-          this.callback(payload);
+      if (payload.callbackId === this.callbackId) {
+        if (payload.status === 'end' || payload.status === 'error') {
+          pyramidUiService.clearMessageFn(messageId);
+        }
+        this.callback(payload);
+      }
     })
   }
 }
 export class PyramidUIReceiveProjectPublicCMD implements PyramidUIAction {
   readonly type = PyramidUIActionTypes.RECEIVE_PUBLIC_CMD;
-  constructor(public payload: any) { }
+  constructor(public payload: {
+    // 判断比较
+    callbackId: string;
+    // 状态
+    status: 'start' | 'error' | 'end' | 'progress';
+    // 二进制数据（根据壳工程传回，看可工程是否需要统一）
+    data: any;
+    // 一般数据（根据壳工程传回，看可工程是否需要统一）
+    msg: string;
+    // 关键数据，需要在壳工程做统一处理（用于一些命令的回传数据）
+    KeyData?: string;
+  }) { }
 }
 /******************** 项目 ********************/
 

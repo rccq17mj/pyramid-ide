@@ -5,6 +5,8 @@ export const ActionTypes = {
     /******************** 全局 ********************/
     // 打开devTools
     SEND_PUBLIC_OPEN_CONSOLE: 'pyramid.ui.send.public.console',
+    // 接收Cli消息
+    RECEIVE_CLI_MESSAGE: 'pyramid.ui.receive.public.console',
     // 直接请求执行某条命令
     SEND_PUBLIC_CMD: 'pyramid.ui.send.public.env.cmd',
     RECEIVE_PUBLIC_CMD:  'pyramid.ui.receive.public.env.cmd',

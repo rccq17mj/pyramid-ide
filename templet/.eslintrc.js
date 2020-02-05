@@ -1,25 +1,39 @@
-const { strictEslint } = require('@umijs/fabric');
+const { eslint } = require('@umijs/fabric');
 
 // 引号、双引号都可以
-strictEslint.rules['quotes'] = 0;
-strictEslint.rules['object-curly-spacing'] = 0;
-strictEslint.rules['comma-dangle'] = 0;
-strictEslint.rules['max-len'] = 0;
-strictEslint.rules['no-trailing-spaces'] = 0;
-strictEslint.rules['no-multiple-empty-lines'] = 0;
-strictEslint.rules['arrow-body-style'] = 0;
-strictEslint.rules['no-unused-vars'] = 1;
-strictEslint.rules['jsx-curly-brace-presence'] = 0;
-strictEslint.rules['jsx-quotes'] = 0;
-strictEslint.rules['space-infix-ops'] = 0;
-strictEslint.rules['react/jsx-curly-brace-presence'] = 0;
-strictEslint.rules['import/order'] = 0;
-strictEslint.rules['dot-notation'] = 0;
-strictEslint.rules['no-plusplus'] = 0;
-strictEslint.rules['no-shadow'] = 0;
+eslint.rules['quotes'] = 0;
+eslint.rules['object-curly-spacing'] = 0;
+eslint.rules['comma-dangle'] = 0;
+eslint.rules['max-len'] = 0;
+eslint.rules['no-trailing-spaces'] = 0;
+eslint.rules['no-multiple-empty-lines'] = 0;
+eslint.rules['arrow-body-style'] = 0;
+eslint.rules['no-unused-vars'] = 1;
+eslint.rules['jsx-curly-brace-presence'] = 0;
+eslint.rules['jsx-quotes'] = 0;
+eslint.rules['space-infix-ops'] = 0;
+eslint.rules['react/jsx-curly-brace-presence'] = 0;
+eslint.rules['import/order'] = 0;
+eslint.rules['dot-notation'] = 0;
+eslint.rules['no-plusplus'] = 0;
+eslint.rules['no-shadow'] = 0;
+eslint.rules['spaced-comment'] = 0;
+eslint.rules['lines-between-class-members'] = 0;
+eslint.rules['no-useless-constructor'] = 0;
+eslint.rules['no-empty-function'] = 0;
+eslint.rules['comma-spacing'] = 0;
+eslint.rules['padded-blocks'] = 0;
+eslint.rules['semi-style'] = 0;
+eslint.rules['no-empty'] = 0;
+eslint.rules['prefer-destructuring'] = 0;
+eslint.rules['block-spacing'] = 0;
+eslint.rules['no-multi-assign'] = 0;
+eslint.rules['no-case-declarations'] = 0;
+eslint.rules['arrow-parens'] = 0;
+eslint.rules['no-param-reassign'] = 0;
 
 module.exports = {
-  ...strictEslint,
+  ...eslint,
   globals: {
     ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION: true,
     page: true,
