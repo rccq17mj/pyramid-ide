@@ -1,7 +1,7 @@
 import { ActionTypes } from '../../../../../core/config/event.config';
 import {CliMessageTypes} from '../../../../../core/config/cliMessageType.config';
 import { pyramidUiService } from '@/core/pyramid-ui/service/pyramid-ui.service';
-
+ 
 export interface PyramidUIAction {
   type: string;
 }
@@ -126,7 +126,11 @@ export class PyramidUIPushCMD {
 }
 
 /******************** 项目 ********************/
-
+export class PyramidUISendProjectCreateAction implements PyramidUIAction {
+  readonly type = PyramidUIActionTypes.SEND_PROJECT_CREATE;
+  constructor(public payload: any) {}
+}
+  
 /**
  * 打开指定项目操作窗口
  */
