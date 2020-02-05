@@ -58,12 +58,23 @@ class message {
                 }
             }
 
+            // 项目创建
+            if (arg.flag === 'cmd-children-project-create') {
+                if (this.window_objs.mainWindow != null) {
+                    // 发送CLI消息回显，带上类型
+                    this.window_objs.mainWindow.webContents.send('site-message', {
+                        type: ActionTypes.RECEIVE_CLI_MESSAGE,
+                        payload: { ...arg, cliType: CliMessageTypes.CHILDREN_PROJECT_CREATE }
+                    });
+                }
+            }
+
             // 项目启动
             if (arg.flag === 'cmd-children-project-start') {
                 if (this.window_objs.mainWindow != null) {
                     this.window_objs.mainWindow.webContents.send('site-message', {
                         type: ActionTypes.RECEIVE_CLI_MESSAGE,
-                        payload: { ...arg, type: CliMessageTypes.CHILDREN_PROJECT_START }
+                        payload: { ...arg, cliType: CliMessageTypes.CHILDREN_PROJECT_START }
                     });
                 }
             }
@@ -77,7 +88,7 @@ class message {
                     // });
                     this.receive.getModuleWindow().webContents.send('site-message', {
                         type: ActionTypes.RECEIVE_CLI_MESSAGE,
-                        payload: { ...arg, type: CliMessageTypes.CHILDREN_PROJECT_MODULE_CREATE }
+                        payload: { ...arg, cliType: CliMessageTypes.CHILDREN_PROJECT_MODULE_CREATE }
                     });
                 }
             }
@@ -87,7 +98,7 @@ class message {
                 if (this.receive.getModuleWindow() != null) {
                     this.receive.getModuleWindow().webContents.send('site-message', {
                         type: ActionTypes.RECEIVE_CLI_MESSAGE,
-                        payload: { ...arg, type: CliMessageTypes.CHILDREN_PROJECT_LAYOUT_CREATE }
+                        payload: { ...arg, cliType: CliMessageTypes.CHILDREN_PROJECT_LAYOUT_CREATE }
                     });
                 }
             }
@@ -97,7 +108,7 @@ class message {
                 if (this.receive.getModuleWindow() != null) {
                     this.receive.getModuleWindow().webContents.send('site-message', {
                         type: ActionTypes.RECEIVE_CLI_MESSAGE,
-                        payload: { ...arg, type: CliMessageTypes.CHILDREN_PROJECT_BLOCK_CREATE }
+                        payload: { ...arg, cliType: CliMessageTypes.CHILDREN_PROJECT_BLOCK_CREATE }
                     });
                 }
             }
@@ -126,7 +137,7 @@ class message {
                     // 发送CLI消息回显，带上类型
                     this.window_objs.mainWindow.webContents.send('site-message', {
                         type: ActionTypes.RECEIVE_CLI_MESSAGE,
-                        payload: { ...arg, type: CliMessageTypes.PROJECT_BLOCK_PACKAGE_CREATE }
+                        payload: { ...arg, cliType: CliMessageTypes.PROJECT_BLOCK_PACKAGE_CREATE }
                     });
                 }
             }
@@ -136,7 +147,7 @@ class message {
                     // 发送CLI消息回显，带上类型
                     this.window_objs.mainWindow.webContents.send('site-message', {
                         type: ActionTypes.RECEIVE_CLI_MESSAGE,
-                        payload: { ...arg, type: CliMessageTypes.PROJECT_BLOCK_ITEM_CREATE }
+                        payload: { ...arg, cliType: CliMessageTypes.PROJECT_BLOCK_ITEM_CREATE }
                     });
                 }
             }
