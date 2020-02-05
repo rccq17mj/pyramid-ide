@@ -38,6 +38,7 @@ eslint.rules['space-before-blocks'] = 0;
 eslint.rules['arrow-spacing'] = 0;
 eslint.rules['array-callback-return'] = 0;
 eslint.rules['no-multi-spaces'] = 0;
+eslint.rules['no-else-return'] = 0;
 
 module.exports = {
   ...eslint,

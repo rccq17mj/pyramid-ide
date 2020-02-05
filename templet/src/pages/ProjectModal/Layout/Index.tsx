@@ -4,6 +4,10 @@ import { pyramidUiService } from '@/core/pyramid-ui/service/pyramid-ui.service';
 import { PyramidUISendProjectLayoutChooseAction } from '@/core/pyramid-ui/action/pyramid-ui.action';
 
 interface IProps {
+  location: {query:
+      {
+      }
+  }
 }
 
 const Component: FunctionComponent<IProps> = props => {
@@ -64,6 +68,9 @@ const Component: FunctionComponent<IProps> = props => {
         break;
       case 5:
         colCountValue = 24;
+        break;
+      default:
+        colCountValue = 2;
         break;
     }
     return colCountValue;

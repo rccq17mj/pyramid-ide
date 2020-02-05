@@ -130,7 +130,9 @@ export class PyramidUISendProjectOpenWindowAction implements PyramidUIAction {
  */
 export class PyramidUISendProjectListAction implements PyramidUIAction {
   readonly type = PyramidUIActionTypes.SEND_PROJECT_LIST;
-  constructor(public payload: any) { }
+  constructor(public payload: {
+    platform: 'pc' | 'mobile'
+  }) {}
 }
 /**
  * 返回项目列表
@@ -145,7 +147,11 @@ export class PyramidUIReceiveProjectListAction implements PyramidUIAction {
  */
 export class PyramidUISendProjectStartAction implements PyramidUIAction {
   readonly type = PyramidUIActionTypes.SEND_PROJECT_START;
-  constructor(public payload: any) { }
+  constructor(public payload: {
+    project: boolean;
+    msg: string;
+    projectInfo: any;
+  }) {}
 }
 /**
  * 返回启动项目信息

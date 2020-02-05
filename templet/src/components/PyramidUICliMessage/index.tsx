@@ -23,7 +23,7 @@ interface IProps {
 }
 
 const CliModal: FunctionComponent<IProps> = props => {
-  let myRef = useRef();
+  const myRef = useRef();
 
   let [term, setTerm] = useState(null);
   const [modalShow, setModalShow] = useState<boolean>(true);
@@ -97,8 +97,7 @@ const CliModal: FunctionComponent<IProps> = props => {
           }
         }}>确定</Button>
       );
-    }
-    else if (props.action.payload.type === CliMessageTypes.CHILDREN_PROJECT_START) {
+    } else if (props.action.payload.type === CliMessageTypes.CHILDREN_PROJECT_START) {
       return (
         <Button type="primary" disabled={!messageEnd} htmlType="button" onClick={()=>{
           if (props.closeCallBack) {
@@ -174,7 +173,7 @@ const CliModal: FunctionComponent<IProps> = props => {
 
   return (
     <Modal
-      destroyOnClose={true}
+      destroyOnClose
       title={renderTitle()}
       width={800}
       visible={modalShow}
