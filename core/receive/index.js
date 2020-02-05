@@ -15,6 +15,9 @@ class receive {
         ipcMain.on('site-message', (event, arg) => {
             if (arg.hasOwnProperty('type')) {
                 switch (arg.type) {
+                    case ActionTypes.SEND_PROJECT_BLOCK_PACKAGE_INFO:
+                        this.pyramidControl.getBlockPackageInfo(this.window_objs.runWindow, arg.payload);
+                        break;
                     // 打开指定项目操作窗口
                     case ActionTypes.SEND_PROJECT_OPENWINDOW:
                         this.view = new BrowserView({

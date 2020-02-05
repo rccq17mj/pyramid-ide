@@ -4,7 +4,11 @@ import {Button, Form, Icon, Input, Menu, Pagination, Tabs} from "antd";
 import AddModal from './Add/Index';
 import {IBlockCard} from "@/interfaces/block/block.interface";
 import {pyramidUiService} from "@/core/pyramid-ui/service/pyramid-ui.service";
-import {PyramidUISendProjectBlockSelectAction} from "@/core/pyramid-ui/action/pyramid-ui.action";
+import {
+  PyramidUIActionsUnion, PyramidUIActionTypes,
+  PyramidUISendBlockPackageInfoAction,
+  PyramidUISendProjectBlockSelectAction
+} from "@/core/pyramid-ui/action/pyramid-ui.action";
 import {blockPackageRequest} from "@/requests/block-package.request";
 import * as _ from 'lodash';
 
@@ -24,7 +28,9 @@ interface IMenu {
   packageManager: string;
   platformVersion: string;
   storeAddress: string;
-  categories: string[];
+
+  // 包信息
+  packageInfo: any;
 
   // 拉取状态
   fetchStatus: EFetchStatus;
@@ -71,6 +77,17 @@ const Component: FunctionComponent<IProps> = () => {
 
   useEffect(() => {
     setTotal(50);
+
+    // 获取区块信息
+    const messageKey = pyramidUiService.getMessageFn((action: PyramidUIActionsUnion) => {
+      if (action.type === PyramidUIActionTypes.RECEIVE_PROJECT_BLOCK_PACKAGE_INFO) {
+        console.log(action.payload);
+      }
+    });
+
+    return () => {
+      pyramidUiService.clearMessageFn(messageKey);
+    }
   }, []);
 
   useEffect(() => {
@@ -148,6 +165,12 @@ const Component: FunctionComponent<IProps> = () => {
                   const findMenu = findMenuByKey(key);
                   if (findMenu && findMenu.fetchStatus === 'noFetch') {
                     findMenu.fetchStatus = EFetchStatus.fetching;
+                    // TODO 先写死 发送获取区块信息
+                    pyramidUiService.sendMessageFn(new PyramidUISendBlockPackageInfoAction({
+                      projectGitUrl: 'https://github.com/guccihuiyuan/pyramid-blocks',
+                      projectGitBranch: 'master',
+                      projectId: findMenu.id
+                    }));
                   }
                 }
                 setMenuOpenKeys(param);

@@ -313,6 +313,30 @@ export class PyramidUIReceiveBlockRemoveAction implements PyramidUIAction {
 /******************** 区块 ********************/
 
 
+/******************** 区块包 ********************/
+// 获取区块信息
+export class PyramidUISendBlockPackageInfoAction implements PyramidUIAction {
+  readonly type = PyramidUIActionTypes.SEND_PROJECT_BLOCK_PACKAGE_INFO;
+  constructor(public payload: {
+    // 通用的
+    projectId?: string;
+
+    // 上面是本地的
+    projectPath?: string;
+
+    // 下面两个参数是远程的
+    projectGitUrl?: string;
+    projectGitBranch?: string;
+  }) { }
+}
+export class PyramidUIReceiveBlockPackageInfoAction implements PyramidUIAction {
+  readonly type = PyramidUIActionTypes.RECEIVE_PROJECT_BLOCK_PACKAGE_INFO;
+  constructor(public payload: {
+    blockInfo: any
+  }) { }
+}
+/******************** 区块包 ********************/
+
 
 export type PyramidUIActionsUnion =
   PyramidUISendPublicCMD |
