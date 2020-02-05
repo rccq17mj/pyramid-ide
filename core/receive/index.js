@@ -44,9 +44,12 @@ class receive {
                             case 'module':
                             case 'block':
                                 const moduleWin = JSON.parse(JSON.stringify(config.moduleWin));
-                                moduleWin.loadUrl = moduleWin.loadUrl + type;
-                                this.moduleWindow = _window(moduleWin);
-                                this.moduleWindow.show();
+                                this.pyramidControl.getNowProjectInfo((projectInfo) => {
+                                    moduleWin.loadUrl = moduleWin.loadUrl + type + '?projectInfo=' + JSON.stringify(projectInfo);
+                                    this.moduleWindow = _window(moduleWin);
+                                    this.moduleWindow.show();
+                                    //console.log('moduleWin::::', moduleWin);
+                                })
                                 break;
                             case 'build':
                                 break;
