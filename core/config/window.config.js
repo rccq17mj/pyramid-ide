@@ -48,8 +48,8 @@ module.exports = {
         minHeight: 800,
         frame: true,
         loadUrl: process.env.ELE_ENV === ENV.ELE_ENV_LOCAL? 
-        `http://localhost:8100/project-toolbar` : 
-        `file://${__dirname}/../../templet/dist/index.html#/./project-toolbar`,
+        `http://localhost:8100/#/project-toolbar` : 
+        `file://${__dirname}/../../templet/dist/index.html#/project-toolbar`,
         parent: null,
         show: true,
         webPreferences: {
@@ -68,8 +68,8 @@ module.exports = {
         minHeight: 800,
         frame: true,
         loadUrl: process.env.ELE_ENV === ENV.ELE_ENV_LOCAL? 
-        'http://localhost:8100/project-modal/module?projectName=1111' :
-        `file://${__dirname}/../../templet/dist/index.html#/./project-modal/module?projectName=1111`,
+        'http://localhost:8100/#/project-modal/module?projectName=1111' :
+        `file://${__dirname}/../../templet/dist/index.html#/project-modal/module?projectName=1111`,
         parent: null,
         show: true,
         webPreferences: {
