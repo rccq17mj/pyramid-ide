@@ -23,7 +23,7 @@ interface IProps {
 }
 
 const CliModal: FunctionComponent<IProps> = props => {
-  let myRef = useRef();
+  const myRef = useRef();
 
   let [term, setTerm] = useState(null);
   const [modalShow, setModalShow] = useState<boolean>(true);
@@ -87,7 +87,8 @@ const CliModal: FunctionComponent<IProps> = props => {
    * 然后底部按钮
    */
   const renderFooter = () => {
-    if (props.action.payload.type === CliMessageTypes.CHILDREN_PROJECT_CREATE) {
+    debugger
+    if (props.action.payload.cliType === CliMessageTypes.CHILDREN_PROJECT_CREATE) {
       return (
         <Button type="primary" disabled={!messageEnd} htmlType="button" onClick={()=>{
           if (props.closeCallBack) {
@@ -97,8 +98,7 @@ const CliModal: FunctionComponent<IProps> = props => {
           }
         }}>确定</Button>
       );
-    }
-    else if (props.action.payload.type === CliMessageTypes.CHILDREN_PROJECT_START) {
+    } else if (props.action.payload.cliType === CliMessageTypes.CHILDREN_PROJECT_START) {
       return (
         <Button type="primary" disabled={!messageEnd} htmlType="button" onClick={()=>{
           if (props.closeCallBack) {
@@ -109,7 +109,7 @@ const CliModal: FunctionComponent<IProps> = props => {
           }
         }}>打开项目</Button>
       );
-    } else if (props.action.payload.type === CliMessageTypes.PROJECT_BLOCK_PACKAGE_CREATE) {
+    } else if (props.action.payload.cliType === CliMessageTypes.PROJECT_BLOCK_PACKAGE_CREATE) {
       return (
         <Button type="primary" disabled={!messageEnd} htmlType="button" onClick={()=>{
           if (props.closeCallBack) {
@@ -121,7 +121,7 @@ const CliModal: FunctionComponent<IProps> = props => {
           }
         }}>确定</Button>
       );
-    } else if (props.action.payload.type === CliMessageTypes.PROJECT_BLOCK_ITEM_CREATE) {
+    } else if (props.action.payload.cliType === CliMessageTypes.PROJECT_BLOCK_ITEM_CREATE) {
       return (
         <Button type="primary" disabled={!messageEnd} htmlType="button" onClick={()=>{
           if (props.closeCallBack) {
@@ -174,7 +174,7 @@ const CliModal: FunctionComponent<IProps> = props => {
 
   return (
     <Modal
-      destroyOnClose={true}
+      destroyOnClose
       title={renderTitle()}
       width={800}
       visible={modalShow}

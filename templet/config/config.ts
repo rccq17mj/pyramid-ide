@@ -79,7 +79,7 @@ if (isAntDesignProPreview) {
 
 export default {
   plugins,
-  base: './',
+  // base: './',
   publicPath: './',
   history: 'hash',
   exportStatic: true,

@@ -22,7 +22,6 @@ interface IProps extends FormComponentProps {
 
 const Component: FunctionComponent<IProps> = props => {
   const [addModalVisible, setAddModalVisible] = useState<boolean>(false);
-  const [processModalVisible, setProcessModalVisible] = useState<boolean>(false);
   const [cards, setCards] = useState<any[]>([]);
   const [allChecked, setAllChecked] = useState(false);
   const [editBoxShow, setEditBoxShow] = useState(false);
@@ -66,7 +65,6 @@ const Component: FunctionComponent<IProps> = props => {
   }
 
   const startProject = (projectInfo) => {
-    // sendMessage({ project: true, msg: 'startProject', projectInfo });
     const params = { project: true, msg: 'startProject', projectInfo };
     pyramidUiService.sendMessageFn(new PyramidUISendProjectStartAction(params));
   };
@@ -76,9 +74,9 @@ const Component: FunctionComponent<IProps> = props => {
    */
   const getProjectsData = () => {
     if (window.location.pathname === '/pc') {
-      pyramidUiService.sendMessageFn(new PyramidUISendProjectListAction({platform:'pc'}));
+      pyramidUiService.sendMessageFn(new PyramidUISendProjectListAction({platform: 'pc'}));
     } else {
-      pyramidUiService.sendMessageFn(new PyramidUISendProjectListAction({platform:'mobile'}));
+      pyramidUiService.sendMessageFn(new PyramidUISendProjectListAction({platform: 'mobile'}));
     }
   }
 
@@ -204,29 +202,10 @@ const Component: FunctionComponent<IProps> = props => {
           closeModal={success => {
             setAddModalVisible(false);
             if (success) {
-              setProcessModalVisible(true);
-              //simpleTable.loadData();
             }
           }}
         />
       ) : null}
-      {
-         getProjectsData()
-      }
-      {/* {processModalVisible ? (
-        <Process
-          modalVisible={processModalVisible}
-          closeModal={success => {
-
-            setProcessModalVisible(false);
-            getProjectsData();
-            if (success) {
-              setProcessModalVisible(true);
-              //simpleTable.loadData();
-            }
-          }}
-        />
-      ) : null} */}
     </div>
 
   )

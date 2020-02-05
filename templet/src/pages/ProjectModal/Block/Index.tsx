@@ -10,7 +10,10 @@ const { SubMenu } = Menu;
 const { TabPane } = Tabs;
 
 interface IProps {
-  location: {query: {projectName?: string}}
+  location: {query:
+      {
+      }
+  }
 }
 
 const Component: FunctionComponent<IProps> = props => {
