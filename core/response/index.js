@@ -23,6 +23,19 @@ class response {
             let reWindow = this.window_objs.mainWindow;
          
                 switch (arg.flag) {
+                    // 获取区块包信息
+                    case 'cmd-get-block-package-info':
+                        if (typeof arg.msg === 'string' && arg.msg.indexOf('pyramid-blocks-info:') !== -1) {
+                            const treeJSON = arg.msg.split('pyramid-blocks-info:')[1].trim();
+                            const tree = JSON.parse(treeJSON);
+                            // 发送消息到子工程
+                            if (this.receive.getModuleWindow() != null) {
+                                reData.type = ActionTypes.RECEIVE_PROJECT_BLOCK_PACKAGE_INFO;
+                                reData.payload.blockInfo = tree;
+                            }else
+                                reData = null;
+                        }
+                        break;
                     // 直接调用命令行    
                     case 'cmd-public-cmd':
                         reData.type = arg.cli ? ActionTypes.RECEIVE_CLI_MESSAGE : ActionTypes.RECEIVE_PUBLIC_CMD

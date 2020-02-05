@@ -20,7 +20,7 @@ class BlockPackageRequest extends BaseRequest {
   }
 
   blockPackageSubscribePage(params: any): Promise<{total: number, list: any[]}> {
-    return this.list(API_CONFIG.MAIN.BLOCK_PACKAGE.SUBSCRIBE_PAGE, params);
+    return this.object(API_CONFIG.MAIN.BLOCK_PACKAGE.SUBSCRIBE_PAGE, params);
 
   }
 

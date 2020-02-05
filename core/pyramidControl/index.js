@@ -240,6 +240,33 @@ var Datastore = require('nedb'), db = new Datastore({
           // 将此命令发送给渲染窗口执行
           runWindow.webContents.send('cmd-message', cmdArg);
     }
+
+      /**
+       * 获取区块包信息
+       * @param runWindow
+       * @param payload
+       */
+    getBlockPackageInfo(runWindow, payload) {
+        let cmdStr = '';
+        if (payload.projectGitUrl) {
+            cmdStr = `pyramid block-package get --get-project-url=${payload.projectGitUrl} --get-project-branch=${payload.projectGitBranch}`;
+        } else if (payload.projectPath) {
+            cmdStr = `pyramid block-package get --get-project-path=${payload.projectPath}`;
+        }
+
+        // 额外参数，需要回传
+        const projectId = payload.projectId;
+
+          const cmdArg  = {
+              channel: 'cmd-message',
+              cmdStr: cmdStr,
+              cwd: '',
+              flag: 'cmd-get-block-package-info',
+              projectId: projectId
+          };
+          // 将此命令发送给渲染窗口执行
+          runWindow.webContents.send('cmd-message', cmdArg);
+    }
   
     /**
      * 创建项目

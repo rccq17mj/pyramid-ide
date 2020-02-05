@@ -53,6 +53,11 @@ export const ActionTypes = {
     SEND_PROJECT_BLOCK_REMOVE: 'pyramid.ui.send.project.block.remove',
     RECEIVE_PROJECT_BLOCK_REMOVE:'pyramid.ui.receive.project.block.remove',
     /******************** 区块 ********************/
+
+    /******************** 区块包 ********************/
+    SEND_PROJECT_BLOCK_PACKAGE_INFO:'pyramid.ui.send.project.block.package.info',
+    RECEIVE_PROJECT_BLOCK_PACKAGE_INFO:'pyramid.ui.receive.project.block.package.info',
+    /******************** 区块包 ********************/
 };
 
 
