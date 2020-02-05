@@ -31,6 +31,13 @@ eslint.rules['no-multi-assign'] = 0;
 eslint.rules['no-case-declarations'] = 0;
 eslint.rules['arrow-parens'] = 0;
 eslint.rules['no-param-reassign'] = 0;
+eslint.rules['prefer-template'] = 0;
+eslint.rules['no-console'] = 0;
+eslint.rules['keyword-spacing'] = 0;
+eslint.rules['space-before-blocks'] = 0;
+eslint.rules['arrow-spacing'] = 0;
+eslint.rules['array-callback-return'] = 0;
+eslint.rules['no-multi-spaces'] = 0;
 
 module.exports = {
   ...eslint,
