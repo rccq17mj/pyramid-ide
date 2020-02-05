@@ -8,16 +8,41 @@ import surrounding from "../assets/surrounding.png";
 import version from "../assets/version.png";
 
 const Home = () => {
-  const [nodeVersion, setNodeVersion] = useState('');
+  const [vrsion, setVersion] = useState<any>({
+    node: '...',
+    npm: '...',
+    yarn: '...',
+    umi: '...'
+  });
 
-  useEffect(() => {
-    pyramidUiService.sendMessageFn(new PyramidUISendPublicCMD({ cmd: 'node -v' }, (payload) => {
-      if (payload.status == "progress") {
-        console.log('这是一个十分简单的cmd命令调用，并利用callBackID来监听返回，尽量省去一堆 PyramidUIReceive 声明');
-        console.log('当前node版本是:' + payload.msg);
-        setNodeVersion(payload.msg);
+  const sendCmd = (cmd, callback) => {
+    pyramidUiService.sendMessageFn(new PyramidUISendPublicCMD({ cmd}, (payload) => {
+      if (payload.status === "progress") {
+        callback(payload.msg);
       }
     }));
+  }
+
+  useEffect(() => {
+    const v = {
+      node: '',
+      npm: '',
+      yarn: '',
+      umi: ''
+    };
+    sendCmd('node -v', (msg) => {
+      v.node = msg;
+      sendCmd('npm -v', (msg) => {
+        v.npm = msg;
+        sendCmd('yarn -v', (msg) => {
+          v.yarn = msg;
+          sendCmd('umi -v', (msg) => {
+            v.umi = msg;
+            setVersion(v);
+          })
+        })
+      })
+    })
   }, [])
 
   return (
@@ -34,7 +59,7 @@ const Home = () => {
               <List.Item.Meta
                 avatar={<img src={surrounding} width={50} height={50} />}
                 title='当前环境'
-                description={"node:" + nodeVersion + " | yarn v1.9.0 | npm v6.9.0"}
+                description={`node ${vrsion.node} | npm ${vrsion.npm} | yarn ${vrsion.yarn} | umi ${vrsion.umi}`}
               />
               <Switch
                 checkedChildren={<Icon type="check" style={{ height: '16px' }} />}

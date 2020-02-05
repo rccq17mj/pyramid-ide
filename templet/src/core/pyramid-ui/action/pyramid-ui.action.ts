@@ -108,22 +108,6 @@ export class PyramidUIReceiveProjectPublicCMD implements PyramidUIAction {
     msg: string;
   }) { }
 }
-/******************** cmd拼装 ********************/
-export class PyramidUIPushCMD {
-  constructor(public payload: any) {
-    this.payload = payload;
-  }
-
-  // 创建项目
-  projectCreateAction = () => {
-    return {
-      cmd: `pyramid init ${this.payload.name} --skip-inquirer —package-manage=${this.payload.pkgmt} --project-url=direct:${this.payload.template}`,
-      cwd: `${this.payload.path}`, // 命令执行路径
-      cli: true,                    // 是否弹出cli命令行窗口
-      cliType: CliMessageTypes.CHILDREN_PROJECT_START  // 用于明确底部显示什么按钮
-    }
-  }
-}
 
 /******************** 项目 ********************/
 export class PyramidUISendProjectCreateAction implements PyramidUIAction {
