@@ -74,6 +74,9 @@ function runCmd(arg) {
 
             if (arg.cli) 
                 msg.cli = arg.cli;
+
+            if (arg.cliType) 
+                msg.cliType = arg.cliType;
             
             // 这里需要单独处理
             if (arg.flag === 'cmd-children-project-start') {

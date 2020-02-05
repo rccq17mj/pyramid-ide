@@ -18,13 +18,11 @@ export const ActionTypes = {
     RECEIVE_PROJECT_LIST: 'pyramid.ui.receive.project.list',
     SEND_PROJECT_START: 'pyramid.ui.send.project.start',
     RECEIVE_PROJECT_START: 'pyramid.ui.receive.project.start',
-    SEND_PROJECT_CREATE: 'pyramid.ui.send.project.create',
     SEND_PROJECT_CHOOSE_PATH: 'pyramid.ui.send.project.choosePath',
     SEND_PROJECT_TOOLBAR: 'pyramid.ui.send.project.SEND_PROJECT_TOOLBAR',
     RECEIVE_PROJECT_REMOVE:'pyramid.ui.receive.project.remove',
     RECEIVE_PROJECT_CHOOSE_PATH: 'pyramid.ui.receive.project.choosePath',
-    SEND_PROJECT_REMOVE: 'pyramid.ui.send.project.remove',
-    RECEIVE_PROJECT_CREATE: 'pyramid.ui.receive.project.create',
+    SEND_PROJECT_REMOVE: 'pyramid.ui.send.project.remove'
     /******************** 项目 ********************/
 
 

@@ -11,7 +11,7 @@ const Home = () => {
   const [nodeVersion, setNodeVersion] = useState('');
 
   useEffect(() => {
-    pyramidUiService.sendMessageFn(new PyramidUISendPublicCMD({ cmd: 'node -v', }, (payload) => {
+    pyramidUiService.sendMessageFn(new PyramidUISendPublicCMD({ cmd: 'node -v' }, (payload) => {
       if (payload.status == "progress") {
         console.log('这是一个十分简单的cmd命令调用，并利用callBackID来监听返回，尽量省去一堆 PyramidUIReceive 声明');
         console.log('当前node版本是:' + payload.msg);

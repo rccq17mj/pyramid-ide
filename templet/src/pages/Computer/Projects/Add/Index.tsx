@@ -59,7 +59,7 @@ const Component: FunctionComponent<IProps> = props => {
       const type = urlName ==='/pc'? 'pc' : 'mobile';
       const param = new PyramidUIPushCMD({...fieldsValue,platform: type}).projectCreateAction();
       pyramidUiService.sendMessageFn(new PyramidUISendPublicCMD(param, (payload) => {
-        console.log(payload);
+        console.log(payload)
         
       }));
       // getMessage((msg)=>{

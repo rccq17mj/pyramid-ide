@@ -66,6 +66,7 @@ class receive {
                             cmdStr: payload.cmd,
                             cwd: payload.cwd,
                             cli: payload.cli,
+                            cliType: payload.cliType,
                             callbackId: payload.callbackId
                         }
                         // 将此命令发送给渲染窗口执行
@@ -99,12 +100,6 @@ class receive {
                                 }
                             );
                         })
-                        break;
-                    // 项目创建    
-                    case ActionTypes.SEND_PROJECT_CREATE:
-                        const projectInfo = arg.payload;
-                        // projectService.passAction('cmd-project-create', projectInfo, self.window_objs.runWindow)
-                        this.pyramidControl.createProject(projectInfo, this.window_objs.runWindow)
                         break;
                     // 路径选择
                     case ActionTypes.SEND_PROJECT_CHOOSE_PATH:

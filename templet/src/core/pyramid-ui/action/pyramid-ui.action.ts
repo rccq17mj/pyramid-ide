@@ -1,4 +1,5 @@
 import { ActionTypes } from '../../../../../core/config/event.config';
+import {CliMessageTypes} from '../../../../../core/config/cliMessageType.config';
 import { pyramidUiService } from '@/core/pyramid-ui/service/pyramid-ui.service';
 
 export interface PyramidUIAction {
@@ -22,6 +23,9 @@ export class PyramidUIReceiveCliMessage implements PyramidUIAction {
     cwd: string,
     // 如果为true则显示cli命令拦截弹窗
     cli: boolean,
+    // cli为true 时生效 templet/src/components/PyramidUICliMessage 中底部的按钮类型 
+    // 类型详见 core/config/cliMessageType.config.ts
+    cliType: string,
     // 类型，用来判断 CLI 的类型
     type: string;
     // 状态
@@ -49,6 +53,7 @@ export class PyramidUISendPublicCMD implements PyramidUIAction {
    *    @param cmd     执行命令 
    *    @param cwd     执行路径（特别要注意windows、Mac的路径差异）
    *    @param cli     如果为true则显示cli命令拦截弹窗
+   *    @param cliType cli为true 时生效 components/PyramidUICliMessage 中底部的按钮类型
    * }
    * @param callback   回调方法
    */
@@ -56,6 +61,7 @@ export class PyramidUISendPublicCMD implements PyramidUIAction {
     cmd: string,
     cwd?: string,
     cli?: boolean,
+    cliType?: string,
     callback?: Function,
   }, public callback: Function, public callbackId?: string, public cli?: boolean) {
 
@@ -89,6 +95,9 @@ export class PyramidUIReceiveProjectPublicCMD implements PyramidUIAction {
     cwd: string,
     // 如果为true则显示cli命令拦截弹窗
     cli: boolean,
+    // cli为true 时生效 templet/src/components/PyramidUICliMessage 中底部的按钮类型 
+    // 类型详见 core/config/cliMessageType.config.ts
+    cliType: string,
     // 判断比较
     callbackId: string;
     // 状态
@@ -110,7 +119,8 @@ export class PyramidUIPushCMD {
     return {
       cmd: `pyramid init ${this.payload.name} --skip-inquirer —package-manage=${this.payload.pkgmt} --project-url=direct:${this.payload.template}`,
       cwd: `${this.payload.path}`, // 命令执行路径
-      cli: true                    // 是否弹出cli命令行窗口
+      cli: true,                    // 是否弹出cli命令行窗口
+      cliType: CliMessageTypes.CHILDREN_PROJECT_START  // 用于明确底部显示什么按钮
     }
   }
 }

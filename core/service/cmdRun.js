@@ -9,7 +9,8 @@ self.onmessage = function (e) {
     const cwd       = data.cwd || null;
     const cli       = data.cli || null;
     const callbackId= data.callbackId || null;
-   
+    const cliType   = data.cliType || null;
+
     // 命令行参数设置
     const cmdParam = {};
     cmdParam.shell  = true;
@@ -25,14 +26,14 @@ self.onmessage = function (e) {
 
     ls.stdout.on('data', (data) => {
         let msg = data.toString();
-        self.postMessage({ flag: 'stdout', msg, status: 'progress', callbackId, cwd , cli});
+        self.postMessage({ flag: 'stdout', msg, status: 'progress', callbackId, cwd , cli, cliType});
     });
 
     ls.stderr.on('data', (data) => {
-        self.postMessage({ flag: 'stderr', data, status: 'progress', callbackId, cwd , cli });
+        self.postMessage({ flag: 'stderr', data, status: 'progress', callbackId, cwd , cli, cliType });
     });
 
     ls.on('close', (code) => {
-        self.postMessage({ flag: 'close_code', code, status: 'end', callbackId, cwd , cli });
+        self.postMessage({ flag: 'close_code', code, status: 'end', callbackId, cwd , cli, cliType });
     });
 };
