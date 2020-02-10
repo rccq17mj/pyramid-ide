@@ -61,7 +61,7 @@ module.exports = {
       },
 
       'moduleWin': {
-        devToolsShow: false,
+        devToolsShow: true,
         width: 1200,
         height: 800,
         minWidth: 1200,

@@ -37,13 +37,13 @@ const CliModal: FunctionComponent<IProps> = props => {
 
   useEffect(() => {
     if (messageEnd) {
-      if (props.action.payload.type === CliMessageTypes.CHILDREN_PROJECT_LAYOUT_CREATE) {
+      if (props.action.payload.cliType === CliMessageTypes.CHILDREN_PROJECT_LAYOUT_CREATE) {
         props.closeCallBack();
         setModalShow(false);
-      } else if (props.action.payload.type === CliMessageTypes.CHILDREN_PROJECT_BLOCK_CREATE) {
+      } else if (props.action.payload.cliType === CliMessageTypes.CHILDREN_PROJECT_BLOCK_CREATE) {
         props.closeCallBack();
         setModalShow(false);
-      } else if (props.action.payload.type === CliMessageTypes.CHILDREN_PROJECT_MODULE_CREATE) {
+      } else if (props.action.payload.cliType === CliMessageTypes.CHILDREN_PROJECT_MODULE_CREATE) {
         props.closeCallBack();
         setModalShow(false);
       }

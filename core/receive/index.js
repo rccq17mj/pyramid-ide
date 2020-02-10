@@ -143,6 +143,18 @@ class receive {
                             }
                         });
                         break;
+                    //    添加布局到项目（请不要随便删除）
+                    case 'pyramid.ui.children.send.project.block.clickSection':
+                        this.pyramidControl.getNowProjectInfo((projectInfo) => {
+                            this.pyramidControl.clickSection(arg.payload, this.window_objs.runWindow, projectInfo);
+                        });
+                        break;
+                    //    添加布局到项目（请不要随便删除）
+                    case 'pyramid.ui.children.send.project.layout.clickSection':
+                        this.pyramidControl.getNowProjectInfo((projectInfo) => {
+                            this.pyramidControl.createLayout(arg.payload, this.window_objs.runWindow, projectInfo);
+                        });
+                        break;
                     // 区块包创建    
                     case ActionTypes.SEND_PROJECT_BLOCK_CREATE:
                         let blockInfo = arg.payload;

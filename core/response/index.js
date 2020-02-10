@@ -99,6 +99,25 @@ class response {
             }
         }
 
+        // 读取区块包信息
+        if (arg.flag === 'cmd-get-block-package-info') {
+            const msg = arg.msg;
+            if (typeof msg === 'string' && msg.indexOf('pyramid-blocks-info:') !== -1) {
+                const treeJSON = msg.split('pyramid-blocks-info:')[1].trim();
+                const packageInfo = JSON.parse(treeJSON);
+                // 发送消息到子工程
+                if (this.receive.getModuleWindow() != null) {
+                    this.receive.getModuleWindow().webContents.send('site-message', {
+                        type: ActionTypes.RECEIVE_PROJECT_BLOCK_PACKAGE_INFO,
+                        payload: {
+                            packageInfo,
+                            projectId: arg.projectId
+                        }
+                    });
+                }
+            }
+        }
+
         // 区块包创建
         if (arg.flag === 'cmd-block-package-create') {
             if (this.window_objs.mainWindow != null) {

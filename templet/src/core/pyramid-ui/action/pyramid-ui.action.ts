@@ -1,5 +1,4 @@
 import { ActionTypes } from '../../../../../core/config/event.config';
-import {CliMessageTypes} from '../../../../../core/config/cliMessageType.config';
 import { pyramidUiService } from '@/core/pyramid-ui/service/pyramid-ui.service';
 
 export interface PyramidUIAction {
@@ -316,7 +315,11 @@ export class PyramidUISendBlockPackageInfoAction implements PyramidUIAction {
 export class PyramidUIReceiveBlockPackageInfoAction implements PyramidUIAction {
   readonly type = PyramidUIActionTypes.RECEIVE_PROJECT_BLOCK_PACKAGE_INFO;
   constructor(public payload: {
-    blockInfo: any
+    packageInfo: any,
+    /**
+     * 哪个项目ID，通过它前端可以找到并设置
+     */
+    projectId: string;
   }) { }
 }
 /******************** 区块包 ********************/

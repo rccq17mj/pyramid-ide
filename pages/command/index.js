@@ -61,6 +61,7 @@ function runCmd(arg) {
         // if (arg.channel === 'project-start') {
         //     ipc.send('project-start', msg);
         // }
+        msg = {...msg, ...arg};
 
         if (arg.channel === 'cmd-message') {
             if (arg.flag) 
