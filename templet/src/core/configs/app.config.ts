@@ -2,9 +2,7 @@ export const USE_LOCAL_MENU = {
   // 使用本地菜单
   USE: 1,
   // 使用远程菜单
-  NON_USE: 0,
-  // 混合使用
-  MUTUAL: 2
+  NON_USE: 0
 };
 
 

@@ -106,6 +106,25 @@ module.exports = (options) => {
             });
         }
     }
+    else if (cmdStr === 'test') {
+        const tempPath = path.join(process.cwd(), 'temp');
+        // 码云：https://gitee.com/guccihuiyuan/pyramid-blocks/raw/master/pyramid-block.json
+        // gitlab：http://10.10.11.151:10080/product/bigdata-cloudplatform/templet/pyramid-blocks/raw/master/pyramid-block.json
+        // github-直接：https://github.com/guccihuiyuan/pyramid-blocks/raw/master/pyramid-blocks.json
+        const completeUrl = `direct:https://github.com/guccihuiyuan/pyramid-blocks/raw/master/pyramid-blocks.json`;
+
+        download(completeUrl, tempPath, null, (err) => {
+            if (err) {
+                console.log(err);
+                console.log('读取失败');
+                process.exit();
+            }
+            // const jsonFile = fs.readFileSync(path.join(tempPath, 'pyramid-blocks.json'), 'utf-8');
+            console.log('读取成功');
+            // console.log(jsonFile);
+            process.exit();
+        });
+    }
     else if (cmdStr === 'init') {// 下载区块模板工程
         // pyramid block init a
 

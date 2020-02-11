@@ -1,5 +1,5 @@
 import React, {FunctionComponent, useEffect, useState} from "react";
-import {Button, Form, Icon, Input, Menu, Pagination, Tabs} from "antd";
+import {Button, Form, Icon, Input, Menu, Pagination, Spin, Tabs} from "antd";
 import {IBlockItem} from "@/interfaces/block/block.interface";
 import {pyramidUiService} from "@/core/pyramid-ui/service/pyramid-ui.service";
 import {
@@ -219,6 +219,16 @@ const Component: FunctionComponent<IProps> = () => {
                             >{category}</Menu.Item>
                           )
                         })
+                      }
+                      {/* 正在加载中 */}
+                      {
+                        menu.packageInfoFetchStatus === EBlockPackageFetchStatus.fetching ? (
+                          <Menu.Item
+                            key={`sub-${menuIndex}-fetching`}
+                          >
+                            <Spin />
+                          </Menu.Item>
+                        ): null
                       }
                     </SubMenu>
                   )

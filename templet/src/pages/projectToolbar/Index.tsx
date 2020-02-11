@@ -3,7 +3,7 @@ import { Row, Col, Button } from 'antd';
 import { pyramidUiService } from '@/core/pyramid-ui/service/pyramid-ui.service';
 import { PyramidUISendProjectToolBar } from "@/core/pyramid-ui/action/pyramid-ui.action";
 
-const Component: FunctionComponent = props => {
+const Component: FunctionComponent = () => {
     const handleClick = (type: 'back' | 'build' | 'layout' | 'module' | 'block') => {
         pyramidUiService.sendMessageFn(new PyramidUISendProjectToolBar({type}));
     };

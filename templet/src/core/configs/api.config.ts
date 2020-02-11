@@ -31,6 +31,7 @@ switch (ENV_TYPE) {
     break;
   case 'dev':
     API_EVN = dev;
+    break;
   case 'test':
     API_EVN = test;
     break;

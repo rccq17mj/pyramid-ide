@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef, FunctionComponent } from 'react';
 import { Button, Form, Modal } from 'antd';
-import styles from './index.less';
 import { Terminal } from 'xterm';
 import 'xterm/css/xterm.css'
 import {
@@ -10,6 +9,7 @@ import {
 import {CliMessageTypes} from "../../../../core/config/cliMessageType.config";
 import {pyramidUiService} from "@/core/pyramid-ui/service/pyramid-ui.service";
 import {urlParames} from "@/utils/utils";
+import styles from './index.less';
 
 const FormItem = Form.Item;
 
@@ -37,13 +37,13 @@ const CliModal: FunctionComponent<IProps> = props => {
 
   useEffect(() => {
     if (messageEnd) {
-      if (props.action.payload.cliType === CliMessageTypes.CHILDREN_PROJECT_LAYOUT_CREATE) {
+      if (props.action.payload.type === CliMessageTypes.CHILDREN_PROJECT_LAYOUT_CREATE) {
         props.closeCallBack();
         setModalShow(false);
-      } else if (props.action.payload.cliType === CliMessageTypes.CHILDREN_PROJECT_BLOCK_CREATE) {
+      } else if (props.action.payload.type === CliMessageTypes.CHILDREN_PROJECT_BLOCK_CREATE) {
         props.closeCallBack();
         setModalShow(false);
-      } else if (props.action.payload.cliType === CliMessageTypes.CHILDREN_PROJECT_MODULE_CREATE) {
+      } else if (props.action.payload.type === CliMessageTypes.CHILDREN_PROJECT_MODULE_CREATE) {
         props.closeCallBack();
         setModalShow(false);
       }
@@ -87,17 +87,16 @@ const CliModal: FunctionComponent<IProps> = props => {
    * 然后底部按钮
    */
   const renderFooter = () => {
-    if (props.action.payload.cliType === CliMessageTypes.CHILDREN_PROJECT_CREATE) {
+    if (props.action.payload.type === CliMessageTypes.CHILDREN_PROJECT_CREATE) {
       return (
         <Button type="primary" disabled={!messageEnd} htmlType="button" onClick={()=>{
           if (props.closeCallBack) {
             props.closeCallBack();
-            // TODO 如果要通知事件，可以在这里进行处理，（SendMessage、或者dva）
             setModalShow(false);
           }
         }}>确定</Button>
       );
-    } else if (props.action.payload.cliType === CliMessageTypes.CHILDREN_PROJECT_START) {
+    } else if (props.action.payload.type === CliMessageTypes.CHILDREN_PROJECT_START) {
       return (
         <Button type="primary" disabled={!messageEnd} htmlType="button" onClick={()=>{
           if (props.closeCallBack) {
@@ -108,26 +107,24 @@ const CliModal: FunctionComponent<IProps> = props => {
           }
         }}>打开项目</Button>
       );
-    } else if (props.action.payload.cliType === CliMessageTypes.PROJECT_BLOCK_PACKAGE_CREATE) {
+    } else if (props.action.payload.type === CliMessageTypes.PROJECT_BLOCK_PACKAGE_CREATE) {
       return (
         <Button type="primary" disabled={!messageEnd} htmlType="button" onClick={()=>{
           if (props.closeCallBack) {
             props.closeCallBack();
             // 通知刷新区块包
             pyramidUiService.sendMessageFn(new PyramidUISendBlockGetAction(true));
-            // TODO 如果要通知事件，可以在这里进行处理，（SendMessage、或者dva）
             setModalShow(false);
           }
         }}>确定</Button>
       );
-    } else if (props.action.payload.cliType === CliMessageTypes.PROJECT_BLOCK_ITEM_CREATE) {
+    } else if (props.action.payload.type === CliMessageTypes.PROJECT_BLOCK_ITEM_CREATE) {
       return (
         <Button type="primary" disabled={!messageEnd} htmlType="button" onClick={()=>{
           if (props.closeCallBack) {
             props.closeCallBack();
-            // TODO 如果要通知事件，可以在这里进行处理，（SendMessage、或者dva）
             // 通知刷新区块
-            pyramidUiService.sendMessageFn(new PyramidUISendBlockItemGetAction({parentId:urlParames().parentId}));
+            pyramidUiService.sendMessageFn(new PyramidUISendBlockItemGetAction({parentId:urlParames()['parentId']}));
             setModalShow(false);
           }
         }}>确定</Button>

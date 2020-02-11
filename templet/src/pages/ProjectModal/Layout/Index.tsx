@@ -3,14 +3,9 @@ import {Button, Col, Row, Slider} from "antd";
 import { pyramidUiService } from '@/core/pyramid-ui/service/pyramid-ui.service';
 import { PyramidUISendProjectLayoutChooseAction } from '@/core/pyramid-ui/action/pyramid-ui.action';
 
-interface IProps {
-  location: {query:
-      {
-      }
-  }
-}
+interface IProps {}
 
-const Component: FunctionComponent<IProps> = props => {
+const Component: FunctionComponent<IProps> = () => {
   const [colCountKey, setColCountKey] = useState<number>(0);
   const colCounts = {
     0: <span style={{color: 'white'}}>2</span>,

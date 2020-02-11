@@ -1,4 +1,4 @@
-import React, {FunctionComponent, useState, useEffect} from 'react';
+import React from 'react';
 import {Card, Checkbox} from "antd";
 import block from "@/assets/block.png";
 import style from "./FeaturesGrid.less";

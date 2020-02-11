@@ -1,6 +1,6 @@
 import { ActionTypes } from '../../../../../core/config/event.config';
 import { pyramidUiService } from '@/core/pyramid-ui/service/pyramid-ui.service';
-import {IBlockPackageInfo} from "@/interfaces/block-package/block-package.interface";
+import { IBlockPackageInfo } from "@/interfaces/block-package/block-package.interface";
 
 export interface PyramidUIAction {
   type: string;
@@ -15,17 +15,11 @@ export class PyramidUISendPublicConsole implements PyramidUIAction {
   readonly type = PyramidUIActionTypes.SEND_PUBLIC_OPEN_CONSOLE;
   constructor(public payload: void) { }
 }
-// 接收Cli返回消息，统一使用这个Action
+
+// 接收Cli返回消息，统一使用这个Action（请勿动）
 export class PyramidUIReceiveCliMessage implements PyramidUIAction {
   readonly type = PyramidUIActionTypes.RECEIVE_CLI_MESSAGE;
   constructor(public payload: {
-    //  执行路径（特别要注意windows、Mac的路径差异）
-    cwd: string,
-    // 如果为true则显示cli命令拦截弹窗
-    cli: boolean,
-    // cli为true 时生效 templet/src/components/PyramidUICliMessage 中底部的按钮类型
-    // 类型详见 core/config/cliMessageType.config.ts
-    cliType: string,
     // 类型，用来判断 CLI 的类型
     type: string;
     // 状态
@@ -43,6 +37,7 @@ const guid = () => {
     return v.toString(16);
   });
 };
+
 /**
  * 直接请求执行某个命令
  */
@@ -88,26 +83,27 @@ export class PyramidUISendPublicCMD implements PyramidUIAction {
     })
   }
 }
-export class PyramidUIReceiveProjectPublicCMD implements PyramidUIAction {
-  readonly type = PyramidUIActionTypes.RECEIVE_PUBLIC_CMD;
-  constructor(public payload: {
-    //  执行路径（特别要注意windows、Mac的路径差异）
-    cwd: string,
-    // 如果为true则显示cli命令拦截弹窗
-    cli: boolean,
-    // cli为true 时生效 templet/src/components/PyramidUICliMessage 中底部的按钮类型
-    // 类型详见 core/config/cliMessageType.config.ts
-    cliType: string,
-    // 判断比较
-    callbackId: string;
-    // 状态
-    status: 'start' | 'error' | 'end' | 'progress';
-    // 二进制数据（根据壳工程传回，看可工程是否需要统一）
-    data: any;
-    // 一般数据（根据壳工程传回，看可工程是否需要统一）
-    msg: string;
-  }) { }
-}
+
+// export class PyramidUIReceiveProjectPublicCMD implements PyramidUIAction {
+//   readonly type = PyramidUIActionTypes.RECEIVE_PUBLIC_CMD;
+//   constructor(public payload: {
+//     //  执行路径（特别要注意windows、Mac的路径差异）
+//     cwd: string,
+//     // 如果为true则显示cli命令拦截弹窗
+//     cli: boolean,
+//     // cli为true 时生效 templet/src/components/PyramidUICliMessage 中底部的按钮类型
+//     // 类型详见 core/config/cliMessageType.config.ts
+//     cliType: string,
+//     // 判断比较
+//     callbackId: string;
+//     // 状态
+//     status: 'start' | 'error' | 'end' | 'progress';
+//     // 二进制数据（根据壳工程传回，看可工程是否需要统一）
+//     data: any;
+//     // 一般数据（根据壳工程传回，看可工程是否需要统一）
+//     msg: string;
+//   }) { }
+// }
 
 /******************** 项目 ********************/
 export class PyramidUISendProjectCreateAction implements PyramidUIAction {
@@ -331,7 +327,6 @@ export class PyramidUIReceiveBlockPackageInfoAction implements PyramidUIAction {
 
 export type PyramidUIActionsUnion =
   PyramidUISendPublicCMD |
-  PyramidUIReceiveProjectPublicCMD |
   PyramidUISendPublicConsole |
   PyramidUISendProjectBlockSelectAction |
   PyramidUISendProjectModuleCreateAction |
