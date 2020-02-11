@@ -1,7 +1,7 @@
 import {BaseRequest} from "@/requests/base.request";
 import {API_CONFIG} from "@/core/configs/api.config";
-import {httpService} from "@react-kit/http";
 import {HTTP_CONTENT_TYPE} from "@/core/configs/http.config";
+import {IBlockPackage} from "@/interfaces/block-package/block-package.interface";
 
 class BlockPackageRequest extends BaseRequest {
   blockPackageGet(params: any): Promise<boolean> {
@@ -19,7 +19,7 @@ class BlockPackageRequest extends BaseRequest {
     return this.list(API_CONFIG.MAIN.BLOCK_PACKAGE.LIST_PAGE, params);
   }
 
-  blockPackageSubscribePage(params: any): Promise<{total: number, list: any[]}> {
+  blockPackageSubscribePage(params: any): Promise<{total: number, list: IBlockPackage[]}> {
     return this.object(API_CONFIG.MAIN.BLOCK_PACKAGE.SUBSCRIBE_PAGE, params);
 
   }

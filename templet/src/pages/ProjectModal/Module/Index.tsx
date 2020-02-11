@@ -2,7 +2,7 @@ import React, {FunctionComponent, useEffect, useState} from "react";
 import styles from './Index.less';
 import {Button, Form, Icon, Input, Menu, Pagination, Tabs} from "antd";
 import AddModal from './Add/Index';
-import {IBlockCard} from "@/interfaces/block/block.interface";
+import {IBlockItem} from "@/interfaces/block/block.interface";
 
 const { SubMenu } = Menu;
 const { TabPane } = Tabs;
@@ -17,10 +17,10 @@ interface IProps {
 const Component: FunctionComponent<IProps> = props => {
   const [tabActiveKey, setTabActiveKey] = useState<string>('1');
   const [modalVisible, setModalVisible] = useState<boolean>(false);
-  const [modalParams, setModalParams] = useState<IBlockCard>(null);
+  const [modalParams, setModalParams] = useState<IBlockItem>(null);
   const [current, setCurrent] = useState<number>(1);
   const [total, setTotal] = useState<number>(50);
-  const [cards, setCards] = useState<IBlockCard[]>([
+  const [cards, setCards] = useState<IBlockItem[]>([
     {
       key: 'ResultSuccess',
       name: '成功页',
@@ -59,12 +59,12 @@ const Component: FunctionComponent<IProps> = props => {
   };
 
   const handleMouse = (i, value) => {
-    const copyCards: IBlockCard[] = JSON.parse(JSON.stringify(cards));
+    const copyCards: IBlockItem[] = JSON.parse(JSON.stringify(cards));
     copyCards[i].hover = value;
     setCards(copyCards);
   };
 
-  const add = (card: IBlockCard) => {
+  const add = (card: IBlockItem) => {
     setModalVisible(true);
     setModalParams(card);
   };

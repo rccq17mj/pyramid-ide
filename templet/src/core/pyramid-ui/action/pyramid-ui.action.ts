@@ -1,5 +1,6 @@
 import { ActionTypes } from '../../../../../core/config/event.config';
 import { pyramidUiService } from '@/core/pyramid-ui/service/pyramid-ui.service';
+import {IBlockPackageInfo} from "@/interfaces/block-package/block-package.interface";
 
 export interface PyramidUIAction {
   type: string;
@@ -315,7 +316,10 @@ export class PyramidUISendBlockPackageInfoAction implements PyramidUIAction {
 export class PyramidUIReceiveBlockPackageInfoAction implements PyramidUIAction {
   readonly type = PyramidUIActionTypes.RECEIVE_PROJECT_BLOCK_PACKAGE_INFO;
   constructor(public payload: {
-    packageInfo: any,
+    /**
+     * 区块包信息，壳工程统一返回这个，并且做异常处理
+     */
+    packageInfo: IBlockPackageInfo,
     /**
      * 哪个项目ID，通过它前端可以找到并设置
      */

@@ -1,15 +1,12 @@
 import React, { useEffect, useState, FunctionComponent } from "react";
 import { HTTP_CONTENT_TYPE } from '@/core/configs/http.config';
-import { message, Form, Icon, Input } from "antd";
+import { message, Form } from "antd";
 import styles from './Login.less';
 import { httpService } from '@react-kit/http';
 import { API_CONFIG } from '@/core/configs/api.config';
-import { connect } from "dva";
-import router from "umi/router";
 import Login from "@/components/Login"
 
-
-const Component: FunctionComponent = props => {
+const Component: FunctionComponent = () => {
   const [auth, setAuth] = useState(null);
   const [verification, setVerification] = useState(null);
 
@@ -27,7 +24,7 @@ const Component: FunctionComponent = props => {
       ).then(res => {
         setAuth(res.data.data);
       });
-  }, [])
+  }, []);
 
   useEffect(() => {
     if (auth) {
@@ -38,10 +35,10 @@ const Component: FunctionComponent = props => {
   const get2dCode = (t = null) => {
     t = t ? '&refresh=' + t : '&refresh=';
     setVerification(API_CONFIG.SSO.GET_CODED + '?rst=' + auth.rst + t);
-  }
+  };
+
   /**
   * 1.获取短信验证码
-  * @param phone
   */
   const authentication = (mobile) => {
       httpService.get(API_CONFIG.SSO.GET_VCODE, {
@@ -53,11 +50,11 @@ const Component: FunctionComponent = props => {
         } else
           message.error(res.data.msg);
       })
-  }
+  };
 
   /**
    * 提交
-   * @param values 
+   * @param values
    */
   const submit = (values) => {
     const { appKey , rst}  = auth;
@@ -76,7 +73,7 @@ const Component: FunctionComponent = props => {
       ).then(res => {
         success(res)
       });
-  }
+  };
 
   /**
    * 手机号快速登录
@@ -96,7 +93,7 @@ const Component: FunctionComponent = props => {
     ).then(res => {
       success(res)
     });
-  }
+  };
 
   const success = (res) => {
     const {ticket} = res.data.data;
@@ -117,7 +114,7 @@ const Component: FunctionComponent = props => {
       message.error(res.data.msg);
       get2dCode(new Date().getTime());
     }
-  }
+  };
 
   return (
     <div className={styles.main}>

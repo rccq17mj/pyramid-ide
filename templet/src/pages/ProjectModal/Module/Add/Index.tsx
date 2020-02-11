@@ -9,7 +9,7 @@ import {
   PyramidUISendProjectModuleCreateAction,
   PyramidUISendProjectModuleGetRouteTreeAction
 } from "@/core/pyramid-ui/action/pyramid-ui.action";
-import {IBlockCard} from "@/interfaces/block/block.interface";
+import {IBlockItem} from "@/interfaces/block/block.interface";
 import {treeService} from "@/core/services/tree.service";
 import {TreeNode} from "antd/lib/tree-select";
 
@@ -18,7 +18,7 @@ const FormItem = Form.Item;
 interface IProps extends FormComponentProps {
   modalVisible: boolean;
   closeModal: (data?: any) => void;
-  params?: IBlockCard;
+  params?: IBlockItem;
 }
 
 const Component: FunctionComponent<IProps> = props => {
