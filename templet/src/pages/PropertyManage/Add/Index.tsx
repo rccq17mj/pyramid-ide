@@ -3,13 +3,8 @@ import { Avatar, Button, Select, Empty, Form, Input, message, Modal, Upload, Ico
 import { FormComponentProps } from 'antd/lib/form';
 import { pyramidUiService } from '@/core/pyramid-ui/service/pyramid-ui.service';
 import {
-  PyramidUISendProjectCreateAction,
-  PyramidUISendProjectChoosePathAction,
-  PyramidUIReceiveProjectChoosePathAction,
-  PyramidUIActionTypes,
-  PyramidUISendProjectBlockCreateAction, PyramidUISendProjectBlockItemCreateAction
-} from "@/core/pyramid-ui/action/pyramid-ui.action";
-import {API_CONFIG} from "@/core/configs/api.config";
+  PyramidUISendProjectBlockItemCreateAction
+} from "@/core/pyramid-ui/action/pyramid-ui-send.action";
 import { urlParames } from '@/utils/utils';
 import {mainRequest} from '../../../requests/main.request';
 import styles from './Index.less';

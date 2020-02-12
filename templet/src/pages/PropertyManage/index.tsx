@@ -6,15 +6,15 @@ import block from "@/assets/block.png";
 import router from "umi/router";
 import StatusBar from '@/components/StatusBar'
 import {
-  PyramidUIActionTypes, PyramidUIReceiveBlockItemListAction,
   PyramidUISendBlockItemGetAction,
-  PyramidUISendProjectToolBar
-} from "@/core/pyramid-ui/action/pyramid-ui.action";
+} from "@/core/pyramid-ui/action/pyramid-ui-send.action";
 import {pyramidUiService} from "@/core/pyramid-ui/service/pyramid-ui.service";
 import Add from '@/pages/PropertyManage/Add/Index';
 import Release from '@/pages/PropertyManage/Add/Release';
 import Types from '@/pages/PropertyManage/Add/Types';
 import {urlParames} from "@/utils/utils";
+import {PyramidUIReceiveBlockItemListAction} from "@/core/pyramid-ui/action/pyramid-ui-receive.action";
+import {PyramidUIActionTypes} from "@/core/pyramid-ui/action";
 
 interface ILeftBtn {
   name: string;
@@ -52,9 +52,12 @@ const PropertyManage: FunctionComponent<IProps> = props => {
     getBlockList();
 
     const messageKey = pyramidUiService.getMessageFn((action: PyramidUIReceiveBlockItemListAction) => {
-      if (action.type === PyramidUIActionTypes.RECEIVE_PROJECT_BLOCK_ITEM_LIST) {
-        console.log('blockItemData', action.payload)
-        setCards(action.payload)
+      switch (action.type) {
+        case PyramidUIActionTypes.RECEIVE_PROJECT_BLOCK_ITEM_LIST:
+          setCards(action.payload);
+          break;
+        default:
+          break;
       }
     });
 
@@ -94,12 +97,6 @@ const PropertyManage: FunctionComponent<IProps> = props => {
     copyLeftButtons[index].open = true;
 
     setLeftButtons(copyLeftButtons);
-  };
-
-  const handleClick = (e: string) => {
-    let msg = {};
-    msg[e] = true;
-    pyramidUiService.sendMessageFn(new PyramidUISendProjectToolBar(msg));
   };
 
 

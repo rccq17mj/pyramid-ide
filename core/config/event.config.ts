@@ -35,7 +35,6 @@ export const ActionTypes = {
 
     /******************** 模块 ********************/
     SEND_PROJECT_MODULE_CREATE: 'pyramid.ui.send.project.module.create',
-    RECEIVE_PROJECT_MODULE_CREATE: 'pyramid.ui.receive.project.module.create',
     SEND_PROJECT_MODULE_GET_ROUTE_TREE: 'pyramid.ui.send.project.module.getRouteTree',
     RECEIVE_PROJECT_MODULE_GET_ROUTE_TREE: 'pyramid.ui.receive.project.module.getRouteTree',
     /******************** 模块 ********************/

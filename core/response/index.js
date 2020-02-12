@@ -10,7 +10,7 @@ class response {
 
         ipcMain.on('project-start', function (event, arg) {
             this.window_objs.mainWindow.webContents.send('site-message', {
-                type: 'pyramid.ui.receive.project.start',
+                type: ActionTypes.RECEIVE_PROJECT_START,
                 payload: arg
             });
         })

@@ -1,8 +1,6 @@
 import React, { FormEvent, FunctionComponent, useState } from 'react';
 import { Avatar, Button, Select, Empty, Form, Input, message, Modal, Upload, Icon  } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
-import { pyramidUiService } from '@/core/pyramid-ui/service/pyramid-ui.service';
-import {PyramidUISendProjectCreateAction, PyramidUISendProjectChoosePathAction, PyramidUIReceiveProjectChoosePathAction, PyramidUIActionTypes} from "@/core/pyramid-ui/action/pyramid-ui.action";
 
 const FormItem = Form.Item;
 
@@ -28,17 +26,6 @@ const Detail: FunctionComponent<IProps> = props => {
     e.preventDefault();
     form.validateFields((err, fieldsValue) => {
       if (!err) {
-        // sendMessage({'project': true, msg: 'create', 'projectInfo': fieldsValue});
-      //  pyramidUiService.sendMessageFn(new PyramidUISendProjectCreateAction(fieldsValue));
-        // getMessage((msg)=>{
-        //   if(msg.hasOwnProperty('cmd-create')) {
-        //     console.log('msg:', msg);
-        //     // form.setFieldsValue({
-        //     //   path: msg.files[0]
-        //     // })
-        //   }
-        // })
-
         props.closeModal(true)
       }
     });

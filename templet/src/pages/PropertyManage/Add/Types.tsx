@@ -4,7 +4,7 @@ import { FormComponentProps } from 'antd/lib/form';
 import { pyramidUiService } from '@/core/pyramid-ui/service/pyramid-ui.service';
 import {
   PyramidUISendProjectBlockTypesCreateAction
-} from "@/core/pyramid-ui/action/pyramid-ui.action";
+} from "@/core/pyramid-ui/action/pyramid-ui-send.action";
 import {API_CONFIG} from "@/core/configs/api.config";
 import { urlParames } from '@/utils/utils';
 import {mainRequest} from '../../../requests/main.request';

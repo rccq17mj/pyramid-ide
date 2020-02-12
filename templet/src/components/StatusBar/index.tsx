@@ -1,7 +1,7 @@
 import React,{useEffect} from 'react';
 import styles from './index.less';
 import { pyramidUiService } from '@/core/pyramid-ui/service/pyramid-ui.service';
-import { PyramidUISendPublicConsole } from "@/core/pyramid-ui/action/pyramid-ui.action";
+import { PyramidUISendPublicConsole } from "@/core/pyramid-ui/action/pyramid-ui-send.action";
 
 import { Button, Icon } from 'antd';
 

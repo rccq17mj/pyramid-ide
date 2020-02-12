@@ -2,11 +2,16 @@
  * Pyramid UI 服务
  */
 import {
-  PyramidUIActionsUnion, PyramidUIActionTypes, PyramidUIReceiveCliMessage,
-} from "@/core/pyramid-ui/action/pyramid-ui.action";
+  PyramidUISendActionsUnion,
+} from "@/core/pyramid-ui/action/pyramid-ui-send.action";
 import React from 'react';
 import ReactDOM from 'react-dom';
 import PyramidUICliMessage from '@/components/PyramidUICliMessage/index';
+import {
+  PyramidUIReceiveActionsUnion,
+  PyramidUIReceiveCliMessageAction
+} from "@/core/pyramid-ui/action/pyramid-ui-receive.action";
+import {PyramidUIActionTypes} from "@/core/pyramid-ui/action";
 
 class PyramidUiService {
   // 引用回掉函数 索引+1
@@ -14,7 +19,7 @@ class PyramidUiService {
   private messageCallbackMap = new Map();
 
   // 保存消息框接收消息的方法
-  private pyramidUICliReceiveMessageFn: (action: PyramidUIReceiveCliMessage) => void = undefined;
+  private pyramidUICliReceiveMessageFn: (action: PyramidUIReceiveCliMessageAction) => void = undefined;
 
   /**
    * 监听消息
@@ -38,13 +43,12 @@ class PyramidUiService {
     }
 
     // 接收消息
-    getMessage((pyramidAction: PyramidUIActionsUnion) => {
+    getMessage((pyramidAction: PyramidUIReceiveActionsUnion) => {
       // 这里可以处理全局消息
       switch (pyramidAction.type) {
-        case PyramidUIActionTypes.SEND_PROJECT_MODULE_CREATE:
-          break;
+        // 接收CLI弹窗消息
         case PyramidUIActionTypes.RECEIVE_CLI_MESSAGE:
-          const action: PyramidUIReceiveCliMessage = pyramidAction as PyramidUIReceiveCliMessage;
+          const action: PyramidUIReceiveCliMessageAction = pyramidAction as PyramidUIReceiveCliMessageAction;
 
           if (action.payload.status === 'start') {// 开始
             this.showCliMessageModal(action);
@@ -72,7 +76,7 @@ class PyramidUiService {
    * 发送 pyramid ui 消息
    * @param pyramidAction
    */
-  public sendMessageFn = (pyramidAction: PyramidUIActionsUnion) => {
+  public sendMessageFn = (pyramidAction: PyramidUISendActionsUnion) => {
     let sendMessage;
     try {
       // @ts-ignore
@@ -88,7 +92,7 @@ class PyramidUiService {
    * 监听 pyramid ui 消息，会返回该消息引用的Key，需要在页面销毁的时候清除
    * @param callback 消息回调
    */
-  public getMessageFn = (callback: (action: PyramidUIActionsUnion) => void): string => {
+  public getMessageFn = (callback: (action: PyramidUIReceiveActionsUnion) => void): string => {
     this.messageCallbackMaxKey += 1;
     this.messageCallbackMap.set(this.messageCallbackMaxKey.toString(), callback);
     return this.messageCallbackMaxKey.toString();
@@ -106,7 +110,7 @@ class PyramidUiService {
    * 显示 Cli 消息模态框
    * @param action
    */
-  private showCliMessageModal = (action: PyramidUIReceiveCliMessage) => {
+  private showCliMessageModal = (action: PyramidUIReceiveCliMessageAction) => {
     const elementId = 'pyramidUICliMessageModal';
 
     const creatReact = React.createElement(PyramidUICliMessage,

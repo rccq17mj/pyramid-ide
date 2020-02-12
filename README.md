@@ -71,7 +71,7 @@ npm run start
 
 1. 子工程声明消息:
 
-        ./templet/src/core/pyramid-ui/action/pyramid-ui.action.ts
+        ./templet/src/core/pyramid-ui/action/pyramid-ui-send.action.ts
 
 2. 子工程发送消息:
 

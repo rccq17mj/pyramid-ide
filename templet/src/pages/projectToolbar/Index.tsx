@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from "react";
 import { Row, Col, Button } from 'antd';
 import { pyramidUiService } from '@/core/pyramid-ui/service/pyramid-ui.service';
-import { PyramidUISendProjectToolBar } from "@/core/pyramid-ui/action/pyramid-ui.action";
+import { PyramidUISendProjectToolBar } from "@/core/pyramid-ui/action/pyramid-ui-send.action";
 
 const Component: FunctionComponent = () => {
     const handleClick = (type: 'back' | 'build' | 'layout' | 'module' | 'block') => {

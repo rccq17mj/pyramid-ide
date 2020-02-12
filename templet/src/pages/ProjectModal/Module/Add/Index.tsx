@@ -5,13 +5,17 @@ import {FormComponentProps} from "antd/lib/form";
 import {REGEX_CONFIG} from "@/core/configs/regex.config";
 import {pyramidUiService} from "@/core/pyramid-ui/service/pyramid-ui.service";
 import {
-  PyramidUIActionsUnion, PyramidUIActionTypes,
   PyramidUISendProjectModuleCreateAction,
   PyramidUISendProjectModuleGetRouteTreeAction
-} from "@/core/pyramid-ui/action/pyramid-ui.action";
+} from "@/core/pyramid-ui/action/pyramid-ui-send.action";
+import {PyramidUIActionTypes} from "@/core/pyramid-ui/action";
 import {IBlockItem} from "@/interfaces/block/block.interface";
 import {treeService} from "@/core/services/tree.service";
 import {TreeNode} from "antd/lib/tree-select";
+import {
+  PyramidUIReceiveActionsUnion,
+  PyramidUIReceiveProjectModuleGetRouteTreeAction
+} from "@/core/pyramid-ui/action/pyramid-ui-receive.action";
 
 const FormItem = Form.Item;
 
@@ -86,24 +90,29 @@ const Component: FunctionComponent<IProps> = props => {
     // 发送消息获取路由信息
     pyramidUiService.sendMessageFn(new PyramidUISendProjectModuleGetRouteTreeAction());
     // 获取路由消息
-    const messageKey = pyramidUiService.getMessageFn((action: PyramidUIActionsUnion) => {
-      if (action.type === PyramidUIActionTypes.RECEIVE_PROJECT_MODULE_GET_ROUTE_TREE) {
-        const getRouterTree = JSON.parse(JSON.stringify(action.payload.routerTree));
-        if (getRouterTree) {
-          getRouterTree.unshift({path: '/'});
+    const messageKey = pyramidUiService.getMessageFn((pyramidAction: PyramidUIReceiveActionsUnion) => {
+      switch (pyramidAction.type) {
+        case PyramidUIActionTypes.RECEIVE_PROJECT_MODULE_GET_ROUTE_TREE:
+          const action: PyramidUIReceiveProjectModuleGetRouteTreeAction = pyramidAction as PyramidUIReceiveProjectModuleGetRouteTreeAction;
+          const getRouterTree = JSON.parse(JSON.stringify(action.payload.routerTree));
+          if (getRouterTree) {
+            getRouterTree.unshift({path: '/'});
 
-          // 这里为了组装成树数据
-          let i = 0;
-          treeService.visitTree(getRouterTree, (item, parent, deep) => {
-            item.key = i.toString();
-            item.title = item.path;
-            // 去掉第一个斜杠
-            item.value = item.path.substr(1);
-            i += 1;
-          });
+            // 这里为了组装成树数据
+            let i = 0;
+            treeService.visitTree(getRouterTree, (item, parent, deep) => {
+              item.key = i.toString();
+              item.title = item.path;
+              // 去掉第一个斜杠
+              item.value = item.path.substr(1);
+              i += 1;
+            });
 
-          setRouteTree(getRouterTree);
-        }
+            setRouteTree(getRouterTree);
+          }
+          break;
+        default:
+          break;
       }
     });
 

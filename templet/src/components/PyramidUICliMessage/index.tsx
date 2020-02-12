@@ -3,19 +3,20 @@ import { Button, Form, Modal } from 'antd';
 import { Terminal } from 'xterm';
 import 'xterm/css/xterm.css'
 import {
-  PyramidUIReceiveCliMessage, PyramidUISendBlockGetAction, PyramidUISendBlockItemGetAction,
+  PyramidUISendBlockGetAction, PyramidUISendBlockItemGetAction,
   PyramidUISendProjectOpenWindowAction
-} from '@/core/pyramid-ui/action/pyramid-ui.action';
+} from '@/core/pyramid-ui/action/pyramid-ui-send.action';
 import {CliMessageTypes} from "../../../../core/config/cliMessageType.config";
 import {pyramidUiService} from "@/core/pyramid-ui/service/pyramid-ui.service";
 import {urlParames} from "@/utils/utils";
 import styles from './index.less';
+import {PyramidUIReceiveCliMessageAction} from "@/core/pyramid-ui/action/pyramid-ui-receive.action";
 
 const FormItem = Form.Item;
 
 interface IProps {
   // 接收的消息类型
-  action: PyramidUIReceiveCliMessage;
+  action: PyramidUIReceiveCliMessageAction;
   // 接收消息的方法
   receiveMsgFn: (fn: any) => void;
   // 模态框关闭的回调
@@ -133,7 +134,7 @@ const CliModal: FunctionComponent<IProps> = props => {
     return null;
   };
 
-  const receiveMsgFn = (action: PyramidUIReceiveCliMessage) => {
+  const receiveMsgFn = (action: PyramidUIReceiveCliMessageAction) => {
     const payload = action.payload;
 
     if (payload.status === 'end') {

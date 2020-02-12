@@ -1,7 +1,7 @@
 import React, {FunctionComponent, useEffect, useState} from 'react';
 import {Button, Col, Row, Slider} from "antd";
 import { pyramidUiService } from '@/core/pyramid-ui/service/pyramid-ui.service';
-import { PyramidUISendProjectLayoutChooseAction } from '@/core/pyramid-ui/action/pyramid-ui.action';
+import { PyramidUISendProjectLayoutChooseAction } from '@/core/pyramid-ui/action/pyramid-ui-send.action';
 
 interface IProps {}
 

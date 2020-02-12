@@ -5,12 +5,15 @@ import styles from './index.less';
 import Add from '@/pages/Computer/Projects/Add/Index';
 import { pyramidUiService } from '@/core/pyramid-ui/service/pyramid-ui.service';
 import {
-  PyramidUIActionsUnion,
   PyramidUISendProjectRemoveAction,
-  PyramidUIActionTypes,
   PyramidUISendProjectListAction,
   PyramidUISendProjectStartAction
-} from "@/core/pyramid-ui/action/pyramid-ui.action";
+} from "@/core/pyramid-ui/action/pyramid-ui-send.action";
+import {PyramidUIActionTypes} from "@/core/pyramid-ui/action";
+import {
+  PyramidUIReceiveActionsUnion, PyramidUIReceiveProjectChoosePathAction,
+  PyramidUIReceiveProjectListAction
+} from "@/core/pyramid-ui/action/pyramid-ui-receive.action";
 
 const FormItem = Form.Item;
 const iconApp = require("../../../assets/icon_app.png");
@@ -32,14 +35,18 @@ const Component: FunctionComponent<IProps> = props => {
     getProjectsData();
 
     // 统一监控 - 取得信息的处理
-    const messageKey = pyramidUiService.getMessageFn((action: PyramidUIActionsUnion) => {
-      // 返回项目列表
-      if (action.type === PyramidUIActionTypes.RECEIVE_PROJECT_LIST) {
-        receive_project_list(action.payload);
-      }
-      // 返回删除处理
-      if (action.type === PyramidUIActionTypes.RECEIVE_PROJECT_CHOOSE_PATH) {
-        receive_project_choose_path(action.payload);
+    const messageKey = pyramidUiService.getMessageFn((pyramidAction: PyramidUIReceiveActionsUnion) => {
+      switch (pyramidAction.type) {
+        // 返回项目列表
+        case PyramidUIActionTypes.RECEIVE_PROJECT_LIST:
+          const action1: PyramidUIReceiveProjectListAction = pyramidAction as PyramidUIReceiveProjectListAction;
+          receive_project_list(action1.payload);
+          break;
+        // 返回删除处理
+        case PyramidUIActionTypes.RECEIVE_PROJECT_CHOOSE_PATH:
+          const action2: PyramidUIReceiveProjectChoosePathAction = pyramidAction as PyramidUIReceiveProjectChoosePathAction;
+          receive_project_choose_path(action2.payload);
+          break;
       }
     });
 

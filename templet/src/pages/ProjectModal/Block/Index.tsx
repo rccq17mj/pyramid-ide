@@ -3,15 +3,19 @@ import {Button, Form, Icon, Input, Menu, Pagination, Spin, Tabs} from "antd";
 import {IBlockItem} from "@/interfaces/block/block.interface";
 import {pyramidUiService} from "@/core/pyramid-ui/service/pyramid-ui.service";
 import {
-  PyramidUIActionsUnion, PyramidUIActionTypes, PyramidUIReceiveBlockPackageInfoAction,
   PyramidUISendBlockPackageInfoAction,
   PyramidUISendProjectBlockSelectAction
-} from "@/core/pyramid-ui/action/pyramid-ui.action";
+} from "@/core/pyramid-ui/action/pyramid-ui-send.action";
+import {PyramidUIActionTypes} from "@/core/pyramid-ui/action";
 import {blockPackageRequest} from "@/requests/block-package.request";
 import {EBlockPackageFetchStatus} from "@/enums/block-package.enum";
 import * as _ from 'lodash';
 import styles from './Index.less';
 import {IBlockPackage, IBlockPackageInfo} from "@/interfaces/block-package/block-package.interface";
+import {
+  PyramidUIReceiveActionsUnion,
+  PyramidUIReceiveBlockPackageInfoAction
+} from "@/core/pyramid-ui/action/pyramid-ui-receive.action";
 
 const { SubMenu } = Menu;
 const { TabPane } = Tabs;
@@ -34,23 +38,27 @@ const Component: FunctionComponent<IProps> = () => {
   useEffect(() => {
     queryPackages();
 
-    const messageKey = pyramidUiService.getMessageFn((pyramidAction: PyramidUIActionsUnion) => {
-      if (pyramidAction.type === PyramidUIActionTypes.RECEIVE_PROJECT_BLOCK_PACKAGE_INFO) {// 获取区块信息
-        const action: PyramidUIReceiveBlockPackageInfoAction = pyramidAction as PyramidUIReceiveBlockPackageInfoAction;
-        const packageInfo = action.payload.packageInfo || null;
-        const projectId = action.payload.projectId;
-        if (projectId) {
-          // 注意这里，监听的时候因为拿不到外部的 menus 对象，所以只能用 localStorage 保存起来并读取
-          const storageMenus: IBlockPackage[] = JSON.parse(localStorage.getItem(localStorageModuleMenusKey));
-          localStorage.setItem(localStorageModuleMenusKey, null);
+    const messageKey = pyramidUiService.getMessageFn((pyramidAction: PyramidUIReceiveActionsUnion) => {
+      switch (pyramidAction.type) {
+        case PyramidUIActionTypes.RECEIVE_PROJECT_BLOCK_PACKAGE_INFO:
+          const action: PyramidUIReceiveBlockPackageInfoAction = pyramidAction as PyramidUIReceiveBlockPackageInfoAction;
+          const packageInfo = action.payload.packageInfo || null;
+          const projectId = action.payload.projectId;
+          if (projectId) {
+            // 注意这里，监听的时候因为拿不到外部的 menus 对象，所以只能用 localStorage 保存起来并读取
+            const storageMenus: IBlockPackage[] = JSON.parse(localStorage.getItem(localStorageModuleMenusKey));
+            localStorage.setItem(localStorageModuleMenusKey, null);
 
-          const findMenu = findMenuByKey(storageMenus, projectId);
-          if (findMenu) {
-            findMenu.packageInfoFetchStatus = EBlockPackageFetchStatus.fetchEnd;
-            findMenu.packageInfo = packageInfo;
-            setMenus(storageMenus);
+            const findMenu = findMenuByKey(storageMenus, projectId);
+            if (findMenu) {
+              findMenu.packageInfoFetchStatus = EBlockPackageFetchStatus.fetchEnd;
+              findMenu.packageInfo = packageInfo;
+              setMenus(storageMenus);
+            }
           }
-        }
+          break;
+        default:
+          break;
       }
     });
 

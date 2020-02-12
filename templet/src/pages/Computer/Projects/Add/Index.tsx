@@ -2,8 +2,10 @@ import React, {FormEvent, FunctionComponent, useEffect, useState} from 'react';
 import { Tabs, Button, Select, Form, Input, Modal, Switch, Icon } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 import { pyramidUiService } from '@/core/pyramid-ui/service/pyramid-ui.service';
-import { PyramidUISendProjectCreateAction, PyramidUISendProjectChoosePathAction, PyramidUIReceiveProjectChoosePathAction, PyramidUIActionTypes } from "@/core/pyramid-ui/action/pyramid-ui.action";
+import { PyramidUISendProjectCreateAction, PyramidUISendProjectChoosePathAction } from "@/core/pyramid-ui/action/pyramid-ui-send.action";
 import styles from './Index.less';
+import {PyramidUIActionTypes} from "@/core/pyramid-ui/action";
+import {PyramidUIReceiveProjectChoosePathAction} from "@/core/pyramid-ui/action/pyramid-ui-receive.action";
 
 const FormItem = Form.Item;
 const { TabPane } = Tabs;
@@ -38,10 +40,14 @@ const Component: FunctionComponent<IProps> = props => {
 
   useEffect(() => {
     const messageKey = pyramidUiService.getMessageFn((action: PyramidUIReceiveProjectChoosePathAction) => {
-      if (action.type === PyramidUIActionTypes.RECEIVE_PROJECT_CHOOSE_PATH) {
-        form.setFieldsValue({
-          path: action.payload.files
-        })
+      switch (action.type) {
+        case PyramidUIActionTypes.RECEIVE_PROJECT_CHOOSE_PATH:
+          form.setFieldsValue({
+            path: action.payload.files
+          });
+          break;
+        default:
+          break;
       }
     });
 

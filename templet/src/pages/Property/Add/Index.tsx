@@ -1,17 +1,15 @@
 import React, { FormEvent, FunctionComponent, useState } from 'react';
-import { Avatar, Button, Select, Empty, Form, Input, message, Modal, Upload, Icon  } from 'antd';
+import { Button, Select, Form, Input, message, Modal, Upload, Icon  } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 import { pyramidUiService } from '@/core/pyramid-ui/service/pyramid-ui.service';
 import {
-  PyramidUISendProjectCreateAction,
   PyramidUISendProjectChoosePathAction,
-  PyramidUIReceiveProjectChoosePathAction,
-  PyramidUIActionTypes,
   PyramidUISendProjectBlockCreateAction
-} from "@/core/pyramid-ui/action/pyramid-ui.action";
-import {API_CONFIG} from "@/core/configs/api.config";
+} from "@/core/pyramid-ui/action/pyramid-ui-send.action";
+import {PyramidUIActionTypes} from "@/core/pyramid-ui/action";
 import {mainRequest} from '../../../requests/main.request';
 import styles from './Index.less';
+import {PyramidUIReceiveProjectChoosePathAction} from "@/core/pyramid-ui/action/pyramid-ui-receive.action";
 
 const FormItem = Form.Item;
 
@@ -84,10 +82,14 @@ const Component: FunctionComponent<IProps> = props => {
     // sendMessage({'open-file-dialog': true});
     pyramidUiService.sendMessageFn(new PyramidUISendProjectChoosePathAction());
     pyramidUiService.getMessageFn((action: PyramidUIReceiveProjectChoosePathAction) => {
-      if (action.type === PyramidUIActionTypes.RECEIVE_PROJECT_CHOOSE_PATH) {
-        form.setFieldsValue({
-          filePath: action.payload.files
-        })
+      switch (action.type) {
+        case PyramidUIActionTypes.RECEIVE_PROJECT_CHOOSE_PATH:
+          form.setFieldsValue({
+            filePath: action.payload.files
+          });
+          break;
+        default:
+          break;
       }
     });
     // getMessage((msg)=>{

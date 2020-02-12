@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { List, Switch, Icon } from 'antd';
-import { PyramidUISendPublicCMD } from "@/core/pyramid-ui/action/pyramid-ui.action";
+import { PyramidUISendPublicCMD } from "@/core/pyramid-ui/action/pyramid-ui-send.action";
 import { pyramidUiService } from '@/core/pyramid-ui/service/pyramid-ui.service';
 import style from './Welcome.less';
 import homeLogo from "../assets/home-logo.png";

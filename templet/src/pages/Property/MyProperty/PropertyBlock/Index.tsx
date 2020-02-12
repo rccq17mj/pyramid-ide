@@ -1,24 +1,24 @@
 import React, { FunctionComponent, useState, useEffect } from 'react';
-import { Layout, Pagination, Breadcrumb, Form, Button, Input, Select, Card, Icon, Checkbox } from 'antd';
+import { Layout, Form, Button, Input, Select, Card, Checkbox } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 import plus from '@/assets/plus.png';
 import block from '@/assets/block.png';
-import FeaturesGrid from '@/library/components/FeaturesGrid/FeaturesGrid'
 
 import Add from '@/pages/Property/Add/Index';
 import { pyramidUiService } from '@/core/pyramid-ui/service/pyramid-ui.service';
 import {
-  PyramidUIActionTypes,
   PyramidUISendBlockGetAction,
-  PyramidUIReceiveBlockListAction,
   PyramidUISendBlockRemoveAction,
-  PyramidUIReceiveBlockRemoveAction,
-  PyramidUIActionsUnion
-} from '@/core/pyramid-ui/action/pyramid-ui.action';
+} from '@/core/pyramid-ui/action/pyramid-ui-send.action';
 import Router from 'umi/router';
 import style from '../../Property.less';
+import {
+  PyramidUIReceiveActionsUnion, PyramidUIReceiveBlockListAction,
+  PyramidUIReceiveBlockRemoveAction
+} from "@/core/pyramid-ui/action/pyramid-ui-receive.action";
+import {PyramidUIActionTypes} from "@/core/pyramid-ui/action";
 
-const { Header, Content, Sider } = Layout;
+const { Content } = Layout;
 const FormItem = Form.Item;
 const { Option } = Select;
 
@@ -55,14 +55,16 @@ const ProperytBlock: FunctionComponent<IProps> = props => {
 
   useEffect(() => {
     // 统一监听
-    const messageKey = pyramidUiService.getMessageFn((action: PyramidUIActionsUnion) => {
-      if (action.type === PyramidUIActionTypes.RECEIVE_PROJECT_BLOCK_LIST) {
-        console.log('blockData', action.payload)
-        setCards(action.payload)
-      }
-
-      if (action.type === PyramidUIActionTypes.RECEIVE_PROJECT_BLOCK_REMOVE) {
-        console.log('删除的action', action)
+    const messageKey = pyramidUiService.getMessageFn((pyramidAction: PyramidUIReceiveActionsUnion) => {
+      switch (pyramidAction.type) {
+        case PyramidUIActionTypes.RECEIVE_PROJECT_BLOCK_LIST:
+          const action1: PyramidUIReceiveBlockListAction = pyramidAction as PyramidUIReceiveBlockListAction;
+          setCards(action1.payload);
+          break;
+        case PyramidUIActionTypes.RECEIVE_PROJECT_BLOCK_REMOVE:
+          const action2: PyramidUIReceiveBlockRemoveAction = pyramidAction as PyramidUIReceiveBlockRemoveAction;
+          console.log(action2);
+          break;
       }
     });
 
