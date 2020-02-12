@@ -14,7 +14,6 @@ import styles from './Index.less';
 import {IBlockPackage, IBlockPackageInfo} from "@/interfaces/block-package/block-package.interface";
 import {
   PyramidUIReceiveActionsUnion,
-  PyramidUIReceiveBlockPackageInfoAction
 } from "@/core/pyramid-ui/action/pyramid-ui-receive.action";
 
 const { SubMenu } = Menu;
@@ -41,9 +40,8 @@ const Component: FunctionComponent<IProps> = () => {
     const messageKey = pyramidUiService.getMessageFn((pyramidAction: PyramidUIReceiveActionsUnion) => {
       switch (pyramidAction.type) {
         case PyramidUIActionTypes.RECEIVE_PROJECT_BLOCK_PACKAGE_INFO:
-          const action: PyramidUIReceiveBlockPackageInfoAction = pyramidAction as PyramidUIReceiveBlockPackageInfoAction;
-          const packageInfo = action.payload.packageInfo || null;
-          const projectId = action.payload.projectId;
+          const packageInfo = pyramidAction.payload.packageInfo || null;
+          const projectId = pyramidAction.payload.projectId;
           if (projectId) {
             // 注意这里，监听的时候因为拿不到外部的 menus 对象，所以只能用 localStorage 保存起来并读取
             const storageMenus: IBlockPackage[] = JSON.parse(localStorage.getItem(localStorageModuleMenusKey));
