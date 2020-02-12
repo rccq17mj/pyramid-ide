@@ -1,5 +1,7 @@
 import { pyramidUiService } from '@/core/pyramid-ui/service/pyramid-ui.service';
-import {PyramidUIReceiveActionsUnion} from "@/core/pyramid-ui/action/pyramid-ui-receive.action";
+import {
+  PyramidUIReceivePublicCMD,
+} from "@/core/pyramid-ui/action/pyramid-ui-receive.action";
 import {PyramidUIAction, PyramidUIActionTypes} from "@/core/pyramid-ui/action/index";
 
 
@@ -10,45 +12,36 @@ export class PyramidUISendPublicConsole implements PyramidUIAction {
   readonly type = PyramidUIActionTypes.SEND_PUBLIC_OPEN_CONSOLE;
   constructor(public payload: void) { }
 }
-// 直接请求执行某个命令
+// 直接请求执行某个命令（还不成熟，其他业务暂时不要用这个，如果有回其他参数，壳工程还是需要根据一个标识，进行相应处理）
 export class PyramidUISendPublicCMD implements PyramidUIAction {
   readonly type = PyramidUIActionTypes.SEND_PUBLIC_CMD;
 
-  /**
-   * @param payload {
-   *    @param cmd     执行命令
-   *    @param cwd     执行路径（特别要注意windows、Mac的路径差异）
-   *    @param cli     如果为true则显示cli命令拦截弹窗
-   *    @param cliType cli为true 时生效 components/PyramidUICliMessage 中底部的按钮类型
-   * }
-   * @param callback   回调方法
-   */
   constructor(public payload: {
-    cmd: string,
-    cwd?: string,
-    cli?: boolean,
-    cliType?: string,
-    callback?: Function,
-  }, public callback: Function, public callbackId?: string, public cli?: boolean) {
+    cmd: string,  // 执行命令
+    cwd?: string, // 执行路径（特别要注意windows、Mac的路径差异）
+    callbackId?: string;// 回调ID，外部调用不需要传，但需要传递给壳工程
+  }, public callback?: (action: PyramidUIReceivePublicCMD) => void) {
+    // 先赋值 callbackId
+    payload.callbackId = guid();
 
-    this.callbackId = payload.callbackId = guid();
-    if (payload.callback) {
-      this.callback = payload.callback;
-    }
+    // 监听消息
+    const messageId = pyramidUiService.getMessageFn((action: PyramidUIReceivePublicCMD) => {
+      switch (action.type) {
+        case PyramidUIActionTypes.RECEIVE_PUBLIC_CMD:
+          // 获取返回参数
+          const receivePayload = action.payload;
 
-    // 这里其实只要拿次协议的 callbackId 作为返回监听即可，必须要声明一大堆 PyramidUIReceive
-    const messageId = pyramidUiService.getMessageFn((action: PyramidUIReceiveActionsUnion) => {
-      const payload = action.payload;
-      if (
-        action.type === PyramidUIActionTypes.RECEIVE_PUBLIC_CMD
-      ) {
-        // 这里完全可以通过 callbackId 判断要不要执行回调
-        if (payload.callbackId === this.callbackId) {
-          if (payload.status === 'end' || payload.status === 'error') {
-            pyramidUiService.clearMessageFn(messageId);
+          if (receivePayload.callbackId === payload.callbackId) {
+            // 销毁监听的消息
+            if (receivePayload.status === 'end' || receivePayload.status === 'error') {
+              pyramidUiService.clearMessageFn(messageId);
+            }
+
+            if (this.callback) {
+              this.callback(action);
+            }
           }
-          this.callback(payload);
-        }
+          break;
       }
     })
   }

@@ -1,5 +1,3 @@
-
-
 // 所有指令集合（注意格式：pyramid.ui + send | receive + 模块 + 功能 + 定义）
 export const ActionTypes = {
     /******************** 全局 ********************/
@@ -11,6 +9,10 @@ export const ActionTypes = {
     SEND_PUBLIC_CMD: 'pyramid.ui.send.public.env.cmd',
     RECEIVE_PUBLIC_CMD:  'pyramid.ui.receive.public.env.cmd',
     /******************** 全局 ********************/
+
+
+
+
 
     /******************** 项目 ********************/
     SEND_PROJECT_OPENWINDOW: 'pyramid.ui.send.project.openWindow',
@@ -28,9 +30,15 @@ export const ActionTypes = {
     /******************** 项目 ********************/
 
 
+
+
+
     /******************** 布局 ********************/
     SEND_PROJECT_LAYOUT_CHOOSE: 'pyramid.ui.send.project.layout.choose',
     /******************** 布局 ********************/
+
+
+
 
 
     /******************** 模块 ********************/
@@ -38,6 +46,9 @@ export const ActionTypes = {
     SEND_PROJECT_MODULE_GET_ROUTE_TREE: 'pyramid.ui.send.project.module.getRouteTree',
     RECEIVE_PROJECT_MODULE_GET_ROUTE_TREE: 'pyramid.ui.receive.project.module.getRouteTree',
     /******************** 模块 ********************/
+
+
+
 
 
     /******************** 区块 ********************/
@@ -53,10 +64,13 @@ export const ActionTypes = {
     RECEIVE_PROJECT_BLOCK_REMOVE:'pyramid.ui.receive.project.block.remove',
     /******************** 区块 ********************/
 
+
+
+
+
+
     /******************** 区块包 ********************/
     SEND_PROJECT_BLOCK_PACKAGE_INFO:'pyramid.ui.send.project.block.package.info',
     RECEIVE_PROJECT_BLOCK_PACKAGE_INFO:'pyramid.ui.receive.project.block.package.info',
     /******************** 区块包 ********************/
 };
-
-

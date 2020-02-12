@@ -20,6 +20,19 @@ export class PyramidUIReceiveCliMessageAction implements PyramidUIAction {
     msg: string;
   }) { }
 }
+// 直接请求执行某个命令（还不成熟，其他业务暂时不要用这个，如果有回其他参数，壳工程还是需要根据一个标识，进行相应处理）
+export class PyramidUIReceivePublicCMD implements PyramidUIAction {
+  readonly type = PyramidUIActionTypes.RECEIVE_PUBLIC_CMD;
+  constructor(public payload: {
+    callbackId: string;// 回调ID
+    // 状态
+    status: 'start' | 'error' | 'end' | 'progress';
+    // 二进制数据（根据壳工程传回，看可工程是否需要统一）
+    data: any;
+    // 一般数据（根据壳工程传回，看可工程是否需要统一）
+    msg: string;
+  }) { }
+}
 /******************** 全局 ********************/
 
 
@@ -97,6 +110,7 @@ export class PyramidUIReceiveBlockPackageInfoAction implements PyramidUIAction {
 
 
 export type PyramidUIReceiveActionsUnion =
+  PyramidUIReceivePublicCMD |
   PyramidUIReceiveCliMessageAction |
   PyramidUIReceiveBlockPackageInfoAction |
   PyramidUIReceiveBlockListAction |

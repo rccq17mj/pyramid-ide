@@ -5,10 +5,10 @@ import { pyramidUiService } from '@/core/pyramid-ui/service/pyramid-ui.service';
 import style from './Welcome.less';
 import homeLogo from "../assets/home-logo.png";
 import surrounding from "../assets/surrounding.png";
-import version from "../assets/version.png";
+import versionImg from "../assets/version.png";
 
 const Home = () => {
-  const [vrsion, setVersion] = useState<any>({
+  const [version, setVersion] = useState<any>({
     node: '...',
     npm: '...',
     yarn: '...',
@@ -16,12 +16,12 @@ const Home = () => {
   });
 
   const sendCmd = (cmd, callback) => {
-    pyramidUiService.sendMessageFn(new PyramidUISendPublicCMD({ cmd}, (payload) => {
-      if (payload.status === "progress") {
-        callback(payload.msg);
+    pyramidUiService.sendMessageFn(new PyramidUISendPublicCMD({cmd}, (action) => {
+      if (action.payload.status === "progress") {
+        callback(action.payload.msg);
       }
     }));
-  }
+  };
 
   useEffect(() => {
     const v = {
@@ -43,7 +43,7 @@ const Home = () => {
         })
       })
     })
-  }, [])
+  }, []);
 
   return (
     <div className={style.homeBody}>
@@ -57,9 +57,9 @@ const Home = () => {
           >
             <List.Item>
               <List.Item.Meta
-                avatar={<img src={surrounding} width={50} height={50} />}
+                avatar={<img src={surrounding} width={50} height={50} alt='' />}
                 title='当前环境'
-                description={`node ${vrsion.node} | npm ${vrsion.npm} | yarn ${vrsion.yarn} | umi ${vrsion.umi}`}
+                description={`node ${version.node} | npm ${version.npm} | yarn ${version.yarn} | umi ${version.umi}`}
               />
               <Switch
                 checkedChildren={<Icon type="check" style={{ height: '16px' }} />}
@@ -69,7 +69,7 @@ const Home = () => {
             </List.Item>
             <List.Item>
               <List.Item.Meta
-                avatar={<img src={version} width={50} height={50} />}
+                avatar={<img src={versionImg} width={50} height={50} alt='' />}
                 title='版本v1.0.1'
                 description="最低可用版本 v1.0.0 | 最新版 v1.0.1"
               />
@@ -83,14 +83,10 @@ const Home = () => {
         </div>
       </div>
       <div className={style.homeLogo}>
-        <img src={homeLogo} />
+        <img src={homeLogo} alt='' />
       </div>
     </div>
   )
-}
+};
 
 export default Home;
-
-/*export default (): React.ReactNode => (
-
-);*/
