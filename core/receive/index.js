@@ -49,10 +49,13 @@ class receive {
                                 const moduleWin = JSON.parse(JSON.stringify(config.moduleWin));
                                 this.pyramidControl.getNowProjectInfo((projectInfo) => {
                                     moduleWin.loadUrl = moduleWin.loadUrl + type + '?projectInfo=' + JSON.stringify(projectInfo);
+                                    if (this.moduleWindow) {
+                                        this.moduleWindow.destroy();
+                                        this.moduleWindow = null;
+                                    }
                                     this.moduleWindow = _window(moduleWin);
                                     this.moduleWindow.show();
-                                    //console.log('moduleWin::::', moduleWin);
-                                })
+                                });
                                 break;
                             case 'build':
                                 break;
@@ -143,16 +146,33 @@ class receive {
                             }
                         });
                         break;
-                    //    添加布局到项目（请不要随便删除）
+                    //    添加区块到项目（请不要随便删除）
                     case 'pyramid.ui.children.send.project.block.clickSection':
+                        if (this.moduleWindow) {
+                            this.moduleWindow.show();
+                        }
                         this.pyramidControl.getNowProjectInfo((projectInfo) => {
                             this.pyramidControl.clickSection(arg.payload, this.window_objs.runWindow, projectInfo);
                         });
                         break;
                     //    添加布局到项目（请不要随便删除）
                     case 'pyramid.ui.children.send.project.layout.clickSection':
+                        if (this.moduleWindow) {
+                            this.moduleWindow.show();
+                        }
                         this.pyramidControl.getNowProjectInfo((projectInfo) => {
                             this.pyramidControl.createLayout(arg.payload, this.window_objs.runWindow, projectInfo);
+                        });
+                        break;
+                    // 路由模块创建
+                    case ActionTypes.SEND_PROJECT_MODULE_CREATE:
+                        if (this.moduleWindow) {
+                            this.moduleWindow.show();
+                        }
+                        const ModuleInfo = arg.payload;
+                        this.pyramidControl.getNowProjectInfo((projectInfo) => {
+                            // projectService.passAction( 'cmd-module-create', ModuleInfo,  self.window_objs.runWindow, );
+                            this.pyramidControl.createModule(ModuleInfo, this.window_objs.runWindow, projectInfo);
                         });
                         break;
                     // 区块包创建    
@@ -240,14 +260,6 @@ class receive {
                             payload: {
                                 removed: true
                             }
-                        })
-                        break;
-                    // 路由模块创建
-                    case ActionTypes.SEND_PROJECT_MODULE_CREATE:
-                        const ModuleInfo = arg.payload;
-                        this.pyramidControl.getNowProjectInfo((projectInfo) => {
-                            // projectService.passAction( 'cmd-module-create', ModuleInfo,  self.window_objs.runWindow, );
-                            this.pyramidControl.createModule(ModuleInfo, this.window_objs.runWindow, projectInfo);
                         })
                         break;
                     // 发送获取项目路由树消息
