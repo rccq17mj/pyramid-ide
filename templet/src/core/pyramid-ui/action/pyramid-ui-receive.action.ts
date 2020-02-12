@@ -1,6 +1,7 @@
 import {IBlockPackageInfo} from "@/interfaces/block-package/block-package.interface";
 import {IPyramidUiRouterTree} from "@/core/pyramid-ui/action/pyramid-ui-send.action";
 import {PyramidUIAction, PyramidUIActionTypes} from "@/core/pyramid-ui/action/index";
+import {ECliMessageType} from "../../../../../core/config/cliMessageType.config";
 
 // 所有动作集合（注意格式：PyramidUIReceive + 模块 + 功能 + 定义 + Action）
 
@@ -9,8 +10,8 @@ import {PyramidUIAction, PyramidUIActionTypes} from "@/core/pyramid-ui/action/in
 export class PyramidUIReceiveCliMessageAction implements PyramidUIAction {
   readonly type = PyramidUIActionTypes.RECEIVE_CLI_MESSAGE;
   constructor(public payload: {
-    // 类型，用来判断 CLI 的类型 类型请参考
-    type: string;
+    // 类型
+    type: ECliMessageType;
     // 状态
     status: 'start' | 'error' | 'end' | 'progress';
     // 二进制数据（根据壳工程传回，看可工程是否需要统一）

@@ -40,8 +40,7 @@ export class PyramidUISendPublicCMD implements PyramidUIAction {
     const messageId = pyramidUiService.getMessageFn((action: PyramidUIReceiveActionsUnion) => {
       const payload = action.payload;
       if (
-        action.type === PyramidUIActionTypes.RECEIVE_PUBLIC_CMD ||
-        action.type === PyramidUIActionTypes.RECEIVE_CLI_MESSAGE
+        action.type === PyramidUIActionTypes.RECEIVE_PUBLIC_CMD
       ) {
         // 这里完全可以通过 callbackId 判断要不要执行回调
         if (payload.callbackId === this.callbackId) {

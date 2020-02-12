@@ -1,12 +1,12 @@
-import React,{useEffect} from 'react';
+import React from 'react';
 import styles from './index.less';
 import { pyramidUiService } from '@/core/pyramid-ui/service/pyramid-ui.service';
 import { PyramidUISendPublicConsole } from "@/core/pyramid-ui/action/pyramid-ui-send.action";
 
 import { Button, Icon } from 'antd';
 
-const StatusBar: React.FC = props => {
-    const handleClick = e => {
+const StatusBar: React.FC = () => {
+    const handleClick = () => {
         pyramidUiService.sendMessageFn(new PyramidUISendPublicConsole());
     };
 
@@ -15,6 +15,6 @@ const StatusBar: React.FC = props => {
             <Button onClick={handleClick} type="link"><Icon type="code" /></Button>
         </div>
     )
-}
+};
 
 export default StatusBar;

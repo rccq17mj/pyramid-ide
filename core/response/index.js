@@ -1,7 +1,7 @@
 /** templet的响应完成用于回复内工程 */
 const { ipcMain } = require('electron');
 const { ActionTypes } = require('../config/event.config');
-const { CliMessageTypes } = require('../config/cliMessageType.config');
+const { ECliMessageType } = require('../config/cliMessageType.config');
 
 class response {
     constructor(window_objs, receive) {
@@ -32,7 +32,7 @@ class response {
                 // 发送CLI消息回显，带上类型
                 this.window_objs.mainWindow.webContents.send('site-message', {
                     type: ActionTypes.RECEIVE_CLI_MESSAGE,
-                    payload: { ...arg, type: CliMessageTypes.CHILDREN_PROJECT_CREATE }
+                    payload: { ...arg, type: ECliMessageType.CHILDREN_PROJECT_CREATE }
                 });
             }
         }
@@ -42,7 +42,7 @@ class response {
             if (this.window_objs.mainWindow != null) {
                 this.window_objs.mainWindow.webContents.send('site-message', {
                     type: ActionTypes.RECEIVE_CLI_MESSAGE,
-                    payload: { ...arg, type: CliMessageTypes.CHILDREN_PROJECT_START }
+                    payload: { ...arg, type: ECliMessageType.CHILDREN_PROJECT_START }
                 });
             }
         }
@@ -56,7 +56,7 @@ class response {
                 // });
                 this.receive.getModuleWindow().webContents.send('site-message', {
                     type: ActionTypes.RECEIVE_CLI_MESSAGE,
-                    payload: { ...arg, type: CliMessageTypes.CHILDREN_PROJECT_MODULE_CREATE }
+                    payload: { ...arg, type: ECliMessageType.CHILDREN_PROJECT_MODULE_CREATE }
                 });
             }
         }
@@ -66,7 +66,7 @@ class response {
             if (this.receive.getModuleWindow() != null) {
                 this.receive.getModuleWindow().webContents.send('site-message', {
                     type: ActionTypes.RECEIVE_CLI_MESSAGE,
-                    payload: { ...arg, type: CliMessageTypes.CHILDREN_PROJECT_LAYOUT_CREATE }
+                    payload: { ...arg, type: ECliMessageType.CHILDREN_PROJECT_LAYOUT_CREATE }
                 });
             }
         }
@@ -76,7 +76,7 @@ class response {
             if (this.receive.getModuleWindow() != null) {
                 this.receive.getModuleWindow().webContents.send('site-message', {
                     type: ActionTypes.RECEIVE_CLI_MESSAGE,
-                    payload: { ...arg, type: CliMessageTypes.CHILDREN_PROJECT_BLOCK_CREATE }
+                    payload: { ...arg, type: ECliMessageType.CHILDREN_PROJECT_BLOCK_CREATE }
                 });
             }
         }
@@ -124,7 +124,7 @@ class response {
                 // 发送CLI消息回显，带上类型
                 this.window_objs.mainWindow.webContents.send('site-message', {
                     type: ActionTypes.RECEIVE_CLI_MESSAGE,
-                    payload: { ...arg, type: CliMessageTypes.PROJECT_BLOCK_PACKAGE_CREATE }
+                    payload: { ...arg, type: ECliMessageType.PROJECT_BLOCK_PACKAGE_CREATE }
                 });
             }
         }
@@ -134,7 +134,7 @@ class response {
                 // 发送CLI消息回显，带上类型
                 this.window_objs.mainWindow.webContents.send('site-message', {
                     type: ActionTypes.RECEIVE_CLI_MESSAGE,
-                    payload: { ...arg, type: CliMessageTypes.PROJECT_BLOCK_ITEM_CREATE }
+                    payload: { ...arg, type: ECliMessageType.PROJECT_BLOCK_ITEM_CREATE }
                 });
             }
         }
