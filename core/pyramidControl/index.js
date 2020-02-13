@@ -7,6 +7,9 @@ var Datastore = require('nedb'), db = new Datastore({
   }),block_itemdb = new Datastore({
       filename: 'public/block_item.db',
       autoload: true
+  }),blocks_typedb = new Datastore({
+    filename: 'public/blocks_type.db',
+    autoload: true
   }),now_use_project_db = new Datastore({
     filename: 'public/now_projects.db',
     autoload: true
@@ -183,6 +186,25 @@ var Datastore = require('nedb'), db = new Datastore({
               flag: 'cmd-block-item-create',
           }
   
+          // 将此命令发送给渲染窗口执行
+          runWindow.webContents.send('cmd-message', cmdArg);
+      }
+
+      /**
+       * 创建区块分类
+       */
+      createBlocksType(blocksTypeInfo,runWindow) {
+          // 保存区块信息  暂时不保存在本地
+        //  new DataUse(blocks_typedb).save(blocksTypeInfo).then(msg=>{})
+          console.log('区块分类info', blocksTypeInfo)
+          // 用项目信息拼接创建执行命令
+          const cmdArg  = {
+              channel: 'cmd-message',
+              cmdStr: `pyramid block category add ${blocksTypeInfo.name} --category-type=${blocksTypeInfo.categoryType}`,
+              cwd: `${blocksTypeInfo.filePath}`,
+              flag: 'cmd-blocks-type-create',
+          }
+
           // 将此命令发送给渲染窗口执行
           runWindow.webContents.send('cmd-message', cmdArg);
       }

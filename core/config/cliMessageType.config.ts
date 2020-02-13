@@ -15,5 +15,7 @@ export enum ECliMessageType {
     // 创建区块包
     PROJECT_BLOCK_PACKAGE_CREATE = 'pyramid.ui.cli.message.block.package.create',
     // 创建区块
-    PROJECT_BLOCK_ITEM_CREATE = 'pyramid.ui.cli.message.block.item.create'
+    PROJECT_BLOCK_ITEM_CREATE = 'pyramid.ui.cli.message.block.item.create',
+    // 创建区块包分类
+    PROJECT_BLOCKS_TYPE_CREATE = 'pyramid.ui.cli.message.blocks.type.create'
 }

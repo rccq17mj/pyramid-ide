@@ -84,6 +84,9 @@ const CliModal: FunctionComponent<IProps> = props => {
       case ECliMessageType.PROJECT_BLOCK_ITEM_CREATE:
         title = '创建区块';
         break;
+        case ECliMessageType.PROJECT_BLOCKS_TYPE_CREATE:
+        title = '创建区块分类';
+        break;
       default:
         break;
     }
@@ -137,6 +140,18 @@ const CliModal: FunctionComponent<IProps> = props => {
               props.closeCallBack();
               // 通知刷新区块
               pyramidUiService.sendMessageFn(new PyramidUISendBlockItemGetAction({parentId:urlParames()['parentId']}));
+              setModalShow(false);
+            }
+          }}>确定</Button>
+        );
+        break;
+        case ECliMessageType.PROJECT_BLOCKS_TYPE_CREATE:
+        view = (
+          <Button type="primary" disabled={!messageEnd} htmlType="button" onClick={()=>{
+            if (props.closeCallBack) {
+              props.closeCallBack();
+              // 通知刷新分类
+             // pyramidUiService.sendMessageFn(new PyramidUISendBlockItemGetAction({parentId:urlParames()['parentId']}));
               setModalShow(false);
             }
           }}>确定</Button>

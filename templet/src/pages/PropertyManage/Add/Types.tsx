@@ -39,12 +39,13 @@ const Component: FunctionComponent<IProps> = props => {
         // sendMessage({'project': true, msg: 'create', 'projectInfo': fieldsValue});
         console.log('fieldsValue', fieldsValue)
         let params = fieldsValue;
-        params['categoryType'] = "block";
+        params['categoryType'] = "blocks";
+        params['parentId'] = urlParames().parentId;
         console.log('最终params数据', params)
         // 还没写完，消息没接收
         pyramidUiService.sendMessageFn(new PyramidUISendProjectBlockTypesCreateAction(params));
 
-        //  props.closeModal(true)
+        props.closeModal(true)
       }
     });
   };

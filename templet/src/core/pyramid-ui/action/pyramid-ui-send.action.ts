@@ -151,7 +151,10 @@ export class PyramidUISendProjectBlockCreateAction implements PyramidUIAction {
 }
 export class PyramidUISendProjectBlockTypesCreateAction implements PyramidUIAction {
   readonly type = PyramidUIActionTypes.SEND_PROJECT_BLOCK_TYPES_CREATE;
-  constructor(public payload: any) { }
+  constructor(public payload: {
+    categoryType?: string;
+    name?: string;
+  }) { }
 }
 export class PyramidUISendProjectBlockItemCreateAction implements PyramidUIAction {
   readonly type = PyramidUIActionTypes.SEND_PROJECT_BLOCK_ITEM_CREATE;

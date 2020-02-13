@@ -6,14 +6,18 @@ import block from "@/assets/block.png";
 import router from "umi/router";
 import StatusBar from '@/components/StatusBar'
 import {
-  PyramidUISendBlockItemGetAction,
+  PyramidUISendBlockItemGetAction, PyramidUISendBlockPackageInfoAction,
 } from "@/core/pyramid-ui/action/pyramid-ui-send.action";
 import {pyramidUiService} from "@/core/pyramid-ui/service/pyramid-ui.service";
 import Add from '@/pages/PropertyManage/Add/Index';
 import Release from '@/pages/PropertyManage/Add/Release';
 import Types from '@/pages/PropertyManage/Add/Types';
 import {urlParames} from "@/utils/utils";
-import {PyramidUIReceiveBlockItemListAction} from "@/core/pyramid-ui/action/pyramid-ui-receive.action";
+import {
+  PyramidUIReceiveActionsUnion,
+  PyramidUIReceiveBlockItemListAction, PyramidUIReceiveBlockListAction,
+  PyramidUIReceiveBlockPackageInfoAction, PyramidUIReceiveBlockRemoveAction
+} from "@/core/pyramid-ui/action/pyramid-ui-receive.action";
 import {PyramidUIActionTypes} from "@/core/pyramid-ui/action";
 
 interface ILeftBtn {
@@ -46,17 +50,26 @@ const PropertyManage: FunctionComponent<IProps> = props => {
 
   const getBlockList = () =>{
     pyramidUiService.sendMessageFn(new PyramidUISendBlockItemGetAction({parentId:urlParames().parentId}));
+
+    pyramidUiService.sendMessageFn(new PyramidUISendBlockPackageInfoAction({
+      // TODO 先写死 发送获取区块信息
+      projectPath: urlParames().path,
+    }));
+
   }
 
   useEffect(() => {
+    console.log('url参数',urlParames())
     getBlockList();
 
-    const messageKey = pyramidUiService.getMessageFn((action: PyramidUIReceiveBlockItemListAction) => {
-      switch (action.type) {
+    const messageKey = pyramidUiService.getMessageFn((pyramidAction: PyramidUIReceiveActionsUnion) => {
+      console.log('监听',pyramidAction);
+      switch (pyramidAction.type) {
         case PyramidUIActionTypes.RECEIVE_PROJECT_BLOCK_ITEM_LIST:
-          setCards(action.payload);
+          setCards(pyramidAction.payload);
           break;
-        default:
+        case PyramidUIActionTypes.RECEIVE_PROJECT_BLOCK_PACKAGE_INFO:
+          console.log('当前的区块包分类',pyramidAction.payload.packageInfo.category.blocks);
           break;
       }
     });

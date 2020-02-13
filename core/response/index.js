@@ -101,18 +101,26 @@ class response {
 
         // 读取区块包信息
         if (arg.flag === 'cmd-get-block-package-info') {
+            console.log('读取区块包信息344', arg)
             const msg = arg.msg;
             if (typeof msg === 'string' && msg.indexOf('pyramid-blocks-info:') !== -1) {
                 const treeJSON = msg.split('pyramid-blocks-info:')[1].trim();
                 const packageInfo = JSON.parse(treeJSON);
                 // 发送消息到子工程
-                if (this.receive.getModuleWindow() != null) {
-                    this.receive.getModuleWindow().webContents.send('site-message', {
+                if(arg.projectId){
+                    if (this.receive.getModuleWindow() != null) {
+                        this.receive.getModuleWindow().webContents.send('site-message', {
+                            type: ActionTypes.RECEIVE_PROJECT_BLOCK_PACKAGE_INFO,
+                            payload: {
+                                packageInfo,
+                                projectId: arg.projectId || null
+                            }
+                        });
+                    }
+                }else{
+                    this.window_objs.mainWindow.webContents.send('site-message', {
                         type: ActionTypes.RECEIVE_PROJECT_BLOCK_PACKAGE_INFO,
-                        payload: {
-                            packageInfo,
-                            projectId: arg.projectId || null
-                        }
+                        payload: {packageInfo}
                     });
                 }
             }
@@ -135,6 +143,16 @@ class response {
                 this.window_objs.mainWindow.webContents.send('site-message', {
                     type: ActionTypes.RECEIVE_CLI_MESSAGE,
                     payload: { ...arg, type: ECliMessageType.PROJECT_BLOCK_ITEM_CREATE }
+                });
+            }
+        }
+        // 区块包类型创建
+        if (arg.flag === 'cmd-blocks-type-create') {
+            if (this.window_objs.mainWindow != null) {
+                // 发送CLI消息回显，带上类型
+                this.window_objs.mainWindow.webContents.send('site-message', {
+                    type: ActionTypes.RECEIVE_CLI_MESSAGE,
+                    payload: { ...arg, type: ECliMessageType.PROJECT_BLOCKS_TYPE_CREATE }
                 });
             }
         }

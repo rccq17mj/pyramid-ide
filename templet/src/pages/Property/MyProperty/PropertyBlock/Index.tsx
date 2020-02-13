@@ -56,6 +56,7 @@ const ProperytBlock: FunctionComponent<IProps> = props => {
   useEffect(() => {
     // 统一监听
     const messageKey = pyramidUiService.getMessageFn((pyramidAction: PyramidUIReceiveActionsUnion) => {
+      console.log('ddda', pyramidAction)
       switch (pyramidAction.type) {
         case PyramidUIActionTypes.RECEIVE_PROJECT_BLOCK_LIST:
           const action1: PyramidUIReceiveBlockListAction = pyramidAction as PyramidUIReceiveBlockListAction;
@@ -79,7 +80,7 @@ const ProperytBlock: FunctionComponent<IProps> = props => {
 
   const startProject = projectInfo => {
       console.log('projectInfo', projectInfo)
-    Router.push(`/property-manage?parentId=${projectInfo._id}&package=${projectInfo.package}&applyType=${projectInfo.applyType}`)
+    Router.push(`/property-manage?parentId=${projectInfo._id}&package=${projectInfo.package}&applyType=${projectInfo.applyType}&path=${projectInfo.filePath}/${projectInfo.menuNameEn}`)
   };
 
 
