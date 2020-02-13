@@ -111,7 +111,7 @@ class response {
                         type: ActionTypes.RECEIVE_PROJECT_BLOCK_PACKAGE_INFO,
                         payload: {
                             packageInfo,
-                            projectId: arg.projectId
+                            projectId: arg.projectId || null
                         }
                     });
                 }
