@@ -91,7 +91,7 @@ program
     .option('--update-block-categories <updateBlockCategories>', 'update block with categories')
 
     // category --options
-    .option('--category-type <categoryType>', 'create block category with type', 'blocks')
+    .option('--category-type <categoryType>', 'create block category with type (blocks | templates)', 'blocks')
     .option('--category-update-name <categoryUpdateName>', 'create block category with updateName', 'blocks')
 
     // list -- options

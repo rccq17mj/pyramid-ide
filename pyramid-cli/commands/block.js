@@ -243,6 +243,15 @@ module.exports = (options) => {
         const categoryName = args1[1];
         const { categoryType, categoryUpdateName } = options;
 
+        if (!categoryType) {
+            console.log(chalk.red('缺少 categoryType 参数'));
+            process.exit();
+        }
+        if (categoryType !== 'blocks' || categoryType !== 'templates') {
+            console.log(chalk.red('categoryType 只能为 blocks | templates'));
+            process.exit();
+        }
+
         // 修改项目区块列表描述文件
         const exists =  fs.existsSync(path.join(currentPath, 'pyramid-blocks.json'));
         if (!exists) {
