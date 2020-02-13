@@ -100,7 +100,7 @@ export class PyramidUIReceiveBlockPackageInfoAction implements PyramidUIAction {
     /**
      * 哪个项目ID，通过它前端可以找到并设置
      */
-    projectId: string;
+    projectId?: string;
   }) { }
 }
 /******************** 区块包 ********************/
