@@ -1,5 +1,5 @@
-import React, { FormEvent, FunctionComponent, useState } from 'react';
-import { Avatar, Button, Select, Empty, Form, Input, message, Modal, Upload, Icon  } from 'antd';
+import React, { FormEvent, FunctionComponent } from 'react';
+import { Button, Form, Input, Modal } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 
 const FormItem = Form.Item;
@@ -7,20 +7,15 @@ const FormItem = Form.Item;
 interface IProps extends FormComponentProps {
   modalVisible: boolean;
   closeModal: (data?: any) => void;
-  cardData: object
+  cardData: any;
 }
 
 const Detail: FunctionComponent<IProps> = props => {
-
-  const [imageUrl, setImageUrl] = useState('')
-  const [imgLoading, setImgLoading] = useState(false)
-
   const {
     form,
     form: { getFieldDecorator },
     cardData
   } = props;
-
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();

@@ -1,7 +1,7 @@
-import React, {FunctionComponent, useState} from 'react';
-import { Layout, Menu, Breadcrumb, Form, Button, Input, Select } from 'antd';
+import React, {FunctionComponent, useEffect, useState} from 'react';
+import { Layout, Form, Button, Input, Select } from 'antd';
 import {FormComponentProps} from "antd/lib/form";
-const { Header, Content, Sider } = Layout;
+const { Content } = Layout;
 const FormItem = Form.Item;
 const { Option } = Select;
 
@@ -11,9 +11,11 @@ interface IProps extends FormComponentProps {
 const PropertyLibraryModule: FunctionComponent<IProps> = (props) =>{
   const [extraParams, setExtraParams] = useState<object>({});
 
-  console.log('MyProperytProps', props)
-
   const {form, form: { getFieldDecorator } } = props;
+
+  useEffect(() => {
+
+  }, [extraParams]);
 
   const extraParamsChange = () => {
     const params = { ...form.getFieldsValue() };
@@ -23,7 +25,7 @@ const PropertyLibraryModule: FunctionComponent<IProps> = (props) =>{
   return(
     <Layout>
       <Layout style={{ padding: '0 24px 24px' }}>
- {/*       <Breadcrumb style={{color:'#fff'}}>
+        {/*       <Breadcrumb style={{color:'#fff'}}>
           <Breadcrumb.Item>模块</Breadcrumb.Item>
           <Breadcrumb.Item>移动端</Breadcrumb.Item>
         </Breadcrumb>*/}
@@ -78,6 +80,6 @@ const PropertyLibraryModule: FunctionComponent<IProps> = (props) =>{
       </Layout>
     </Layout>
   )
-}
+};
 
 export default Form.create<IProps>({})(PropertyLibraryModule)
