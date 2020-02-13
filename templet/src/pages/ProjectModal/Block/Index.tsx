@@ -15,6 +15,7 @@ import {IBlockPackage, IBlockPackageInfo} from "@/interfaces/block-package/block
 import {
   PyramidUIReceiveActionsUnion,
 } from "@/core/pyramid-ui/action/pyramid-ui-receive.action";
+import LibraryModal from "@/pages/Property/PropertyLibrary/PropertyLibraryModal";
 
 const { SubMenu } = Menu;
 const { TabPane } = Tabs;
@@ -33,6 +34,9 @@ const Component: FunctionComponent<IProps> = () => {
   // 菜单选项
   const [menus, setMenus] = useState<IBlockPackage[]>([]);
   const [menuOpenKeys, setMenuOpenKeys] = useState<string[]>([]);
+
+  // 订阅
+  const [subscribeModalVisible, setSubscribeModalVisible] = useState<boolean>(false);
 
   useEffect(() => {
     queryPackages();
@@ -244,7 +248,9 @@ const Component: FunctionComponent<IProps> = () => {
           </div>
 
           {/* 底部订阅标题 */}
-          <div className={styles['bottom-toolbar']} onClick={() => {}}>
+          <div className={styles['bottom-toolbar']} onClick={() => {
+            setSubscribeModalVisible(true);
+          }}>
             <Icon type="plus-circle" style={{ marginRight: 10 }} />
             <span>订阅</span>
           </div>
@@ -296,6 +302,19 @@ const Component: FunctionComponent<IProps> = () => {
           </div>
         </div>
       </div>
+
+      {/* 新增订阅 */}
+      {subscribeModalVisible ? (
+        <LibraryModal
+          modalVisible={subscribeModalVisible}
+          params={{type: 1, blockType: 1}}
+          closeModal={() => {
+            setSubscribeModalVisible(false);
+            // 重新获取数据
+            queryPackages();
+          }}
+        />
+      ) : null}
 
     </div>
   )

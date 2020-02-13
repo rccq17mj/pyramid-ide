@@ -210,6 +210,7 @@ const PropertyLibraryBlock: FunctionComponent<IProps> = (props) =>{
       {addModalVisible ? (
         <LibraryModal
           modalVisible={addModalVisible}
+          params={{type: 1, blockType: 1}}
           closeModal={() => {
             setAddModalVisible(false);
             getBlockList()

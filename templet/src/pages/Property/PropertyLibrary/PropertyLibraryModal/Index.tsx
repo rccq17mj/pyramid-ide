@@ -1,5 +1,5 @@
 import React, {FunctionComponent, useEffect, useState} from 'react';
-import styles from './PropertyLibraryModal.less';
+import styles from './Index.less';
 import {Icon, Modal, Form, Button, Input, Card, Pagination, Layout} from "antd";
 import {FormComponentProps} from "antd/lib/form";
 import block from "@/assets/block.png";
@@ -20,8 +20,9 @@ interface IProps extends FormComponentProps{
   modalVisible: boolean;
   closeModal: (data?: any) => void;
   // TODO 以后要传区块还是模块参数
-  params?: {
-    type?: 'block' | 'module'
+  params: {
+    blockType: 1 | 2 // 1-区块 2-模块
+    type: 1 | 2 // 1-社区 2-私有
   }
 }
 const Component: FunctionComponent<IProps> = props => {
