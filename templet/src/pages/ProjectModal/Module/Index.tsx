@@ -3,21 +3,16 @@ import styles from './Index.less';
 import {Button, Form, Icon, Input, Menu, Pagination, Tabs} from "antd";
 import AddModal from './Add/Index';
 import {IBlockItem} from "@/interfaces/block/block.interface";
+import LibraryModal from "@/pages/Property/PropertyLibrary/PropertyLibraryModal";
 
 const { SubMenu } = Menu;
 const { TabPane } = Tabs;
 
-interface IProps {
-  location: {query:
-      {
-      }
-  }
-}
+interface IProps {}
 
 const Component: FunctionComponent<IProps> = props => {
   const [tabActiveKey, setTabActiveKey] = useState<string>('1');
-  const [modalVisible, setModalVisible] = useState<boolean>(false);
-  const [modalParams, setModalParams] = useState<IBlockItem>(null);
+
   const [current, setCurrent] = useState<number>(1);
   const [total, setTotal] = useState<number>(50);
   const [cards, setCards] = useState<IBlockItem[]>([
@@ -49,6 +44,12 @@ const Component: FunctionComponent<IProps> = props => {
       hover: false
     }
   ]);
+
+  const [modalVisible, setModalVisible] = useState<boolean>(false);
+  const [modalParams, setModalParams] = useState<IBlockItem>(null);
+
+  // 订阅
+  const [subscribeModalVisible, setSubscribeModalVisible] = useState<boolean>(false);
 
   useEffect(() => {
     setTotal(50);
@@ -134,12 +135,15 @@ const Component: FunctionComponent<IProps> = props => {
               </SubMenu>
             </Menu>
           </div>
+
           {/* 底部订阅标题 */}
           <div className={styles['bottom-toolbar']} onClick={() => {
+            setSubscribeModalVisible(true);
           }}>
             <Icon type="plus-circle" style={{ marginRight: 10 }} />
             <span>订阅</span>
           </div>
+
         </div>
       </div>
       <div className={styles.right}>
@@ -197,6 +201,20 @@ const Component: FunctionComponent<IProps> = props => {
           />
         ) : null
       }
+
+      {/* 新增订阅 */}
+      {subscribeModalVisible ? (
+        <LibraryModal
+          modalVisible={subscribeModalVisible}
+          params={{type: 1, blockType: 1}}
+          closeModal={() => {
+            setSubscribeModalVisible(false);
+            // 重新获取数据
+            // queryPackages();
+          }}
+        />
+      ) : null}
+
     </div>
   )
 };

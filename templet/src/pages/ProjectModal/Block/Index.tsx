@@ -192,7 +192,7 @@ const Component: FunctionComponent<IProps> = () => {
                     localStorage.setItem(localStorageModuleMenusKey, JSON.stringify(menus));
 
                     pyramidUiService.sendMessageFn(new PyramidUISendBlockPackageInfoAction({
-                      // TODO 先写死 发送获取区块信息
+                      // TODO 因为还没有同步到测试仓库里去，所以这里先写死 发送获取区块信息 storeAddress，差一个端口 10080
                       projectGitUrl: 'https://github.com/guccihuiyuan/pyramid-blocks',
                       projectGitBranch: 'master',
                       projectId: findMenu.id
