@@ -46,59 +46,25 @@ onload = function () {
 /*   越狱electron的沙箱环境，使得node与系统打通 */
 function runCmd(arg) {
     let worker = new Worker(cmdRun);
-    // // 添加启动成功结束符
-    // if (arg.channel === 'project-start') {
-    //     waitOn(opts).then(function() {
-    //         ipc.send('project-start', {end:true});
-    //     }).catch(function(err) {
-    //         console.log(err);
-    //     });
-    // }
 
     worker.postMessage(arg);
     worker.onmessage = (ev) => {
         let msg = ev.data;
-        // if (arg.channel === 'project-start') {
-        //     ipc.send('project-start', msg);
-        // }
-        msg = {...msg, ...arg};
 
         if (arg.channel === 'cmd-message') {
-            if (arg.flag) 
-                msg.flag = arg.flag;
-            
-            if (arg.callbackId) 
-                msg.callbackId = arg.callbackId;
-
-            if (arg.cwd) 
-                msg.cwd = arg.cwd;
-            
-            // 这里需要单独处理
+            // 这里需要单独处理，因为启动项目后，就会一直挂起，没有结束事件
             if (arg.flag === 'cmd-children-project-start') {
                 waitOn(opts).then(function() {
-                    msg.end = true;
                     msg.status = 'end';
-                    ipc.send('cmd-message', { 'cmd-create': true, ...msg });
+                    ipc.send('cmd-message', { ...msg });
                 }).catch(function(err) {
-                    console.log(err);
                 });
             }
 
-            if (msg.flag === 'cmd_code') {
-                msg.end = true;
-                msg.status = 'end';
-            }
-            if (msg.status === 'start') {
-                msg.status = 'start';
-            }
-            if (msg.status === 'progress') {
-                msg.status = 'progress';
-            }
-            if (msg.status === 'end') {
-                msg.status = 'end';
-            }
+            // TODO 这里组成起来了，参数需要好好处理下，不然 msg 和 arg 的字段可能会冲突
+            msg = {...msg, ...arg};
 
-            ipc.send('cmd-message', { 'cmd-create': true, ...msg });
+            ipc.send('cmd-message', { ...msg });
         }
 
         if (msg.flag === 'cmd_code') {
@@ -109,10 +75,10 @@ function runCmd(arg) {
 }
 
 ipc.on('cmd-message', function (event, arg) {
-    console.log('收到控制台请求:', arg)
+    console.log('收到控制台请求:', arg);
     runCmd(arg)
-})
+});
 
 ipc.on('ping', function (event, arg) {
     console.log('arg:', arg)
-})
+});

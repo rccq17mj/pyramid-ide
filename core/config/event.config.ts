@@ -19,7 +19,6 @@ export const ActionTypes = {
     SEND_PROJECT_LIST: 'pyramid.ui.send.project.list',
     RECEIVE_PROJECT_LIST: 'pyramid.ui.receive.project.list',
     SEND_PROJECT_START: 'pyramid.ui.send.project.start',
-    RECEIVE_PROJECT_START: 'pyramid.ui.receive.project.start',
     SEND_PROJECT_CREATE: 'pyramid.ui.send.project.create',
     SEND_PROJECT_CHOOSE_PATH: 'pyramid.ui.send.project.choosePath',
     SEND_PROJECT_TOOLBAR: 'pyramid.ui.send.project.SEND_PROJECT_TOOLBAR',

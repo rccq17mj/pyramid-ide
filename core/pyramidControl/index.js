@@ -116,12 +116,6 @@ var Datastore = require('nedb'), db = new Datastore({
      * @param {*} callback
      */
     start(projectInfo, runWindow) {
-      // const cmdArg  = {
-      //   channel: 'project-start',
-      //   cmdStr: 'cross-env BROWSER=none yarn start:pyramid-ui',
-      //   cwd: `${projectInfo.path}/${projectInfo.name}`
-      // };
-  
         const cmdArg  = {
             channel: 'cmd-message',
             cmdStr: 'cross-env BROWSER=none yarn start:pyramid-ui',

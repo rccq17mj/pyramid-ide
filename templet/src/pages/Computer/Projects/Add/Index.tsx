@@ -60,22 +60,12 @@ const Component: FunctionComponent<IProps> = props => {
     e.preventDefault();
 
     form.validateFields((err, fieldsValue) => {
-      // sendMessage({'project': true, msg: 'create', 'projectInfo': fieldsValue});
       let urlName = window.location.pathname;
       if(urlName==='/pc'){
         pyramidUiService.sendMessageFn(new PyramidUISendProjectCreateAction({...fieldsValue,platform:'pc'}));
       }else{
         pyramidUiService.sendMessageFn(new PyramidUISendProjectCreateAction({...fieldsValue,platform:'mobile'}));
       }
-
-      // getMessage((msg)=>{
-      //   if(msg.hasOwnProperty('cmd-create')) {
-      //     console.log('msg:', msg);
-      //     // form.setFieldsValue({
-      //     //   path: msg.files[0]
-      //     // })
-      //   }
-      // })
 
       props.closeModal(true)
 
