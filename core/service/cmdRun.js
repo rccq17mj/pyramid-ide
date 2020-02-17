@@ -38,12 +38,13 @@ self.onmessage = function (e) {
 
     // 错误输出信息
     ls.stderr.on('data', (data) => {
+        let msg = data.toString();
         self.postMessage({
             cmdFlag: 'cmd_err',
             cmdStatus: 'progress',
             callbackId,
             cwd,
-            data,
+            msg,
         });
     });
 

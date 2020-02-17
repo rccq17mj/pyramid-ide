@@ -193,9 +193,6 @@ const CliModal: FunctionComponent<IProps> = props => {
       if (payload.msg) {
         term.write(payload.msg);
       }
-      if (payload.data) {
-        term.write(payload.data);
-      }
     }
   };
 
