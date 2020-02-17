@@ -170,7 +170,7 @@ var Datastore = require('nedb'), db = new Datastore({
        */
       createBlockItem(blockInfo,runWindow) {
           // 保存区块信息
-          new DataUse(block_itemdb).save(blockInfo).then(msg=>{})
+     //     new DataUse(block_itemdb).save(blockInfo).then(msg=>{})
           console.log('区块blockInfo', blockInfo)
           // 用项目信息拼接创建执行命令
           const cmdArg  = {
@@ -344,7 +344,7 @@ var Datastore = require('nedb'), db = new Datastore({
        * 查找全部区块
        * @param {*} callback
        */
-      findBlockItem(callback) {
+/*      findBlockItem(callback) {
           new DataUse(block_itemdb).getRows({}).then(rows => {
               if(rows.length > 0){
                   callback(rows);
@@ -354,7 +354,7 @@ var Datastore = require('nedb'), db = new Datastore({
           }).catch(e=>{
               callback([]);
           })
-      }
+      }*/
   
     // /**
     //  * 项目保存

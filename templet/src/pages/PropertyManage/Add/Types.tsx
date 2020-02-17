@@ -1,14 +1,12 @@
-import React, {FormEvent, FunctionComponent, useEffect, useState} from 'react';
-import {Avatar, Button, Select, Empty, Form, Input, message, Modal, Upload, Icon, Switch} from 'antd';
+import React, {FormEvent, FunctionComponent, useEffect} from 'react';
+import { Button, Form, Input, Modal} from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 import { pyramidUiService } from '@/core/pyramid-ui/service/pyramid-ui.service';
 import {
   PyramidUISendProjectBlockTypesCreateAction
 } from "@/core/pyramid-ui/action/pyramid-ui-send.action";
-import {API_CONFIG} from "@/core/configs/api.config";
 import { urlParames } from '@/utils/utils';
-import {mainRequest} from '../../../requests/main.request';
-import styles from './Index.less';
+
 
 const FormItem = Form.Item;
 
@@ -19,7 +17,6 @@ interface IProps extends FormComponentProps {
 
 const Component: FunctionComponent<IProps> = props => {
 
-  const [isPublic, setIsPublic] = useState(false);
   const {
     form,
     form: { getFieldDecorator },
@@ -41,7 +38,6 @@ const Component: FunctionComponent<IProps> = props => {
         params['categoryType'] = "blocks";
         params['parentId'] = urlParames().parentId;
         console.log('最终params数据', params)
-        // 还没写完，消息没接收
         pyramidUiService.sendMessageFn(new PyramidUISendProjectBlockTypesCreateAction(params));
 
         props.closeModal(true)

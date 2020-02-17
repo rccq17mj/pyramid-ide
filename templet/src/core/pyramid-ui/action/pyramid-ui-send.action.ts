@@ -180,10 +180,7 @@ export class PyramidUISendBlockGetAction implements PyramidUIAction {
   readonly type = PyramidUIActionTypes.SEND_PROJECT_BLOCK_GET;
   constructor(public payload: any) { }
 }
-export class PyramidUISendBlockItemGetAction implements PyramidUIAction {
-  readonly type = PyramidUIActionTypes.SEND_PROJECT_BLOCK_ITEM_GET;
-  constructor(public payload: { parentId: string }) { }
-}
+
 export class PyramidUISendBlockRemoveAction implements PyramidUIAction {
   readonly type = PyramidUIActionTypes.SEND_PROJECT_BLOCK_REMOVE;
   constructor(public payload: any) { }

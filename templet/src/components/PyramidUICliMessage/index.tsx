@@ -3,7 +3,10 @@ import { Button, Form, Modal } from 'antd';
 import { Terminal } from 'xterm';
 import 'xterm/css/xterm.css'
 import {
-  PyramidUISendBlockGetAction, PyramidUISendBlockItemGetAction, PyramidUISendCMDExecuteResultAction,
+  PyramidUISendBlockGetAction,
+  PyramidUISendBlockItemGetAction,
+  PyramidUISendBlockPackageInfoAction,
+  PyramidUISendCMDExecuteResultAction,
   PyramidUISendProjectOpenWindowAction
 } from '@/core/pyramid-ui/action/pyramid-ui-send.action';
 import {pyramidUiService} from "@/core/pyramid-ui/service/pyramid-ui.service";
@@ -152,7 +155,11 @@ const CliModal: FunctionComponent<IProps> = props => {
             if (props.closeCallBack) {
               props.closeCallBack();
               // 通知刷新区块
-              pyramidUiService.sendMessageFn(new PyramidUISendBlockItemGetAction({parentId:urlParames()['parentId']}));
+              //pyramidUiService.sendMessageFn(new PyramidUISendBlockItemGetAction({parentId:urlParames()['parentId']}));
+              pyramidUiService.sendMessageFn(new PyramidUISendBlockPackageInfoAction({
+                // TODO 先写死 发送获取区块信息
+                projectPath: urlParames().path,
+              }));
               setModalShow(false);
             }
           }}>确定</Button>
@@ -164,7 +171,10 @@ const CliModal: FunctionComponent<IProps> = props => {
             if (props.closeCallBack) {
               props.closeCallBack();
               // 通知刷新分类
-             // pyramidUiService.sendMessageFn(new PyramidUISendBlockItemGetAction({parentId:urlParames()['parentId']}));
+              pyramidUiService.sendMessageFn(new PyramidUISendBlockPackageInfoAction({
+                // TODO 先写死 发送获取区块信息
+                projectPath: urlParames().path,
+              }));
               setModalShow(false);
             }
           }}>确定</Button>

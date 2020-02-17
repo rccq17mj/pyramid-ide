@@ -230,22 +230,7 @@ class receive {
                             }
                         })
                         break;
-                    // 查询区块    
-                    case ActionTypes.SEND_PROJECT_BLOCK_ITEM_GET:
-                        // 查找数据
-                        this.pyramidControl.findBlockItem((res) => {
-                            console.log('找到的区块', res)
-                            console.log('传进的id', arg.payload)
-                            const fatherBlock = [...res].filter((val) => {
-                                return val.parentId == arg.payload.parentId
-                            })
-                            this.window_objs.mainWindow.webContents.send('site-message', {
-                                type: ActionTypes.RECEIVE_PROJECT_BLOCK_ITEM_LIST,
-                                payload: fatherBlock
-                            });
 
-                        })
-                        break;
                     // 区块包删除
                     case ActionTypes.SEND_PROJECT_BLOCK_REMOVE:
                         const blockId = arg.payload;

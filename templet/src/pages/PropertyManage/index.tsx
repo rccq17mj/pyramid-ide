@@ -5,24 +5,21 @@ import plus from "@/assets/plus.png";
 import block from "@/assets/block.png";
 import router from "umi/router";
 import StatusBar from '@/components/StatusBar'
-import {
-  PyramidUISendBlockItemGetAction, PyramidUISendBlockPackageInfoAction,
-} from "@/core/pyramid-ui/action/pyramid-ui-send.action";
 import {pyramidUiService} from "@/core/pyramid-ui/service/pyramid-ui.service";
 import Add from '@/pages/PropertyManage/Add/Index';
 import Release from '@/pages/PropertyManage/Add/Release';
 import Types from '@/pages/PropertyManage/Add/Types';
 import {urlParames} from "@/utils/utils";
 import {
+  PyramidUISendBlockPackageInfoAction,
+} from "@/core/pyramid-ui/action/pyramid-ui-send.action";
+import {
   PyramidUIReceiveActionsUnion,
-  PyramidUIReceiveBlockItemListAction, PyramidUIReceiveBlockListAction,
-  PyramidUIReceiveBlockPackageInfoAction, PyramidUIReceiveBlockRemoveAction
 } from "@/core/pyramid-ui/action/pyramid-ui-receive.action";
 import {PyramidUIActionTypes} from "@/core/pyramid-ui/action";
 
 interface ILeftBtn {
   name: string;
-  type: string;
   open: boolean;
 }
 
@@ -31,26 +28,16 @@ interface IProps {
 
 const PropertyManage: FunctionComponent<IProps> = props => {
 
-  const [leftButtons, setLeftButtons] = useState<ILeftBtn[]>([
-    {
-      name: '表单',
-      type: 'form',
-      open: true
-    },
-    {
-      name: '表格',
-      type: 'table',
-      open: false
-    }
-  ]);
+  const [leftButtons, setLeftButtons] = useState<ILeftBtn[]>([]);
+  const [selectType, setSelectType] = useState('');
   const [cards, setCards] = useState<any[]>([]);
+  const [cardData, setCardData] = useState<any[]>([]);
   const [addModalVisible, setAddModalVisible] = useState<boolean>(false);
   const [releaseModalVisible, setReleaseModalVisible] = useState<boolean>(false);
   const [typesModalVisible, setTypesModalVisible] = useState<boolean>(false);
 
-  const getBlockList = () =>{
-    pyramidUiService.sendMessageFn(new PyramidUISendBlockItemGetAction({parentId:urlParames().parentId}));
 
+  const getBlockTypeList = () =>{
     pyramidUiService.sendMessageFn(new PyramidUISendBlockPackageInfoAction({
       // TODO 先写死 发送获取区块信息
       projectPath: urlParames().path,
@@ -60,16 +47,43 @@ const PropertyManage: FunctionComponent<IProps> = props => {
 
   useEffect(() => {
     console.log('url参数',urlParames())
-    getBlockList();
+   // getBlockList();
+    getBlockTypeList();
 
     const messageKey = pyramidUiService.getMessageFn((pyramidAction: PyramidUIReceiveActionsUnion) => {
       console.log('监听',pyramidAction);
       switch (pyramidAction.type) {
-        case PyramidUIActionTypes.RECEIVE_PROJECT_BLOCK_ITEM_LIST:
-          setCards(pyramidAction.payload);
-          break;
         case PyramidUIActionTypes.RECEIVE_PROJECT_BLOCK_PACKAGE_INFO:
-          console.log('当前的区块包分类',pyramidAction.payload.packageInfo.category.blocks);
+          let blocks = pyramidAction.payload.packageInfo.blocks;
+          // 渲染区块
+          const fatherBlock = blocks.filter((val) => {
+            return val.name != ''
+          })
+          setCards(fatherBlock);
+          setCardData(fatherBlock);
+
+          // 渲染分类
+          let category = pyramidAction.payload.packageInfo.category.blocks;
+          console.log('当前的区块包分类',category);
+          let categoryList = []
+          category.forEach((item, index)=>{
+            let categoryItem
+            if(index == 0){
+              categoryItem = {
+                name: item,
+                open: true,
+              }
+              setSelectType(item)
+            }else{
+              categoryItem = {
+                name: item,
+                open: false,
+              }
+            }
+            categoryList.push(categoryItem)
+          })
+
+          setLeftButtons(categoryList)
           break;
       }
     });
@@ -79,22 +93,18 @@ const PropertyManage: FunctionComponent<IProps> = props => {
     }
   },[]);
 
-/*  useEffect(() => {
-    // clickLeftBtn(leftButtons[2], 2);
-    // console.log('pathname', window.location.pathname)
-    leftButtons.forEach((item)=>{
-      if(item.url == window.location.pathname){
-        item.open = true
-      }else{
-        item.open = false
-      }
+  useEffect(() => {
+    let newCards = [...cardData]
+    const Cards = newCards.filter((val) => {
+      return val.tags.indexOf(selectType) != -1;
     })
-    setLeftButtons(leftButtons)
-  });*/
+    setCards(Cards)
+  },[leftButtons, cardData])
+
   const hoverChange = (card, hover) => {
     let newCards = [...cards]
     newCards.forEach((item)=>{
-      if(item._id == card._id){
+      if(item.key == card.key){
         item['hover'] = hover
       }
     })
@@ -108,7 +118,7 @@ const PropertyManage: FunctionComponent<IProps> = props => {
     });
 
     copyLeftButtons[index].open = true;
-
+    setSelectType(copyLeftButtons[index].name)
     setLeftButtons(copyLeftButtons);
   };
 
@@ -123,7 +133,7 @@ const PropertyManage: FunctionComponent<IProps> = props => {
         {
           cards.map((card, index) => {
             return (
-              <Card className={styles.cards} key={card._id + index}
+              <Card className={styles.cards} key={card.key + index}
                     onMouseEnter={()=>hoverChange(card, true)}
                     onMouseLeave={()=>hoverChange(card, false)}>
                 {card.hover ?
@@ -142,8 +152,8 @@ const PropertyManage: FunctionComponent<IProps> = props => {
                   </div> : null
                 }
                 <img src={block} width={50} height={50}></img>
-                <p>{card.menuNameZh}</p>
-                <span>{card.menuNameEn}</span>
+                <p>{card.key}</p>
+                <span>{card.name}</span>
               </Card>
             )
           })
@@ -195,6 +205,7 @@ const PropertyManage: FunctionComponent<IProps> = props => {
       {addModalVisible ? (
         <Add
           modalVisible={addModalVisible}
+          categories={leftButtons}
           closeModal={success => {
             setAddModalVisible(false);
             if (success) {
