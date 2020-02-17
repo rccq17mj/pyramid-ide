@@ -247,7 +247,7 @@ module.exports = (options) => {
             console.log(chalk.red('缺少 categoryType 参数'));
             process.exit();
         }
-        if (categoryType !== 'blocks' || categoryType !== 'templates') {
+        if (categoryType !== 'blocks' && categoryType !== 'templates') {
             console.log(chalk.red('categoryType 只能为 blocks | templates'));
             process.exit();
         }
