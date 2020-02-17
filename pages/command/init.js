@@ -68,9 +68,7 @@ class init {
                         worker.postMessage({ cmdStr });
                         worker.onmessage = (ev) => {
                             let msg = ev.data;
-                            if (msg.flag === 'stderr' || msg.flag === 'error') {
-                                reject(msg.msg);
-                            } else if(msg.status === 'progress') {
+                            if(msg.status === 'progress') {
                                 resolve(msg.msg);
                             }
                         };

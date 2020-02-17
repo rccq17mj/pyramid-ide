@@ -16,8 +16,9 @@ self.onmessage = function (e) {
         cmdParam.cwd  = cwd;
     }
 
+    // 参数 cmdFlag、cmdCloseCode、cmdStatus
     self.postMessage({
-        flag: 'cmd_start',
+        cmdFlag: 'cmd_start',
         status: 'start'
     });
 
@@ -27,7 +28,7 @@ self.onmessage = function (e) {
     ls.stdout.on('data', (data) => {
         let msg = data.toString();
         self.postMessage({
-            flag: 'cmd_out',
+            cmdFlag: 'cmd_out',
             status: 'progress',
             callbackId,
             cwd,
@@ -38,7 +39,7 @@ self.onmessage = function (e) {
     // 错误输出信息
     ls.stderr.on('data', (data) => {
         self.postMessage({
-            flag: 'cmd_err',
+            cmdFlag: 'cmd_err',
             status: 'progress',
             callbackId,
             cwd,
@@ -49,7 +50,7 @@ self.onmessage = function (e) {
     // 结束
     ls.on('close', (code) => {
         self.postMessage({
-            flag: 'cmd_close',
+            cmdFlag: 'cmd_close',
             status: 'end',
             callbackId,
             cwd,
