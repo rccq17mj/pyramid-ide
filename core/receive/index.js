@@ -18,6 +18,14 @@ class receive {
                     case ActionTypes.SEND_PROJECT_BLOCK_PACKAGE_INFO:
                         this.pyramidControl.getBlockPackageInfo(this.window_objs.runWindow, arg.payload);
                         break;
+                    case ActionTypes.SEND_CMD_EXECUTE_RESULT:
+                        // TODO 根据 pyramidUIActionType 判断往哪个窗口发
+                        const { pyramidUIActionType } = arg.payload;
+                        this.window_objs.mainWindow.webContents.send('site-message', {
+                            type: ActionTypes.RECEIVE_CMD_EXECUTE_RESULT,
+                            payload: arg.payload
+                        });
+                        break;
                     // 打开指定项目操作窗口
                     case ActionTypes.SEND_PROJECT_OPENWINDOW:
                         this.view = new BrowserView({

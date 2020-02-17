@@ -42,6 +42,9 @@ export class PyramidUIReceivePublicCMD implements PyramidUIAction {
 export class PyramidUIReceiveCMDExecuteResultAction implements PyramidUIAction {
   readonly type = PyramidUIActionTypes.RECEIVE_CMD_EXECUTE_RESULT;
   constructor(public payload: {
+    // 用于区分是哪个动作的执行结果
+    pyramidUIActionType: string;
+    // 执行结果
     cmdExecuteResult: boolean;
     // 成功的时候一般不返回
     cmdExecuteMessage?: string;

@@ -40,6 +40,13 @@ const Component: FunctionComponent<IProps> = props => {
         case PyramidUIActionTypes.RECEIVE_PROJECT_CHOOSE_PATH:
           receive_project_choose_path(pyramidAction);
           break;
+        case PyramidUIActionTypes.RECEIVE_CMD_EXECUTE_RESULT:
+          if (pyramidAction.payload.pyramidUIActionType === PyramidUIActionTypes.SEND_PROJECT_CREATE) {
+            if (pyramidAction.payload.cmdExecuteResult) {
+              getProjectsData();
+            }
+          }
+          break;
       }
     });
 
