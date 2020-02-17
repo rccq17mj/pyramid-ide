@@ -72,12 +72,6 @@ function runCmd(arg) {
 
             if (arg.cwd) 
                 msg.cwd = arg.cwd;
-
-            if (arg.cli) 
-                msg.cli = arg.cli;
-
-            if (arg.cliType) 
-                msg.cliType = arg.cliType;
             
             // 这里需要单独处理
             if (arg.flag === 'cmd-children-project-start') {
@@ -90,7 +84,7 @@ function runCmd(arg) {
                 });
             }
 
-            if (msg.flag === 'close_code') {
+            if (msg.flag === 'cmd_code') {
                 msg.end = true;
                 msg.status = 'end';
             }
@@ -107,7 +101,7 @@ function runCmd(arg) {
             ipc.send('cmd-message', { 'cmd-create': true, ...msg });
         }
 
-        if (msg.flag === 'close_code') {
+        if (msg.flag === 'cmd_code') {
             worker.terminate();
         }
 

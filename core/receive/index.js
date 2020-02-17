@@ -81,8 +81,6 @@ class receive {
                             flag: 'cmd-public-cmd',
                             cmdStr: payload.cmd,
                             cwd: payload.cwd,
-                            cli: payload.cli,
-                            cliType: payload.cliType,
                             callbackId: payload.callbackId
                         }
                         // 将此命令发送给渲染窗口执行

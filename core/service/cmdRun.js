@@ -1,39 +1,59 @@
 const PROCESS = require('child_process');
-const fs   = require('fs');
-
-
 
 self.onmessage = function (e) {
-    let data        = e.data;
-    const cmdstr    = data.cmdStr;
-    const cwd       = data.cwd || null;
-    const cli       = data.cli || null;
-    const callbackId= data.callbackId || null;
-    const cliType   = data.cliType || null;
+    const data       = e.data;
+
+    const cmdStr     = data.cmdStr;
+    const cwd        = data.cwd || null;
+    const callbackId = data.callbackId || null;
 
     // 命令行参数设置
-    const cmdParam = {};
-    cmdParam.shell  = true;
+    const cmdParam = {
+        shell: true
+    };
 
-    if(cwd) {
+    if (cwd) {
         cmdParam.cwd  = cwd;
     }
 
-    self.postMessage({ flag: 'start_code', status: 'start' });
+    self.postMessage({
+        flag: 'cmd_start',
+        status: 'start'
+    });
 
-    // 执行
-    const ls = PROCESS.spawn(cmdstr, cmdParam);
+    const ls = PROCESS.spawn(cmdStr, cmdParam);
 
+    // 正常输出信息
     ls.stdout.on('data', (data) => {
         let msg = data.toString();
-        self.postMessage({ flag: 'stdout', msg, status: 'progress', callbackId, cwd , cli, cliType});
+        self.postMessage({
+            flag: 'cmd_out',
+            status: 'progress',
+            callbackId,
+            cwd,
+            msg,
+        });
     });
 
+    // 错误输出信息
     ls.stderr.on('data', (data) => {
-        self.postMessage({ flag: 'stderr', data, status: 'progress', callbackId, cwd , cli, cliType });
+        self.postMessage({
+            flag: 'cmd_err',
+            status: 'progress',
+            callbackId,
+            cwd,
+            data,
+        });
     });
 
+    // 结束
     ls.on('close', (code) => {
-        self.postMessage({ flag: 'close_code', code, status: 'end', callbackId, cwd , cli, cliType });
+        self.postMessage({
+            flag: 'cmd_close',
+            status: 'end',
+            callbackId,
+            cwd,
+            code
+        });
     });
 };
