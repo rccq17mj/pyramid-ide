@@ -67,7 +67,7 @@ function runCmd(arg) {
             ipc.send('cmd-message', { ...msg });
         }
 
-        if (msg.flag === 'cmd_code') {
+        if (msg.flag === 'cmd_close') {
             worker.terminate();
         }
 
