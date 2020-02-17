@@ -37,6 +37,16 @@ export class PyramidUIReceivePublicCMD implements PyramidUIAction {
     cmdCloseCode?: number;
   }) { }
 }
+
+// 接收 CMD 执行结果
+export class PyramidUIReceiveCMDExecuteResultAction implements PyramidUIAction {
+  readonly type = PyramidUIActionTypes.RECEIVE_CMD_EXECUTE_RESULT;
+  constructor(public payload: {
+    cmdExecuteResult: boolean;
+    // 成功的时候一般不返回
+    cmdExecuteMessage?: string;
+  }) { }
+}
 /******************** 全局 ********************/
 
 
@@ -114,6 +124,7 @@ export class PyramidUIReceiveBlockPackageInfoAction implements PyramidUIAction {
 
 
 export type PyramidUIReceiveActionsUnion =
+  PyramidUIReceiveCMDExecuteResultAction|
   PyramidUIReceivePublicCMD |
   PyramidUIReceiveCliMessageAction |
   PyramidUIReceiveBlockPackageInfoAction |

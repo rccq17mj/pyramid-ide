@@ -3,14 +3,18 @@ import { Button, Form, Modal } from 'antd';
 import { Terminal } from 'xterm';
 import 'xterm/css/xterm.css'
 import {
-  PyramidUISendBlockGetAction, PyramidUISendBlockItemGetAction,
+  PyramidUISendBlockGetAction, PyramidUISendBlockItemGetAction, PyramidUISendCMDExecuteResultAction,
   PyramidUISendProjectOpenWindowAction
 } from '@/core/pyramid-ui/action/pyramid-ui-send.action';
 import {pyramidUiService} from "@/core/pyramid-ui/service/pyramid-ui.service";
 import {urlParames} from "@/utils/utils";
 import styles from './index.less';
-import {PyramidUIReceiveCliMessageAction} from "@/core/pyramid-ui/action/pyramid-ui-receive.action";
+import {
+  PyramidUIReceiveCliMessageAction,
+} from "@/core/pyramid-ui/action/pyramid-ui-receive.action";
 import {ECliMessageType} from "../../../../core/config/cliMessageType.config";
+import {ECmdResultCode} from "../../../../core/config/cmdResultCode";
+import {ActionTypes} from "../../../../core/config/event.config";
 
 const FormItem = Form.Item;
 
@@ -29,6 +33,8 @@ const CliModal: FunctionComponent<IProps> = props => {
   let [term, setTerm] = useState(null);
   const [modalShow, setModalShow] = useState<boolean>(true);
   const [messageEnd, setMessageEnd] = useState<boolean>(false);
+  // 执行结果
+  const [cliExecuteResult, setCliExecuteResult] = useState<ECmdResultCode>(ECmdResultCode.SUCCESS);
 
   useEffect(() => {
     if (props.receiveMsgFn) {
@@ -104,6 +110,13 @@ const CliModal: FunctionComponent<IProps> = props => {
           <Button type="primary" disabled={!messageEnd} htmlType="button" onClick={()=>{
             if (props.closeCallBack) {
               props.closeCallBack();
+              // 通知刷新
+              pyramidUiService.sendMessageFn(
+                new PyramidUISendCMDExecuteResultAction({
+                  pyramidUIActionType: ActionTypes.SEND_PROJECT_CREATE,
+                  cmdExecuteResult: cliExecuteResult === ECmdResultCode.SUCCESS
+                })
+              );
               setModalShow(false);
             }
           }}>确定</Button>
@@ -168,6 +181,7 @@ const CliModal: FunctionComponent<IProps> = props => {
     const payload = action.payload;
 
     if (payload.cmdStatus === 'end') {
+      setCliExecuteResult(payload.cmdCloseCode);
       setMessageEnd(true);
     }
 

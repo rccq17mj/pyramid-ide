@@ -8,6 +8,10 @@ export const ActionTypes = {
     // 直接请求执行某条命令
     SEND_PUBLIC_CMD: 'pyramid.ui.send.public.env.cmd',
     RECEIVE_PUBLIC_CMD:  'pyramid.ui.receive.public.env.cmd',
+
+    // 通知执行结果 统一使用这个
+    SEND_CMD_EXECUTE_RESULT: 'pyramid.ui.send.cmd.execute.result',
+    RECEIVE_CMD_EXECUTE_RESULT: 'pyramid.ui.receive.cmd.execute.result',
     /******************** 全局 ********************/
 
 
@@ -24,7 +28,6 @@ export const ActionTypes = {
     SEND_PROJECT_TOOLBAR: 'pyramid.ui.send.project.SEND_PROJECT_TOOLBAR',
     RECEIVE_PROJECT_CHOOSE_PATH: 'pyramid.ui.receive.project.choosePath',
     SEND_PROJECT_REMOVE: 'pyramid.ui.send.project.remove',
-    RECEIVE_PROJECT_CREATE: 'pyramid.ui.receive.project.create',
     /******************** 项目 ********************/
 
 
