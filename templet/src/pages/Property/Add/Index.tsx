@@ -62,7 +62,6 @@ const Component: FunctionComponent<IProps> = props => {
 
     form.validateFields((err, fieldsValue) => {
       if (!err) {
-        // sendMessage({'project': true, msg: 'create', 'projectInfo': fieldsValue});
         console.log('fieldsValue', fieldsValue)
         console.log('imgUrl', imageUrl)
 
@@ -92,18 +91,6 @@ const Component: FunctionComponent<IProps> = props => {
           break;
       }
     });
-    // getMessage((msg)=>{
-    //   if(msg.hasOwnProperty('files')) {
-    //     console.log('filepath:', msg.files[0]);
-    // form.setFieldsValue({
-    //   path: msg.files[0]
-    // })
-    //   }
-    // })
-    // ipc.send('open-file-dialog')
-    // ipc.on('selected-directory', function (event, pathstr) {
-    //   $('#selected_path').val(pathstr)
-    // })
 
   };
 

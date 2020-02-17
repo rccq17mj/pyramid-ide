@@ -18,7 +18,7 @@ const Home = () => {
   const sendCmd = (cmd, callback) => {
     pyramidUiService.sendMessageFn(new PyramidUISendPublicCMD({cmd}, (action) => {
       if (action.payload.cmdStatus === "progress") {
-        callback(action.payload.msg);
+        callback(action.payload.cmdMessage);
       }
     }));
   };

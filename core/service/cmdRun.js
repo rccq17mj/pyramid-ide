@@ -16,7 +16,7 @@ self.onmessage = function (e) {
         cmdParam.cwd  = cwd;
     }
 
-    // 参数 cmdFlag、cmdCloseCode、cmdStatus
+    // 参数 cmdFlag、cmdCloseCode、cmdStatus、cmdMessage
     self.postMessage({
         cmdFlag: 'cmd_start',
         cmdStatus: 'start'
@@ -30,9 +30,9 @@ self.onmessage = function (e) {
         self.postMessage({
             cmdFlag: 'cmd_out',
             cmdStatus: 'progress',
+            cmdMessage: msg,
             callbackId,
             cwd,
-            msg,
         });
     });
 
@@ -42,9 +42,9 @@ self.onmessage = function (e) {
         self.postMessage({
             cmdFlag: 'cmd_err',
             cmdStatus: 'progress',
+            cmdMessage: msg,
             callbackId,
             cwd,
-            msg,
         });
     });
 
@@ -53,9 +53,9 @@ self.onmessage = function (e) {
         self.postMessage({
             cmdFlag: 'cmd_close',
             cmdStatus: 'end',
+            cmdCloseCode: code,
             callbackId,
             cwd,
-            cmdCloseCode: code
         });
     });
 };

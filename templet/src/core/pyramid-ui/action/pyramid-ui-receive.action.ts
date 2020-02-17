@@ -12,10 +12,12 @@ export class PyramidUIReceiveCliMessageAction implements PyramidUIAction {
   constructor(public payload: {
     // 类型
     type: ECliMessageType;
-    // 状态
+    // 对应壳工程的 flag
+    cmdFlag: 'cmd_start' | 'cmd_out' | 'cmd_err' | 'cmd_close',
+    // 状态（cmdFlag为 cmd_out 和 cmd_err 都在 progress 状态）
     cmdStatus: 'start' | 'end' | 'progress';
-    // 一般数据（根据壳工程传回，看可工程是否需要统一）
-    msg: string;
+    // 消息
+    cmdMessage: string;
     // 执行结束才会有，执行成功为 0，非0为执行失败
     cmdCloseCode?: number;
   }) { }
@@ -25,10 +27,12 @@ export class PyramidUIReceivePublicCMD implements PyramidUIAction {
   readonly type = PyramidUIActionTypes.RECEIVE_PUBLIC_CMD;
   constructor(public payload: {
     callbackId: string;// 回调ID
-    // 状态
+    // 对应壳工程的flag
+    cmdFlag: 'cmd_start' | 'cmd_out' | 'cmd_err' | 'cmd_close',
+    // 状态（cmdFlag为 cmd_out 和 cmd_err 都在 progress 状态）
     cmdStatus: 'start' | 'end' | 'progress';
-    // 一般数据（根据壳工程传回，看可工程是否需要统一）
-    msg: string;
+    // 消息
+    cmdMessage: string;
     // 执行结束才会有，执行成功为 0，非0为执行失败
     cmdCloseCode?: number;
   }) { }

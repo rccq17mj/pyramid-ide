@@ -69,7 +69,7 @@ class init {
                         worker.onmessage = (ev) => {
                             let msg = ev.data;
                             if(msg.cmdStatus === 'progress') {
-                                resolve(msg.msg);
+                                resolve(msg.cmdMessage);
                             }
                         };
                     } catch (e) {

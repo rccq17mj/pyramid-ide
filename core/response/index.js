@@ -75,7 +75,7 @@ class response {
 
             // 获取子项目路由树
             if (arg.flag === 'cmd-children-project-get-route-tree') {
-                const msg = arg.msg;
+                const msg = arg.cmdMessage;
                 if (typeof msg === 'string' && msg.indexOf('routes:') !== -1) {
                     const treeJSON = msg.split('routes:')[1].trim();
                     const tree = JSON.parse(treeJSON);
@@ -93,8 +93,7 @@ class response {
 
             // 读取区块包信息
             if (arg.flag === 'cmd-get-block-package-info') {
-                console.log('读取区块包信息344', arg)
-                const msg = arg.msg;
+                const msg = arg.cmdMessage;
                 if (typeof msg === 'string' && msg.indexOf('pyramid-blocks-info:') !== -1) {
                     const treeJSON = msg.split('pyramid-blocks-info:')[1].trim();
                     const packageInfo = JSON.parse(treeJSON);

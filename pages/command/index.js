@@ -33,7 +33,7 @@ onload = function () {
         console.log('initError:', e);
     });
     /** 检测pyramid-cli */
-    test.testPyramid().then(msg => {
+    test.testPyramid().then(() => {
         var loding = document.getElementById("loding");
         ipc.send(ipcConfig.ON_DE_PYARMID_SUCCESS, null);
         loding.remove();

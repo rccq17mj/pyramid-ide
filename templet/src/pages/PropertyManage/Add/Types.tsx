@@ -36,7 +36,6 @@ const Component: FunctionComponent<IProps> = props => {
 
     form.validateFields((err, fieldsValue) => {
       if (!err) {
-        // sendMessage({'project': true, msg: 'create', 'projectInfo': fieldsValue});
         console.log('fieldsValue', fieldsValue)
         let params = fieldsValue;
         params['categoryType'] = "blocks";
