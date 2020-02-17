@@ -11,14 +11,11 @@ import {
 } from "@/core/pyramid-ui/action/pyramid-ui-send.action";
 import {PyramidUIActionTypes} from "@/core/pyramid-ui/action";
 import {
-  PyramidUIReceiveActionsUnion, PyramidUIReceiveProjectChoosePathAction,
-  PyramidUIReceiveProjectListAction
+  PyramidUIReceiveActionsUnion, PyramidUIReceiveProjectChoosePathAction, PyramidUIReceiveProjectListAction,
 } from "@/core/pyramid-ui/action/pyramid-ui-receive.action";
 
 const FormItem = Form.Item;
 const iconApp = require("../../../assets/icon_app.png");
-const defaultCheckedList = [];
-
 
 interface IProps extends FormComponentProps {
 }
@@ -29,8 +26,6 @@ const Component: FunctionComponent<IProps> = props => {
   const [allChecked, setAllChecked] = useState(false);
   const [editBoxShow, setEditBoxShow] = useState(false);
 
-
-
   useEffect(() => {
     getProjectsData();
 
@@ -39,13 +34,11 @@ const Component: FunctionComponent<IProps> = props => {
       switch (pyramidAction.type) {
         // 返回项目列表
         case PyramidUIActionTypes.RECEIVE_PROJECT_LIST:
-          const action1: PyramidUIReceiveProjectListAction = pyramidAction as PyramidUIReceiveProjectListAction;
-          receive_project_list(action1.payload);
+          receive_project_list(pyramidAction);
           break;
         // 返回删除处理
         case PyramidUIActionTypes.RECEIVE_PROJECT_CHOOSE_PATH:
-          const action2: PyramidUIReceiveProjectChoosePathAction = pyramidAction as PyramidUIReceiveProjectChoosePathAction;
-          receive_project_choose_path(action2.payload);
+          receive_project_choose_path(pyramidAction);
           break;
       }
     });
@@ -57,23 +50,24 @@ const Component: FunctionComponent<IProps> = props => {
 
   const { form, form: { getFieldDecorator } } = props;
 
-  const receive_project_list = (payload) =>{
-    const newData = payload.data.map((item) => {
+  const receive_project_list = (action: PyramidUIReceiveActionsUnion) =>{
+    const newAction = action as PyramidUIReceiveProjectListAction;
+    const newData = newAction.payload.projects.map((item) => {
       item.checked = false;
       return item;
-    })
-   setCards(newData);
-  }
+    });
+    setCards(newData);
+  };
 
-  const receive_project_choose_path = (payload) =>{
-        form.setFieldsValue({
-          path: payload.files
-        })
-  }
+  const receive_project_choose_path = (action: PyramidUIReceiveActionsUnion) => {
+    const newAction = action as PyramidUIReceiveProjectChoosePathAction;
+    form.setFieldsValue({
+      path: newAction.payload.files
+    });
+  };
 
   const startProject = (projectInfo) => {
-    const params = { project: true, msg: 'startProject', projectInfo };
-    pyramidUiService.sendMessageFn(new PyramidUISendProjectStartAction(params));
+    pyramidUiService.sendMessageFn(new PyramidUISendProjectStartAction({projectInfo}));
   };
 
   /**
@@ -85,48 +79,43 @@ const Component: FunctionComponent<IProps> = props => {
     } else {
       pyramidUiService.sendMessageFn(new PyramidUISendProjectListAction({platform: 'mobile'}));
     }
-  }
-
-  const [state, setState] = useState({
-    checkedList: defaultCheckedList,
-    indeterminate: false,
-    checkAll: false,
-  })
+  };
 
   const onChange = (e, index) => {
-    let newCards = [...cards];
+    const newCards = [...cards];
     newCards[index].checked = e.target.checked;
     setCards(newCards);
   };
 
   const onCheckAllChange = (e) => {
     setAllChecked(e.target.checked);
-    let newCards = cards.map((item) => {
+    const newCards = cards.map((item) => {
       item.checked = e.target.checked;
       return item
-    })
+    });
     setCards(newCards);
   };
 
   const editFun = () => {
     setEditBoxShow(true);
-  }
+  };
 
   const editCompFun = () => {
     setEditBoxShow(false);
-  }
+  };
 
-  const delateFun = () => {
-    let  delateArr = []
+  const deleteFun = () => {
+    let  deleteArr: string[] = [];
     cards.map((card)=>{
       if(card.checked && card.name){
-        delateArr.push(card.name)
+        deleteArr.push(card.name)
       }
-    })
+    });
 
-    pyramidUiService.sendMessageFn(new PyramidUISendProjectRemoveAction(delateArr));
+    pyramidUiService.sendMessageFn(new PyramidUISendProjectRemoveAction({projectNames: deleteArr}));
     getProjectsData();
-  }
+  };
+
   return (
     <div className={styles.main}>
       <Card bordered={false} className={styles.cards}>
@@ -140,37 +129,39 @@ const Component: FunctionComponent<IProps> = props => {
           <FormItem>
             {getFieldDecorator('search')(<Input placeholder="请输入应用名称" className={styles.inputAppName} />)}
           </FormItem>
+
           <FormItem className={styles.rightBox}>
             {
               editBoxShow ?
                 <div>
-                  <Button type="primary" onClick={delateFun}>
+                  <Button type="primary" onClick={deleteFun}>
                     删除
-                </Button>
+                  </Button>
                   <Button onClick={editCompFun}>
                     完成
-                </Button>
+                  </Button>
                   <Checkbox
-                    indeterminate={state.indeterminate}
+                    indeterminate={false}
                     onChange={onCheckAllChange}
                     checked={allChecked}
                     className={styles.checkAll}
                   >
                     全选
-                </Checkbox>
+                  </Checkbox>
                 </div> :
                 <div>
                   <Button type="primary" htmlType="submit">
                     搜索
-                </Button>
+                  </Button>
                   <Button onClick={editFun}>
                     管理
-                </Button>
+                  </Button>
                 </div>
             }
 
           </FormItem>
         </Form>
+
         <div className={styles.cardBody}>
           <div className={styles.flexBox}>
             <div className={styles.addBox}>
@@ -203,6 +194,8 @@ const Component: FunctionComponent<IProps> = props => {
         </div>
 
       </Card>
+
+      {/* 添加项目 */}
       {addModalVisible ? (
         <Add
           modalVisible={addModalVisible}

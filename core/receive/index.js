@@ -93,18 +93,10 @@ class receive {
                         break;
                     // 项目删除    
                     case ActionTypes.SEND_PROJECT_REMOVE:
-                        const projecNames = arg.payload;
-                        console.log('projecNames:', projecNames)
+                        const projecNames = arg.payload.projectNames;
                         this.pyramidControl.removeProjects(projecNames, (s) => {
                             this.window_objs.mainWindow.webContents.send('site-message', arg);
-                        })
-
-                        event.sender.send('site-message', {
-                            type: ActionTypes.RECEIVE_PROJECT_REMOVE,
-                            payload: {
-                                removed: true
-                            }
-                        })
+                        });
                         break;
                     // 查询项目列表的请求
                     case ActionTypes.SEND_PROJECT_LIST:
@@ -114,7 +106,7 @@ class receive {
                                 {
                                     type: ActionTypes.RECEIVE_PROJECT_LIST,
                                     payload: {
-                                        data: res
+                                        projects: res
                                     }
                                 }
                             );

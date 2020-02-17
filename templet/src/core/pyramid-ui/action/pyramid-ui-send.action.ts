@@ -55,7 +55,11 @@ export class PyramidUISendPublicCMD implements PyramidUIAction {
 /******************** 项目 ********************/
 export class PyramidUISendProjectCreateAction implements PyramidUIAction {
   readonly type = PyramidUIActionTypes.SEND_PROJECT_CREATE;
-  constructor(public payload: any) {}
+  constructor(public payload: {
+    platform: 'pc' | 'mobile',
+    // 其他项目信息
+    [key: string]: any;
+  }) {}
 }
 // 打开指定项目操作窗口
 export class PyramidUISendProjectOpenWindowAction implements PyramidUIAction {
@@ -73,8 +77,6 @@ export class PyramidUISendProjectListAction implements PyramidUIAction {
 export class PyramidUISendProjectStartAction implements PyramidUIAction {
   readonly type = PyramidUIActionTypes.SEND_PROJECT_START;
   constructor(public payload: {
-    project: boolean;
-    msg: string;
     projectInfo: any;
   }) {}
 }
@@ -90,7 +92,9 @@ export class PyramidUISendProjectToolBar implements PyramidUIAction {
 }
 export class PyramidUISendProjectRemoveAction implements PyramidUIAction {
   readonly type = PyramidUIActionTypes.SEND_PROJECT_REMOVE;
-  constructor(public payload: any) { }
+  constructor(public payload: {
+    projectNames: string[]
+  }) { }
 }
 /******************** 项目 ********************/
 

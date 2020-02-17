@@ -27,11 +27,6 @@ const Component: FunctionComponent<IProps> = props => {
     value: 'https://github.com/guccihuiyuan/pyramid-pro#master'
   }];
 
-  // const templetOptions = [{
-  //   label: 'ssh://git@10.10.11.151:10022/product/bigdata-cloudplatform/templet/templet.git',
-  //   value: 'ssh://git@10.10.11.151:10022/product/bigdata-cloudplatform/templet/templet.git'
-  // }];
-
   const pkgmtOptions = [
     { label: 'yarn', value: 'yarn' },
     { label: 'npm', value: 'npm' }
@@ -73,16 +68,13 @@ const Component: FunctionComponent<IProps> = props => {
   };
 
   const handleSelectPath = () => {
-    // sendMessage({'open-file-dialog': true});
     pyramidUiService.sendMessageFn(new PyramidUISendProjectChoosePathAction());
   };
 
-  const callback = (key) => {
-    console.log(key);
-  }
   const onChange = (checked) => {
     setCongoOpen(checked);
-  }
+  };
+
   return (
     <Modal
       destroyOnClose={true}
@@ -92,34 +84,34 @@ const Component: FunctionComponent<IProps> = props => {
       footer={null}
       onCancel={() => props.closeModal()}>
 
-      <Tabs defaultActiveKey="1" onChange={callback}>
+      <Tabs defaultActiveKey="1">
         <TabPane tab="新建应用" key="1">
           <Form onSubmit={handleSubmit} className={styles.formBox}>
             <FormItem>
               中文名称{getFieldDecorator(`name_cn`, {
-                rules: [
-                  { required: true, message: '必填' }
-                ],
-              })(<Input placeholder="中文名称" />)}
+              rules: [
+                { required: true, message: '必填' }
+              ],
+            })(<Input placeholder="中文名称" />)}
             </FormItem>
             <FormItem>
               英文名称 {getFieldDecorator(`name`, {
-                rules: [
-                  { required: true, message: '必填' },
-                ],
-              })(<Input placeholder="英文名称" />)}
+              rules: [
+                { required: true, message: '必填' },
+              ],
+            })(<Input placeholder="英文名称" />)}
             </FormItem>
             <FormItem>
               目录{getFieldDecorator(`path`, {
-                rules: [
-                  { required: true, message: '必填' }
-                ],
-              })(<Input placeholder="目录" onClick={() => handleSelectPath()} />)}
+              rules: [
+                { required: true, message: '必填' }
+              ],
+            })(<Input placeholder="目录" onClick={() => handleSelectPath()} />)}
             </FormItem>
 
             <FormItem>
               包管理器
-          {getFieldDecorator('pkgmt', { initialValue: pkgmtOptions[0].value })(
+              {getFieldDecorator('pkgmt', { initialValue: pkgmtOptions[0].value })(
                 <Select
                   placeholder="包管理器"
                   allowClear={true}
@@ -137,7 +129,7 @@ const Component: FunctionComponent<IProps> = props => {
 
             <FormItem>
               模板工程
-          {getFieldDecorator('template', { initialValue: templetOptions[0].value })(
+              {getFieldDecorator('template', { initialValue: templetOptions[0].value })(
                 <Select
                   placeholder="模板工程"
                   allowClear={true}
@@ -155,12 +147,12 @@ const Component: FunctionComponent<IProps> = props => {
 
             <FormItem>
               备注 {getFieldDecorator(`remark`, {
-                rules: [
-                  { required: true, message: '必填' },
-                  {
-                  },
-                ],
-              })(<Input placeholder="备注" />)}
+              rules: [
+                { required: true, message: '必填' },
+                {
+                },
+              ],
+            })(<Input placeholder="备注" />)}
             </FormItem>
             <p style={{ marginTop: '10px' }}>是否接入热果？</p>
 
@@ -174,30 +166,30 @@ const Component: FunctionComponent<IProps> = props => {
                 <div className={styles.congoBox}>
                   <FormItem>
                     请选择项目 {getFieldDecorator(`remark`, {
-                      rules: [
-                        { required: true, message: '必填' },
-                        {
-                        },
-                      ],
-                    })(<Input placeholder="请选择项目" />)}
+                    rules: [
+                      { required: true, message: '必填' },
+                      {
+                      },
+                    ],
+                  })(<Input placeholder="请选择项目" />)}
                   </FormItem>
                   <FormItem>
                     appKey {getFieldDecorator(`remark`, {
-                      rules: [
-                        { required: true, message: '必填' },
-                        {
-                        },
-                      ],
-                    })(<Input placeholder="appKey" />)}
+                    rules: [
+                      { required: true, message: '必填' },
+                      {
+                      },
+                    ],
+                  })(<Input placeholder="appKey" />)}
                   </FormItem>
                   <FormItem>
                     应用编码 {getFieldDecorator(`remark`, {
-                      rules: [
-                        { required: true, message: '必填' },
-                        {
-                        },
-                      ],
-                    })(<Input placeholder="应用编码" />)}
+                    rules: [
+                      { required: true, message: '必填' },
+                      {
+                      },
+                    ],
+                  })(<Input placeholder="应用编码" />)}
                   </FormItem>
                 </div> : null}
             </div>
@@ -215,15 +207,15 @@ const Component: FunctionComponent<IProps> = props => {
             <Form>
               <FormItem>
                 请选择目录{getFieldDecorator(`path`, {
-                  rules: [
-                    { required: true, message: '必填' }
-                  ],
-                })(<Input placeholder="请选择目录" onClick={() => handleSelectPath()} />)}
+                rules: [
+                  { required: true, message: '必填' }
+                ],
+              })(<Input placeholder="请选择目录" onClick={() => handleSelectPath()} />)}
               </FormItem>
               <FormItem >
                 <Button type="primary" htmlType="submit" style={{ marginTop: '1rem' }}>
                   确定
-              </Button>
+                </Button>
               </FormItem>
             </Form>
           </div>

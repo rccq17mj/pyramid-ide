@@ -47,7 +47,7 @@ export class PyramidUIReceivePublicCMD implements PyramidUIAction {
 // 接收项目列表
 export class PyramidUIReceiveProjectListAction implements PyramidUIAction {
   readonly type = PyramidUIActionTypes.RECEIVE_PROJECT_LIST;
-  constructor(public payload: any) { }
+  constructor(public payload: {projects: any[]}) { }
 }
 // 接收选择路径
 export class PyramidUIReceiveProjectChoosePathAction implements PyramidUIAction {
