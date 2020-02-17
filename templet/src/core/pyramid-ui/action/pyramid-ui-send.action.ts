@@ -33,7 +33,7 @@ export class PyramidUISendPublicCMD implements PyramidUIAction {
 
           if (receivePayload.callbackId === payload.callbackId) {
             // 销毁监听的消息
-            if (receivePayload.status === 'end') {
+            if (receivePayload.cmdStatus === 'end') {
               pyramidUiService.clearMessageFn(messageId);
             }
 

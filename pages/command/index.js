@@ -55,7 +55,7 @@ function runCmd(arg) {
             // 这里需要单独处理，因为启动项目后，就会一直挂起，没有结束事件
             if (arg.flag === 'cmd-children-project-start') {
                 waitOn(opts).then(function() {
-                    msg.status = 'end';
+                    msg.cmdStatus = 'end';
                     ipc.send('cmd-message', { ...msg });
                 }).catch(function(err) {
                 });

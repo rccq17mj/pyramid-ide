@@ -50,13 +50,13 @@ class PyramidUiService {
         case PyramidUIActionTypes.RECEIVE_CLI_MESSAGE:
           const action: PyramidUIReceiveCliMessageAction = pyramidAction as PyramidUIReceiveCliMessageAction;
 
-          if (action.payload.status === 'start') {// 开始
+          if (action.payload.cmdStatus === 'start') {// 开始
             this.showCliMessageModal(action);
-          } else if (action.payload.status === 'progress') {// 正在进行
+          } else if (action.payload.cmdStatus === 'progress') {// 正在进行
             if (this.pyramidUICliReceiveMessageFn) {
               this.pyramidUICliReceiveMessageFn(action);
             }
-          } else if (action.payload.status === 'end') {// 结束
+          } else if (action.payload.cmdStatus === 'end') {// 结束
             if (this.pyramidUICliReceiveMessageFn) {
               this.pyramidUICliReceiveMessageFn(action);
             }

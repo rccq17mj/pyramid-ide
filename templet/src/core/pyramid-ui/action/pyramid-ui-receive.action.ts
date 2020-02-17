@@ -13,7 +13,7 @@ export class PyramidUIReceiveCliMessageAction implements PyramidUIAction {
     // 类型
     type: ECliMessageType;
     // 状态
-    status: 'start' | 'end' | 'progress';
+    cmdStatus: 'start' | 'end' | 'progress';
     // 二进制数据（根据壳工程传回，看可工程是否需要统一）
     data: any;
     // 一般数据（根据壳工程传回，看可工程是否需要统一）
@@ -28,7 +28,7 @@ export class PyramidUIReceivePublicCMD implements PyramidUIAction {
   constructor(public payload: {
     callbackId: string;// 回调ID
     // 状态
-    status: 'start' | 'end' | 'progress';
+    cmdStatus: 'start' | 'end' | 'progress';
     // 二进制数据（根据壳工程传回，看可工程是否需要统一）
     data: any;
     // 一般数据（根据壳工程传回，看可工程是否需要统一）

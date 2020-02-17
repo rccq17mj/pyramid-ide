@@ -19,7 +19,7 @@ self.onmessage = function (e) {
     // 参数 cmdFlag、cmdCloseCode、cmdStatus
     self.postMessage({
         cmdFlag: 'cmd_start',
-        status: 'start'
+        cmdStatus: 'start'
     });
 
     const ls = PROCESS.spawn(cmdStr, cmdParam);
@@ -29,7 +29,7 @@ self.onmessage = function (e) {
         let msg = data.toString();
         self.postMessage({
             cmdFlag: 'cmd_out',
-            status: 'progress',
+            cmdStatus: 'progress',
             callbackId,
             cwd,
             msg,
@@ -40,7 +40,7 @@ self.onmessage = function (e) {
     ls.stderr.on('data', (data) => {
         self.postMessage({
             cmdFlag: 'cmd_err',
-            status: 'progress',
+            cmdStatus: 'progress',
             callbackId,
             cwd,
             data,
@@ -51,7 +51,7 @@ self.onmessage = function (e) {
     ls.on('close', (code) => {
         self.postMessage({
             cmdFlag: 'cmd_close',
-            status: 'end',
+            cmdStatus: 'end',
             callbackId,
             cwd,
             cmdCloseCode: code

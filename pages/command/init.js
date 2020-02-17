@@ -68,7 +68,7 @@ class init {
                         worker.postMessage({ cmdStr });
                         worker.onmessage = (ev) => {
                             let msg = ev.data;
-                            if(msg.status === 'progress') {
+                            if(msg.cmdStatus === 'progress') {
                                 resolve(msg.msg);
                             }
                         };

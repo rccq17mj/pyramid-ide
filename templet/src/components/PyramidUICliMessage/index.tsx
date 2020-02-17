@@ -167,7 +167,7 @@ const CliModal: FunctionComponent<IProps> = props => {
   const receiveMsgFn = (action: PyramidUIReceiveCliMessageAction) => {
     const payload = action.payload;
 
-    if (payload.status === 'end') {
+    if (payload.cmdStatus === 'end') {
       setMessageEnd(true);
     }
 
