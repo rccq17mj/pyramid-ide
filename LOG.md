@@ -4,16 +4,6 @@
 
 详见 templet/src/pages/Welcome.tsx 中调用方式
 
-          useEffect(() => {
-            pyramidUiService.sendMessageFn(new PyramidUISendPublicCMD({ cmd: 'node -v', }, (payload) => {
-            if (payload.status == "progress") {
-              console.log('这是一个十分简单的cmd命令调用，并利用callBackID来监听返回，尽量省去一堆 PyramidUIReceive 声明');
-              console.log('当前node版本是:' + payload.msg);
-              setNodeVersion(payload.msg);
-            }
-            }));
-          }, [])
-
 #### 2020.01.07 - 新增一个渲染窗口来执行系统命令的调用:
 main.js 下添加代码
 `function createCmdWin () {

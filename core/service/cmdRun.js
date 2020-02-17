@@ -53,7 +53,7 @@ self.onmessage = function (e) {
             status: 'end',
             callbackId,
             cwd,
-            code
+            cmdCloseCode: code
         });
     });
 };
