@@ -4,3 +4,4 @@ node_modules
 build/*
 core/config/cliMessageType.config.js
 core/config/event.config.js
+core/config/cmdResultCode.js
