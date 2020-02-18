@@ -69,7 +69,10 @@ class init {
                         worker.onmessage = (ev) => {
                             let msg = ev.data;
                             if(msg.cmdStatus === 'progress') {
-                                resolve(msg.cmdMessage);
+                                if( msg.cmdFlag ==='cmd_err')
+                                    reject(msg.cmdMessage);
+                                else
+                                    resolve(msg.cmdMessage);
                             }
                         };
                     } catch (e) {
