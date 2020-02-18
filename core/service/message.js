@@ -15,7 +15,6 @@ class message {
         this.moduleWindow = this.receive.getModuleWindow();
         this.showDevTools = false;
         this.detectionTest();
-        console.log('eventConfig:', eventConfig.ActionTypes)
     }
 
     /** 环境检测 */
@@ -38,7 +37,9 @@ class message {
             ipcMain.on(ipcConfig.ON_DETECTION_ERROR, (event, arg) => {
                 console.log(arg);
             });
-        })
+        });
+        // 先监听，后执行显示
+        this.window_objs.runWindow.show();
     }
 }
 

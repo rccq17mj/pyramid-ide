@@ -31,7 +31,7 @@ module.exports = {
         frame: true,
         loadUrl: `file://${__dirname}/../../pages/command/index.html`,
         parent: null,
-        show: true,
+        show: false,
         webPreferences: {
           nodeIntegrationInWorker: true,
           devTools: true,
