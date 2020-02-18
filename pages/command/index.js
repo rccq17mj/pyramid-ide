@@ -6,7 +6,7 @@ const init = require("./init");
 const cmdRun = "../../core/service/cmdRun.js";
 var waitOn = require('wait-on');
 var opts = {
-  resources: ['http://localhost:9100']
+    resources: ['http://localhost:9100']
 }
 onload = function () {
     /** 初始化检测 */
@@ -14,31 +14,34 @@ onload = function () {
     /** 检测node */
     test.testNode().then(msg => {
         ipc.send(ipcConfig.ON_DE_NODE_SUCCESS, msg);
+        /** 检测npm */
+        test.testNPM().then(msg => {
+            ipc.send(ipcConfig.ON_DE_NPM_SUCCESS, msg);
+            /** 检测yarn */
+            test.testYarn().then(msg => {
+                alert('抱歉，建议您安装yarn');
+                ipc.send(ipcConfig.ON_DE_YARN_SUCCESS, msg);
+            }).catch(e => {
+                ipc.send(ipcConfig.ON_DE_YARN_SUCCESS, e);
+                console.log('initError:', e);
+            });
+            /** 检测pyramid-cli */
+            test.testPyramid().then(() => {
+                var loding = document.getElementById("loding");
+                ipc.send(ipcConfig.ON_DE_PYARMID_SUCCESS, null);
+                loding.remove();
+            }).catch(e => {
+                ipc.send(ipcConfig.ON_DE_PYARMID_ERROR, e);
+                console.log('initError:', e);
+            });
+        }).catch(e => {
+            alert('抱歉，请安装npm');
+            ipc.send(ipcConfig.ON_DE_NPM_ERROR, e);
+            console.log('initError:', e);
+        });
     }).catch(e => {
+        alert('抱歉，请安装node.js');
         ipc.send(ipcConfig.ON_DE_NODE_ERROR, e);
-        console.log('initError:', e);
-    });
-    /** 检测npm */
-    test.testNPM().then(msg => {
-        ipc.send(ipcConfig.ON_DE_NPM_SUCCESS, msg);
-    }).catch(e => {
-        ipc.send(ipcConfig.ON_DE_NPM_ERROR, e);
-        console.log('initError:', e);
-    });
-    /** 检测yarn */
-    test.testYarn().then(msg => {
-        ipc.send(ipcConfig.ON_DE_YARN_SUCCESS, msg);
-    }).catch(e => {
-        ipc.send(ipcConfig.ON_DE_YARN_SUCCESS, e);
-        console.log('initError:', e);
-    });
-    /** 检测pyramid-cli */
-    test.testPyramid().then(() => {
-        var loding = document.getElementById("loding");
-        ipc.send(ipcConfig.ON_DE_PYARMID_SUCCESS, null);
-        loding.remove();
-    }).catch(e => {
-        ipc.send(ipcConfig.ON_DE_PYARMID_ERROR, e);
         console.log('initError:', e);
     });
 }
@@ -54,15 +57,15 @@ function runCmd(arg) {
         if (arg.channel === 'cmd-message') {
             // 这里需要单独处理，因为启动项目后，就会一直挂起，没有结束事件
             if (arg.flag === 'cmd-children-project-start') {
-                waitOn(opts).then(function() {
+                waitOn(opts).then(function () {
                     msg.cmdStatus = 'end';
                     ipc.send('cmd-message', { ...msg });
-                }).catch(function(err) {
+                }).catch(function (err) {
                 });
             }
 
             // TODO 这里组成起来了，参数需要好好处理下，不然 msg 和 arg 的字段可能会冲突
-            msg = {...msg, ...arg};
+            msg = { ...msg, ...arg };
 
             ipc.send('cmd-message', { ...msg });
         }
