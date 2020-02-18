@@ -19,9 +19,9 @@ onload = function () {
             ipc.send(ipcConfig.ON_DE_NPM_SUCCESS, msg);
             /** 检测yarn */
             test.testYarn().then(msg => {
-                alert('抱歉，建议您安装yarn');
                 ipc.send(ipcConfig.ON_DE_YARN_SUCCESS, msg);
             }).catch(e => {
+                alert('抱歉，建议您安装yarn');
                 ipc.send(ipcConfig.ON_DE_YARN_SUCCESS, e);
                 console.log('initError:', e);
             });
