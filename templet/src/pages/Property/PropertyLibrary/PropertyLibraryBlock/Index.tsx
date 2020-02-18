@@ -39,11 +39,10 @@ const PropertyLibraryBlock: FunctionComponent<IProps> = (props) =>{
     params['pageSize'] = 7;
     blockPackageRequest.blockPackageSubscribePage(params).then(res => {
       if(res){
-        if(res.rows.length > 0){
-          setCards(res.rows);
-          setTotal(res.total);
-        }
-        console.log('res123',res);
+        const list = res ? (res.list || []) : [];
+        const total = res ? (res.total || 0) : 0;
+        setCards(list);
+        setTotal(total);
       }
     })
   };

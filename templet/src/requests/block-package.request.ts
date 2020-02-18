@@ -19,9 +19,9 @@ class BlockPackageRequest extends BaseRequest {
     return this.list(API_CONFIG.MAIN.BLOCK_PACKAGE.LIST_PAGE, params);
   }
 
-  blockPackageSubscribePage(params: any): Promise<{total: number, rows: IBlockPackage[]}> {
+  blockPackageSubscribePage(params: any): Promise<{total: number, list: IBlockPackage[]}> {
+    // TODO 这里接口有问题，有数据就是 list,没有数据就是rows
     return this.object(API_CONFIG.MAIN.BLOCK_PACKAGE.SUBSCRIBE_PAGE, params);
-
   }
 
   blockPackageDetail(blockId: number): Promise<any> {
