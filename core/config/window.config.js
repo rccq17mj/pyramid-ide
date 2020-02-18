@@ -13,7 +13,7 @@ module.exports = {
         loadUrl: process.env.ELE_ENV === ENV.ELE_ENV_LOCAL? 
         `http://localhost:8100/` : 
         `file://${__dirname}/../../templet/dist/index.html`,
-        show: true,
+        show: false,
         webPreferences: {
             devTools: true,
             nodeIntegration: true,

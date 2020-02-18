@@ -95,10 +95,7 @@ export class PyramidUIReceiveBlockRemoveAction implements PyramidUIAction {
   readonly type = PyramidUIActionTypes.RECEIVE_PROJECT_BLOCK_REMOVE;
   constructor(public payload: any) { }
 }
-export class PyramidUIReceiveBlockItemListAction implements PyramidUIAction {
-  readonly type = PyramidUIActionTypes.RECEIVE_PROJECT_BLOCK_ITEM_LIST;
-  constructor(public payload: any) { }
-}
+
 /******************** 区块 ********************/
 
 

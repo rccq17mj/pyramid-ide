@@ -13,6 +13,7 @@ const FormItem = Form.Item;
 
 interface IProps extends FormComponentProps {
   modalVisible: boolean;
+  categories: Array<object>;
   closeModal: (data?: any) => void;
 }
 
@@ -24,12 +25,8 @@ const Component: FunctionComponent<IProps> = props => {
   const {
     form,
     form: { getFieldDecorator },
+    categories
   } = props;
-
-  const typeOptions = [{
-    label: '表单',
-    value: 'form'
-  }];
 
 
   useEffect(()=>{
@@ -71,7 +68,7 @@ const Component: FunctionComponent<IProps> = props => {
         params['remarkImg'] = imageUrl
         params['type'] = 'block'
         params['parentId'] = urlParames().parentId
-
+        params['categories'] = params['categories'].toString();
         console.log('最终params数据', params)
         pyramidUiService.sendMessageFn(new PyramidUISendProjectBlockItemCreateAction(params));
 
@@ -170,15 +167,19 @@ const Component: FunctionComponent<IProps> = props => {
         </FormItem>
         <FormItem>
           分类
-          {getFieldDecorator('categories', { initialValue: typeOptions[0].value })(
+          {getFieldDecorator('categories', {
+            rules: [
+              { required: true, message: '必填' },
+            ]})(
             <Select
               placeholder="分类"
+              mode="multiple"
               allowClear={true}
             >
-              {typeOptions.map(data => {
+              {categories.map(data => {
                 return (
-                  <Select.Option value={data.value} key={data.value}>
-                    {data.label}
+                  <Select.Option value={data.name} key={data.name}>
+                    {data.name}
                   </Select.Option>
                 );
               })}

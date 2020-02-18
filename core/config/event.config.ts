@@ -58,7 +58,6 @@ export const ActionTypes = {
     SEND_PROJECT_BLOCK_TYPES_CREATE: 'pyramid.ui.send.project.block.types.create',
     SEND_PROJECT_BLOCK_ITEM_CREATE: 'pyramid.ui.send.project.block.item.create',
     SEND_PROJECT_BLOCK_GET: 'pyramid.ui.send.project.block.get',
-    SEND_PROJECT_BLOCK_ITEM_GET: 'pyramid.ui.send.project.block.item.get',
     RECEIVE_PROJECT_BLOCK_LIST: 'pyramid.ui.receive.project.block.list',
     RECEIVE_PROJECT_BLOCK_ITEM_LIST: 'pyramid.ui.receive.project.block.item.list',
     SEND_PROJECT_BLOCK_REMOVE: 'pyramid.ui.send.project.block.remove',

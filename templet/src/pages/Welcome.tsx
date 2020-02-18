@@ -8,12 +8,12 @@ import surrounding from "../assets/surrounding.png";
 import versionImg from "../assets/version.png";
 
 const Home = () => {
-  const [version, setVersion] = useState<any>({
-    node: '...',
-    npm: '...',
-    yarn: '...',
-    umi: '...'
-  });
+  const [vNode, setvNode] = useState<any>('...');
+  const [vNPM, setvNPM] = useState<any>('...');
+  const [vYarn, setvYarn] = useState<any>('...');
+  const [vUmi, setvUmi] = useState<any>('...');
+  const [vPyramid, setvPyramid] = useState<any>('...');
+  const [dependent, seDependent] = useState<any>(false);
 
   const sendCmd = (cmd, callback) => {
     pyramidUiService.sendMessageFn(new PyramidUISendPublicCMD({cmd}, (action) => {
@@ -24,21 +24,18 @@ const Home = () => {
   };
 
   useEffect(() => {
-    const v = {
-      node: '',
-      npm: '',
-      yarn: '',
-      umi: ''
-    };
     sendCmd('node -v', (msg) => {
-      v.node = msg;
+      setvNode(msg);
       sendCmd('npm -v', (msg) => {
-        v.npm = msg;
+        setvNPM(msg);
         sendCmd('yarn -v', (msg) => {
-          v.yarn = msg;
+          setvYarn(msg);
           sendCmd('umi -v', (msg) => {
-            v.umi = msg;
-            setVersion(v);
+            setvUmi(msg);
+            sendCmd('pyramid -v', (msg) => {
+              setvPyramid(msg);
+              seDependent(true);
+            })
           })
         })
       })
@@ -59,12 +56,12 @@ const Home = () => {
               <List.Item.Meta
                 avatar={<img src={surrounding} width={50} height={50} alt='' />}
                 title='当前环境'
-                description={`node ${version.node} | npm ${version.npm} | yarn ${version.yarn} | umi ${version.umi}`}
+                description={`node ${vNode} | npm ${vNPM} | yarn ${vYarn} | umi ${vUmi} | pyramid ${vPyramid}`}
               />
               <Switch
                 checkedChildren={<Icon type="check" style={{ height: '16px' }} />}
                 unCheckedChildren={<Icon type="close" style={{ height: '16px' }} />}
-                defaultChecked
+                checked={dependent}
               />
             </List.Item>
             <List.Item>
