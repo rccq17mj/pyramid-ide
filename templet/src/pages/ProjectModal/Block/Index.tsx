@@ -80,11 +80,11 @@ const Component: FunctionComponent<IProps> = () => {
       params['pageSize'] = 100000;
       blockPackageRequest.blockPackageSubscribePage(params).then(res => {
         if (res) {
-          const list = res ? res.list : [];
+          const list = res ? (res.list || []) : [];
           list.forEach(item => {
             item.packageInfoFetchStatus = EBlockPackageFetchStatus.noFetch;
           });
-          setMenus(res.list);
+          setMenus(list);
         }
       });
     } else if (tabActiveKey === '2') {// 私有
