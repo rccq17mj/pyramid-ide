@@ -3,6 +3,7 @@ import {
   PyramidUIReceivePublicCMD,
 } from "@/core/pyramid-ui/action/pyramid-ui-receive.action";
 import {PyramidUIAction, PyramidUIActionTypes} from "@/core/pyramid-ui/action/index";
+import {ECmdResultCode, getCmdResultStrByCode} from "../../../../../core/config/cmdResultCode";
 
 
 // 所有动作集合（注意格式：PyramidUISend + 模块 + 功能 + 定义 + Action）
@@ -54,9 +55,16 @@ export class PyramidUISendCMDExecuteResultAction implements PyramidUIAction {
     pyramidUIActionType: string;
     // 执行结果
     cmdExecuteResult: boolean;
+    // 执行结果
+    cmdExecuteResultCode: ECmdResultCode;
     // 成功的时候一般不返回
     cmdExecuteMessage?: string;
-  }) { }
+  }) {
+    if (payload.cmdExecuteResultCode && !payload.cmdExecuteMessage) {
+      // 自动转义
+      payload.cmdExecuteMessage = getCmdResultStrByCode(payload.cmdExecuteResultCode);
+    }
+  }
 }
 /******************** 全局 ********************/
 
@@ -215,7 +223,6 @@ export class PyramidUISendBlockPackageInfoAction implements PyramidUIAction {
 export type PyramidUISendActionsUnion =
   PyramidUISendCMDExecuteResultAction |
   PyramidUISendProjectRemoveAction |
-  PyramidUISendBlockItemGetAction |
   PyramidUISendProjectBlockTypesCreateAction |
   PyramidUISendProjectBlockCreateAction |
   PyramidUISendProjectCreateAction |
