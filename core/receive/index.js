@@ -56,6 +56,7 @@ class receive {
                                 this.view.destroy();
                                 this.window_objs.mainWindow.destroy();
                                 this.window_objs.mainWindow = _window(config.mainWin);
+                                this.window_objs.mainWindow.show();
                                 break;
                             case 'layout':
                             case 'module':
