@@ -2,6 +2,7 @@ import {IBlockPackageInfo} from "@/interfaces/block-package/block-package.interf
 import {IPyramidUiRouterTree} from "@/core/pyramid-ui/action/pyramid-ui-send.action";
 import {PyramidUIAction, PyramidUIActionTypes} from "@/core/pyramid-ui/action/index";
 import {ECliMessageType} from "../../../../../core/config/cliMessageType.config";
+import {ECmdResultCode} from "../../../../../core/config/cmdResultCode";
 
 // 所有动作集合（注意格式：PyramidUIReceive + 模块 + 功能 + 定义 + Action）
 
@@ -19,7 +20,7 @@ export class PyramidUIReceiveCliMessageAction implements PyramidUIAction {
     // 消息
     cmdMessage: string;
     // 执行结束才会有，执行成功为 0，非0为执行失败
-    cmdCloseCode?: number;
+    cmdCloseCode?: ECmdResultCode;
   }) { }
 }
 // 直接请求执行某个命令（还不成熟，其他业务暂时不要用这个，如果有回其他参数，壳工程还是需要根据一个标识，进行相应处理）
@@ -34,7 +35,7 @@ export class PyramidUIReceivePublicCMD implements PyramidUIAction {
     // 消息
     cmdMessage: string;
     // 执行结束才会有，执行成功为 0，非0为执行失败
-    cmdCloseCode?: number;
+    cmdCloseCode?: ECmdResultCode;
   }) { }
 }
 
@@ -46,6 +47,8 @@ export class PyramidUIReceiveCMDExecuteResultAction implements PyramidUIAction {
     pyramidUIActionType: string;
     // 执行结果
     cmdExecuteResult: boolean;
+    // 执行结果
+    cmdExecuteResultCode: ECmdResultCode;
     // 成功的时候一般不返回
     cmdExecuteMessage?: string;
   }) { }
@@ -132,6 +135,5 @@ export type PyramidUIReceiveActionsUnion =
   PyramidUIReceiveBlockRemoveAction |
   PyramidUIReceiveProjectModuleGetRouteTreeAction |
   PyramidUIReceiveProjectListAction |
-  PyramidUIReceiveProjectChoosePathAction |
-  PyramidUIReceiveBlockItemListAction
+  PyramidUIReceiveProjectChoosePathAction
   ;

@@ -5,7 +5,7 @@ import style from "../../Property.less";
 import plus from "@/assets/plus.png";
 import block from "@/assets/block.png";
 
-import LibraryModal from '@/pages/Property/PropertyLibrary/PropertyLibraryModal/Index';
+import LibraryModal from '@/pages/Property/PropertyLibrary/PropertyLibraryModal';
 import {blockPackageRequest} from "@/requests/block-package.request";
 
 const { Content } = Layout;

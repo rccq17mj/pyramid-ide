@@ -4,7 +4,6 @@ import { Terminal } from 'xterm';
 import 'xterm/css/xterm.css'
 import {
   PyramidUISendBlockGetAction,
-  PyramidUISendBlockItemGetAction,
   PyramidUISendBlockPackageInfoAction,
   PyramidUISendCMDExecuteResultAction,
   PyramidUISendProjectOpenWindowAction
@@ -117,6 +116,7 @@ const CliModal: FunctionComponent<IProps> = props => {
               pyramidUiService.sendMessageFn(
                 new PyramidUISendCMDExecuteResultAction({
                   pyramidUIActionType: ActionTypes.SEND_PROJECT_CREATE,
+                  cmdExecuteResultCode: cliExecuteResult,
                   cmdExecuteResult: cliExecuteResult === ECmdResultCode.SUCCESS
                 })
               );
@@ -155,10 +155,9 @@ const CliModal: FunctionComponent<IProps> = props => {
             if (props.closeCallBack) {
               props.closeCallBack();
               // 通知刷新区块
-              //pyramidUiService.sendMessageFn(new PyramidUISendBlockItemGetAction({parentId:urlParames()['parentId']}));
               pyramidUiService.sendMessageFn(new PyramidUISendBlockPackageInfoAction({
                 // TODO 先写死 发送获取区块信息
-                projectPath: urlParames().path,
+                projectPath: urlParames()['path'],
               }));
               setModalShow(false);
             }
@@ -173,7 +172,7 @@ const CliModal: FunctionComponent<IProps> = props => {
               // 通知刷新分类
               pyramidUiService.sendMessageFn(new PyramidUISendBlockPackageInfoAction({
                 // TODO 先写死 发送获取区块信息
-                projectPath: urlParames().path,
+                projectPath: urlParames()['path'],
               }));
               setModalShow(false);
             }
