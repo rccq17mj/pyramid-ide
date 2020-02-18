@@ -19,7 +19,7 @@ class BlockPackageRequest extends BaseRequest {
     return this.list(API_CONFIG.MAIN.BLOCK_PACKAGE.LIST_PAGE, params);
   }
 
-  blockPackageSubscribePage(params: any): Promise<{total: number, list: IBlockPackage[]}> {
+  blockPackageSubscribePage(params: any): Promise<{total: number, rows: IBlockPackage[]}> {
     return this.object(API_CONFIG.MAIN.BLOCK_PACKAGE.SUBSCRIBE_PAGE, params);
 
   }

@@ -39,8 +39,8 @@ const PropertyLibraryBlock: FunctionComponent<IProps> = (props) =>{
     params['pageSize'] = 7;
     blockPackageRequest.blockPackageSubscribePage(params).then(res => {
       if(res){
-        if(res.list.length > 0){
-          setCards(res.list);
+        if(res.rows.length > 0){
+          setCards(res.rows);
           setTotal(res.total);
         }
         console.log('res123',res);
