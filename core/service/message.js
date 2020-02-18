@@ -22,6 +22,7 @@ class message {
         this.window_objs.runWindow.once('show', () => {
             /** 检测通过 */
             ipcMain.on(ipcConfig.ON_DE_PYARMID_SUCCESS, (event, arg) => {
+                this.window_objs.mainWindow.reload();
                 this.window_objs.mainWindow.show();
                 switch (process.env.ELE_ENV) {
                     case ENV.ELE_ENV_DEV:

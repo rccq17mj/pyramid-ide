@@ -69,10 +69,18 @@ class init {
                         worker.onmessage = (ev) => {
                             let msg = ev.data;
                             if(msg.cmdStatus === 'progress') {
-                                if( msg.cmdFlag ==='cmd_err')
-                                    reject(msg.cmdMessage);
+                                if( msg.cmdFlag === 'cmd_err')
+                                    this.error = msg.cmdMessage;
+                                else if( msg.cmdFlag ==='cmd_out') {
+                                    this.error = null;
+                                    this.msg = msg.cmdMessage;
+                                }
+                            }
+                            if(msg.cmdStatus === 'end'){
+                                if(!this.error)
+                                    resolve(this.msg);
                                 else
-                                    resolve(msg.cmdMessage);
+                                    reject(this.error);
                             }
                         };
                     } catch (e) {
