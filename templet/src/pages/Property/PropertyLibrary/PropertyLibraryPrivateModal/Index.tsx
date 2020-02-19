@@ -30,6 +30,8 @@ const Component: FunctionComponent<IProps> = props => {
 
   return (
     <Modal
+      maskClosable={false}
+      closable={false}
       destroyOnClose={true}
       title=""
       width={800}
@@ -54,7 +56,10 @@ const Component: FunctionComponent<IProps> = props => {
         </FormItem>
 
         <FormItem>
-          <Button type={"primary"} htmlType="submit">新增</Button>
+          <Button type={"primary"} htmlType="submit" style={{marginRight: 10}}>新增</Button>
+          <Button type={"danger"} onClick={() => {
+            props.closeModal();
+          }}>关闭</Button>
         </FormItem>
       </Form>
     </Modal>
