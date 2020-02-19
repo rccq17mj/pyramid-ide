@@ -81,7 +81,7 @@ const Component: FunctionComponent<IProps> = props => {
    * 请求项目列表
    */
   const getProjectsData = () => {
-    if (window.location.pathname === '/pc') {
+    if (window.location.hash === '#/pc') {
       pyramidUiService.sendMessageFn(new PyramidUISendProjectListAction({platform: 'pc'}));
     } else {
       pyramidUiService.sendMessageFn(new PyramidUISendProjectListAction({platform: 'mobile'}));
