@@ -22,7 +22,7 @@ interface ILeftBtn {
   open: boolean;
 }
 
-interface IProps extends FormComponentProps{
+interface IProps extends FormComponentProps {
   modalVisible: boolean;
   closeModal: (data?: any) => void;
   params: {
