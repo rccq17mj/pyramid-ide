@@ -263,7 +263,7 @@ const PropertyLibraryBlock: FunctionComponent<IProps> = (props) => {
       {addModalVisible ? (
         <LibraryModal
           modalVisible={addModalVisible}
-          params={{source: tabActiveKey, assemblyType: EBlockPackageAssemblyType.BLOCK,}}
+          params={{source: tabActiveKey, assemblyType: EBlockPackageAssemblyType.BLOCK}}
           closeModal={() => {
             setAddModalVisible(false);
             getBlockList()
