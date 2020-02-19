@@ -36,11 +36,11 @@ const plugins: IPlugin[] = [
       },
       pwa: pwa
         ? {
-            workboxPluginMode: 'InjectManifest',
-            workboxOptions: {
-              importWorkboxFrom: 'local',
-            },
-          }
+          workboxPluginMode: 'InjectManifest',
+          workboxOptions: {
+            importWorkboxFrom: 'local',
+          },
+        }
         : false,
       // default close dll, because issue https://github.com/ant-design/ant-design-pro/issues/4665
       // dll features https://webpack.js.org/plugins/dll-plugin/
@@ -161,18 +161,23 @@ export default {
           name: 'assets',
           icon: 'safety',
           routes: [
+            // 资产库
             {
               path: '/property/propertyLibrary',
               name: 'propertyLibrary',
               component: '../layouts/PropertyLibraryLayout',
               routes: [
-                { path: '/property/PropertyLibrary', redirect: '/property/PropertyLibrary/PropertyLibraryBlock' },
+                { path: '/property/PropertyLibrary',
+                  redirect: '/property/PropertyLibrary/PropertyLibraryBlock'
+                },
+                // 模块
                 {
                   path: '/property/propertyLibrary/propertyLibraryModule',
                   name: 'module',
                   hideInMenu: true,
                   component: './Property/PropertyLibrary/PropertyLibraryModule/Index',
                 },
+                // 区块
                 {
                   path: '/property/propertyLibrary/PropertyLibraryBlock',
                   name: 'block',
@@ -181,18 +186,23 @@ export default {
                 },
               ],
             },
+            // 我的资产
             {
               path: '/property/myProperty',
               name: 'myProperty',
               component: '../layouts/PropertyLayout',
               routes: [
-                 { path: '/property/myProperty', redirect: '/property/myProperty/PropertyBlock' },
-                 {
+                { path: '/property/myProperty',
+                  redirect: '/property/myProperty/PropertyBlock'
+                },
+                // 模块
+                {
                   path: '/property/myProperty/propertyModule',
                   name: 'module',
                   hideInMenu: true,
                   component: './Property/MyProperty/PropertyModule/Index',
-                 },
+                },
+                // 区块
                 {
                   path: '/property/myProperty/PropertyBlock',
                   name: 'block',

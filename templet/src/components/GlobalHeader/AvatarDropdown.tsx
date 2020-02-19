@@ -33,7 +33,7 @@ class AvatarDropdown extends React.Component<GlobalHeaderRightProps> {
     }
     router.push(`/account/${key}`);
   };
-  
+
   render(): React.ReactNode {
     const { currentUser = {}, menu } = this.props;
     if (!menu) {
@@ -54,8 +54,8 @@ class AvatarDropdown extends React.Component<GlobalHeaderRightProps> {
           <Icon type="setting" />
           <FormattedMessage id="menu.account.settings" defaultMessage="account settings" />
         </Menu.Item> */}
-        <Menu.Divider />
-          <Menu.Item key="logout">
+        {/*<Menu.Divider />*/}
+        <Menu.Item key="logout">
           <Icon type="logout" />
           {currentUser.userId ? <FormattedMessage id="menu.account.logout" defaultMessage="logout" /> :
             <FormattedMessage id="menu.account.login" defaultMessage="login" />}
@@ -71,8 +71,8 @@ class AvatarDropdown extends React.Component<GlobalHeaderRightProps> {
         </span>
       </HeaderDropdown>
     ) : (
-        <Spin size="small" style={{ marginLeft: 8, marginRight: 8 }} />
-      );
+      <Spin size="small" style={{ marginLeft: 8, marginRight: 8 }} />
+    );
   }
 }
 export default connect(({ user }: ConnectState) => ({
