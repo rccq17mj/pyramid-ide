@@ -179,7 +179,7 @@ const PropertyLibraryBlock: FunctionComponent<IProps> = (props) => {
                 {
                   BlockPackageEndType.map(v => {
                     return (
-                      <Option value={v.value}>{v.label}</Option>
+                      <Option key={v.value} value={v.value}>{v.label}</Option>
                     )
                   })
                 }
