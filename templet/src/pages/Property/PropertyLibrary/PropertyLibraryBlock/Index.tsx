@@ -6,6 +6,7 @@ import plus from "@/assets/plus.png";
 import block from "@/assets/block.png";
 import {blockPackageRequest} from "@/requests/block-package.request";
 import LibraryModal from '@/pages/Property/PropertyLibrary/PropertyLibraryModal';
+import LibraryPrivateModal from '@/pages/Property/PropertyLibrary/PropertyLibraryPrivateModal';
 import {
   BlockPackageSourceDict,
   BlockPackageEndType,
@@ -27,6 +28,7 @@ const PropertyLibraryBlock: FunctionComponent<IProps> = (props) => {
 
   // 模态框
   const [addModalVisible, setAddModalVisible] = useState<boolean>(false);
+  const [addPrivateModalVisible, setAddPrivateModalVisible] = useState<boolean>(false);
 
   // card 数量
   const [cards, setCards] = useState<any[]>([]);
@@ -177,7 +179,7 @@ const PropertyLibraryBlock: FunctionComponent<IProps> = (props) => {
                 {
                   BlockPackageEndType.map(v => {
                     return (
-                      <Option value={v.value}>{v.label}</Option>
+                      <Option key={v.value} value={v.value}>{v.label}</Option>
                     )
                   })
                 }
@@ -233,7 +235,13 @@ const PropertyLibraryBlock: FunctionComponent<IProps> = (props) => {
         {/* card */}
         <div className={style['card-container']}>
           {/* 新增订阅 */}
-          <Card className={style['card-item']} onClick={() => setAddModalVisible(true)}>
+          <Card className={style['card-item']} onClick={() => {
+            if (tabActiveKey === EBlockPackageSource.Community) {
+              setAddModalVisible(true);
+            } else if (tabActiveKey === EBlockPackageSource.Private) {
+              setAddPrivateModalVisible(true);
+            }
+          }}>
             <img src={plus} width={50} height={50} alt='' />
             <p>新增订阅</p>
           </Card>
@@ -263,13 +271,25 @@ const PropertyLibraryBlock: FunctionComponent<IProps> = (props) => {
       {addModalVisible ? (
         <LibraryModal
           modalVisible={addModalVisible}
-          params={{source: tabActiveKey, assemblyType: EBlockPackageAssemblyType.BLOCK,}}
+          params={{source: tabActiveKey, assemblyType: EBlockPackageAssemblyType.BLOCK}}
           closeModal={() => {
             setAddModalVisible(false);
             getBlockList()
           }}
         />
       ) : null}
+
+      {
+        addPrivateModalVisible? (
+          <LibraryPrivateModal
+            modalVisible={addPrivateModalVisible}
+            closeModal={() => {
+              setAddPrivateModalVisible(false);
+              getBlockList();
+            }}
+          />
+        ): null
+      }
     </Layout>
   )
 };

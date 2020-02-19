@@ -9,6 +9,11 @@ class response {
         this.receive = receive;
 
         ipcMain.on('cmd-message', (event, arg) => {
+            const cmdStatus = arg.cmdStatus;
+            const cmdMessage = arg.cmdMessage || '';
+            const cmdFlag = arg.cmdMessage;
+            const cmdCloseCode = arg.cmdCloseCode;
+
             if (arg.flag === 'cmd-public-cmd') {
                 if (this.window_objs.mainWindow != null) {
                     this.window_objs.mainWindow.webContents.send('site-message', {
@@ -104,26 +109,45 @@ class response {
 
             // 读取区块包信息
             if (arg.flag === 'cmd-get-block-package-info') {
-                const msg = arg.cmdMessage;
-                if (typeof msg === 'string' && msg.indexOf('pyramid-blocks-info:') !== -1) {
-                    const treeJSON = msg.split('pyramid-blocks-info:')[1].trim();
-                    const packageInfo = JSON.parse(treeJSON);
-                    // 发送消息到子工程
-                    if(arg.projectId){
-                        if (this.receive.getModuleWindow() != null) {
-                            this.receive.getModuleWindow().webContents.send('site-message', {
-                                type: ActionTypes.RECEIVE_PROJECT_BLOCK_PACKAGE_INFO,
+                if (cmdStatus === 'end') {
+                    // 结束反馈执行结果
+                    if(arg.projectId) {
+
+                    } else {
+                        if (this.window_objs.mainWindow !== null) {
+                            this.window_objs.mainWindow.webContents.send('site-message', {
+                                type: ActionTypes.RECEIVE_CMD_EXECUTE_RESULT,
                                 payload: {
-                                    packageInfo,
-                                    projectId: arg.projectId || null
+                                    pyramidUIActionType: ActionTypes.SEND_PROJECT_BLOCK_PACKAGE_INFO,
+                                    cmdExecuteResult: cmdCloseCode === 0,
+                                    cmdExecuteResultCode: cmdCloseCode
                                 }
                             });
                         }
-                    }else{
-                        this.window_objs.mainWindow.webContents.send('site-message', {
-                            type: ActionTypes.RECEIVE_PROJECT_BLOCK_PACKAGE_INFO,
-                            payload: {packageInfo}
-                        });
+                    }
+                }
+
+                if (cmdStatus === 'progress') {
+                    if (typeof cmdMessage === 'string' && cmdMessage.indexOf('pyramid-blocks-info:') !== -1) {
+                        const treeJSON = cmdMessage.split('pyramid-blocks-info:')[1].trim();
+                        const packageInfo = JSON.parse(treeJSON);
+                        // 发送消息到子工程
+                        if(arg.projectId){
+                            if (this.receive.getModuleWindow() != null) {
+                                this.receive.getModuleWindow().webContents.send('site-message', {
+                                    type: ActionTypes.RECEIVE_PROJECT_BLOCK_PACKAGE_INFO,
+                                    payload: {
+                                        packageInfo,
+                                        projectId: arg.projectId || null
+                                    }
+                                });
+                            }
+                        }else{
+                            this.window_objs.mainWindow.webContents.send('site-message', {
+                                type: ActionTypes.RECEIVE_PROJECT_BLOCK_PACKAGE_INFO,
+                                payload: {packageInfo}
+                            });
+                        }
                     }
                 }
             }
