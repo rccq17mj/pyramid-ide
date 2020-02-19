@@ -30,7 +30,6 @@ class receive {
                         } else {
 
                         }
-
                         break;
                     // 打开指定项目操作窗口
                     case ActionTypes.SEND_PROJECT_OPENWINDOW:
@@ -101,9 +100,13 @@ class receive {
                         // 将此命令发送给渲染窗口执行
                         this.window_objs.runWindow.webContents.send('cmd-message', cmdArg);
                         break;
+                    // 创建项目    
                     case ActionTypes.SEND_PROJECT_CREATE:
-                            const projectInfo = arg.payload;
-                            this.pyramidControl.createProject(projectInfo, this.window_objs.runWindow);
+                            this.pyramidControl.createProject(arg.payload, this.window_objs.runWindow);
+                        break;
+                    // 导入项目
+                    case ActionTypes.SEND_PROJECT_IMPORT:
+                        this.pyramidControl.importProject(arg.payload, this.window_objs.runWindow);
                         break;
                     // 项目删除    
                     case ActionTypes.SEND_PROJECT_REMOVE:

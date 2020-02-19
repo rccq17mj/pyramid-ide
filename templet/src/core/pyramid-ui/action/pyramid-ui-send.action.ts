@@ -82,6 +82,15 @@ export class PyramidUISendProjectCreateAction implements PyramidUIAction {
     [key: string]: any;
   }) {}
 }
+// 导入项目
+export class PyramidUISendProjectImportAction implements PyramidUIAction {
+  readonly type = PyramidUIActionTypes.SEND_PROJECT_IMPORT;
+  constructor(public payload: {
+    platform: EPlatform,
+    // 其他项目信息
+    [key: string]: any;
+  }) {}
+}
 // 打开指定项目操作窗口
 export class PyramidUISendProjectOpenWindowAction implements PyramidUIAction {
   readonly type = PyramidUIActionTypes.SEND_PROJECT_OPENWINDOW;

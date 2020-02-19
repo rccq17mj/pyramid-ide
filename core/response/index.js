@@ -29,6 +29,17 @@ class response {
                 }
             }
 
+            // 导入项目
+            if (arg.flag === 'cmd-children-project-import') {
+                if (this.window_objs.mainWindow != null) {
+                    // 发送CLI消息回显，带上类型
+                    this.window_objs.mainWindow.webContents.send('site-message', {
+                        type: ActionTypes.RECEIVE_CLI_MESSAGE,
+                        payload: { ...arg, type: ECliMessageType.CHILDREN_PROJECT_CREATE }
+                    });
+                }
+            }
+
             // 项目启动
             if (arg.flag === 'cmd-children-project-start') {
                 if (this.window_objs.mainWindow != null) {

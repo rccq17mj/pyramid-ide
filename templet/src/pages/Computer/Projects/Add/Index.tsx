@@ -1,11 +1,11 @@
-import React, {FormEvent, FunctionComponent, useEffect, useState} from 'react';
+import React, { FormEvent, FunctionComponent, useEffect, useState } from 'react';
 import { Tabs, Button, Select, Form, Input, Modal, Switch, Icon } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 import { pyramidUiService } from '@/core/pyramid-ui/service/pyramid-ui.service';
-import { PyramidUISendProjectCreateAction, PyramidUISendProjectChoosePathAction } from "@/core/pyramid-ui/action/pyramid-ui-send.action";
-import {PyramidUIActionTypes} from "@/core/pyramid-ui/action";
-import {PyramidUIReceiveProjectChoosePathAction} from "@/core/pyramid-ui/action/pyramid-ui-receive.action";
-import {EPlatform} from "@/enums/platform.enum";
+import { PyramidUISendProjectCreateAction, PyramidUISendProjectChoosePathAction, PyramidUISendProjectImportAction } from "@/core/pyramid-ui/action/pyramid-ui-send.action";
+import { PyramidUIActionTypes } from "@/core/pyramid-ui/action";
+import { PyramidUIReceiveProjectChoosePathAction } from "@/core/pyramid-ui/action/pyramid-ui-receive.action";
+import { EPlatform } from "@/enums/platform.enum";
 
 const FormItem = Form.Item;
 const { TabPane } = Tabs;
@@ -13,11 +13,13 @@ const { TabPane } = Tabs;
 interface IProps extends FormComponentProps {
   modalVisible: boolean;
   closeModal: (data?: any) => void;
-  params: {platform: EPlatform}
+  params: { platform: EPlatform }
 }
 
 const Component: FunctionComponent<IProps> = props => {
   const [activeKey, setActiveKey] = useState<string>('1');
+  // 1:新建项目 ｜ 0:导入项目
+  let [pathType, setPathType] = useState<number>(1);
 
   const {
     form,
@@ -33,31 +35,50 @@ const Component: FunctionComponent<IProps> = props => {
     { label: 'yarn', value: 'yarn' },
   ];
 
-  const handleSelectPath = () => {
+  const handleSelectPath = (type: number) => {
+    pathType = type;
     pyramidUiService.sendMessageFn(new PyramidUISendProjectChoosePathAction());
-  };
-
-  useEffect(() => {
     const messageKey = pyramidUiService.getMessageFn((action: PyramidUIReceiveProjectChoosePathAction) => {
       switch (action.type) {
         case PyramidUIActionTypes.RECEIVE_PROJECT_CHOOSE_PATH:
-          form.setFieldsValue({
-            path: action.payload.files
-          });
+          let files = action.payload.files;
+          const site = files.lastIndexOf("\/");
+          let import_name = files.substring(site + 1, files.length);
+          if (pathType === 1)
+            form.setFieldsValue({
+              path: files,
+              import_name: import_name
+            });
+          else
+            form.setFieldsValue({
+              import_path: files,
+              import_name: import_name
+            });
           break;
         default:
           break;
       }
     });
-
     return () => {
       pyramidUiService.clearMessageFn(messageKey);
     }
-  }, []);
+  };
 
+  // 导入项目
+  const importSubmit  = (e: FormEvent) => {
+    e.preventDefault();
+    form.validateFieldsAndScroll((err, fieldsValue) => {
+      if (err) {
+        return;
+      }
+      pyramidUiService.sendMessageFn(new PyramidUISendProjectImportAction({ ...fieldsValue, platform: props.params.platform }));
+      props.closeModal(true);
+    })
+  };
+
+  // 新建项目
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-
     form.validateFieldsAndScroll((err, fieldsValue) => {
       if (err) {
         return;
@@ -65,10 +86,10 @@ const Component: FunctionComponent<IProps> = props => {
 
       switch (props.params.platform) {
         case EPlatform.PC:
-          pyramidUiService.sendMessageFn(new PyramidUISendProjectCreateAction({...fieldsValue,platform: EPlatform.PC}));
+          pyramidUiService.sendMessageFn(new PyramidUISendProjectCreateAction({ ...fieldsValue, platform: EPlatform.PC }));
           break;
         case EPlatform.MOBILE:
-          pyramidUiService.sendMessageFn(new PyramidUISendProjectCreateAction({...fieldsValue,platform: EPlatform.MOBILE}));
+          pyramidUiService.sendMessageFn(new PyramidUISendProjectCreateAction({ ...fieldsValue, platform: EPlatform.MOBILE }));
           break;
       }
       props.closeModal(true);
@@ -114,7 +135,7 @@ const Component: FunctionComponent<IProps> = props => {
                       { required: true, message: '必填' }
                     ],
                   })(<Input placeholder="请选择" onClick={() => {
-                    handleSelectPath();
+                    handleSelectPath(1);
                   }} />)}
                 </FormItem>
 
@@ -214,13 +235,48 @@ const Component: FunctionComponent<IProps> = props => {
         <TabPane tab="导入应用" key="2">
           {
             activeKey === '2' ? (
-              <Form>
+              <Form onSubmit={importSubmit}>
                 <FormItem label='请选择目录'>
-                  {getFieldDecorator(`importPath`, {
+                  {getFieldDecorator(`import_path`, {
                     rules: [
                       { required: true, message: '必填' }
                     ],
-                  })(<Input placeholder="请选择" onClick={() => handleSelectPath()} />)}
+                  })(<Input placeholder="请选择" onClick={() => handleSelectPath(0)} />)}
+                </FormItem>
+                <FormItem label='英文名称'>
+                  {getFieldDecorator(`import_name`, {
+                    rules: [
+                      { required: true, message: '必填' },
+                    ],
+                  })(<Input placeholder="请输入" />)}
+                </FormItem>
+                <FormItem label={'中文名称'}>
+                  {getFieldDecorator(`import_name_cn`, {
+                    rules: [
+                      { required: true, message: '必填' }
+                    ],
+                  })(<Input placeholder="请输入" />)}
+                </FormItem>
+                <FormItem label={'包管理器'}>
+                  {getFieldDecorator('import_pkgmt', {
+                    initialValue: pkgmtOptions[0].value,
+                    rules: [
+                      { required: true, message: '必选' }
+                    ],
+                  })(
+                    <Select
+                      placeholder="包管理器"
+                      allowClear={false}
+                    >
+                      {pkgmtOptions.map(data => {
+                        return (
+                          <Select.Option value={data.value} key={data.value}>
+                            {data.label}
+                          </Select.Option>
+                        );
+                      })}
+                    </Select>
+                  )}
                 </FormItem>
                 <FormItem >
                   <Button type="primary" htmlType="submit">
