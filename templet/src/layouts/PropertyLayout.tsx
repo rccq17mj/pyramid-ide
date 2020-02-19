@@ -1,5 +1,5 @@
-import React, {FunctionComponent, useEffect, useState} from 'react';
-import styles from './ProjectModalLayout.less';
+import React, {FunctionComponent, useState} from 'react';
+import styles from './PropertyLayout.less';
 import {Icon} from "antd";
 import router from "umi/router";
 

@@ -21,7 +21,7 @@ const PropertyLibraryBlock: FunctionComponent<IProps> = (props) =>{
   const [cards, setCards] = useState<any[]>([]);
 
   // 管理模式
-  const [isManege, setIsManege] = useState<boolean>(false);
+  const [isManage, setIsManage] = useState<boolean>(false);
   const [selectList, setSelectList] = useState<any[]>([]);
   const [pageNum, setPageNum] = useState<number>(1);
   const [total, setTotal] = useState<number>(0);
@@ -34,9 +34,10 @@ const PropertyLibraryBlock: FunctionComponent<IProps> = (props) =>{
   };
 
   const getBlockList = () =>{
-    let params = extraParams;
+    const params = extraParams;
     params['pageNum'] = pageNum;
-    params['pageSize'] = 7;
+    params['pageSize'] = 10;
+    // TODO 这里还差移动端或者pc端参数
     blockPackageRequest.blockPackageSubscribePage(params).then(res => {
       if(res){
         const list = res ? (res.list || []) : [];
@@ -44,7 +45,7 @@ const PropertyLibraryBlock: FunctionComponent<IProps> = (props) =>{
         setCards(list);
         setTotal(total);
       }
-    })
+    });
   };
 
   useEffect(() => {
@@ -62,21 +63,14 @@ const PropertyLibraryBlock: FunctionComponent<IProps> = (props) =>{
     getBlockList()
   }, [pageNum, extraParams]);
 
-
-  const startProject = (projectInfo) => {
-    console.log('projectInfo', projectInfo)
-    // sendMessage({'openProjectWindow': true});
-  };
-
-
   // 管理模式
   const management = (flag) =>{
-    setIsManege(flag);
+    setIsManage(flag);
     let newCards = [...cards];
     newCards.forEach((item)=>{
       item.checked = false
     });
-    setCards(newCards)
+    setCards(newCards);
   };
 
   // 选中项
@@ -112,19 +106,14 @@ const PropertyLibraryBlock: FunctionComponent<IProps> = (props) =>{
   };
 
   const pageChange = (page) =>{
-    setPageNum(page)
+    setPageNum(page);
   };
 
   return(
-    <Layout style={{ padding: '0 24px 24px' }}>
-      {/*    <Breadcrumb style={{color:'#fff'}}>
-          <Breadcrumb.Item>区块</Breadcrumb.Item>
-          <Breadcrumb.Item>移动端</Breadcrumb.Item>
-        </Breadcrumb>*/}
+    <Layout style={{ padding: '24px 24px 24px' }}>
       <Content
         style={{
           background: '#212121',
-          padding: 24,
           margin: 0,
           minHeight: 280,
         }}
@@ -146,61 +135,81 @@ const PropertyLibraryBlock: FunctionComponent<IProps> = (props) =>{
                 style={{minWidth:'80px'}}
               >
                 <Option value="0">全部</Option>
-                <Option value="2">移动端</Option>
                 <Option value="1">PC端</Option>
+                <Option value="2">移动端</Option>
               </Select>
             )}
           </FormItem>
+
           <FormItem>
             {getFieldDecorator('chineseName')(<Input placeholder="请输入资产名称" />)}
           </FormItem>
-          {isManege ?
-            <FormItem>
-              <Button disabled={selectList.length <= 0} onClick={()=>{deleteItem()}}>
-                取消订阅
-              </Button>
-              <Button
-                onClick={() => {
-                  management(false)
-                }}
-                style={{ marginLeft: 8 }}
-                type="primary"
-              >
-                完成
-              </Button>
-              <Checkbox className={style.allCheck} onChange={allCheckOnChange}>全选</Checkbox>
-            </FormItem> :
-            <FormItem>
-              <Button type="primary" htmlType="submit">
-                搜索
-              </Button>
-              <Button
-                onClick={() => {
-                  management(true)
-                }}
-                style={{ marginLeft: 8 }}
-              >
-                管理
-              </Button>
-            </FormItem>}
-        </Form>
-        <Card className={style.cards} onClick={() => setAddModalVisible(true)}>
-          <img src={plus} width={50} height={50} alt='' />
-          <p>新增订阅</p>
-        </Card>
-        {
-          cards.map((card, index) => {
-            return (
-              <Card className={style.cards} key={card.id + index} onClick={() => startProject(card)}>
-                <img src={block} width={50} height={50} alt='' />
-                <p>{card.chineseName}</p>
-                <span>{card.englishName}</span>
-                { isManege ?  <Checkbox className={style.checkBox} checked={card.checked} onClick={(e)=>{e.stopPropagation()}}  onChange={()=>{checkOnChange(card.id)}} /> : null}
-              </Card>
+
+          {
+            isManage ? (
+              <>
+                <FormItem>
+                  <Button disabled={selectList.length <= 0} onClick={()=>{deleteItem()}}>
+                    取消订阅
+                  </Button>
+                </FormItem>
+                <FormItem>
+                  <Button
+                    onClick={() => {
+                      management(false);
+                    }}
+                    type="primary"
+                  >
+                    完成
+                  </Button>
+                  <Checkbox className={style.allCheck} onChange={allCheckOnChange}>全选</Checkbox>
+                </FormItem>
+              </>
+            ) : (
+              <>
+                <FormItem>
+                  <Button type="primary" htmlType="submit">
+                    搜索
+                  </Button>
+                </FormItem>
+                <FormItem>
+                  <Button
+                    onClick={() => {
+                      management(true)
+                    }}
+                  >
+                    管理
+                  </Button>
+                </FormItem>
+              </>
             )
-          })
-        }
+          }
+        </Form>
+
+        <div className={style['card-container']}>
+          {/* 新增订阅 */}
+          <Card className={style['card-item']} onClick={() => setAddModalVisible(true)}>
+            <img src={plus} width={50} height={50} alt='' />
+            <p>新增订阅</p>
+          </Card>
+
+          {/* 已经订阅的 */}
+          {
+            cards.map((card, index) => {
+              return (
+                <Card className={style['card-item']} key={card.id + index}>
+                  <img src={block} width={50} height={50} alt='' />
+                  <p>{card.chineseName}</p>
+                  <span>{card.englishName}</span>
+                  { isManage ?  <Checkbox className={style.checkBox} checked={card.checked} onClick={(e)=>{e.stopPropagation()}}  onChange={()=>{checkOnChange(card.id)}} /> : null}
+                </Card>
+              )
+            })
+          }
+        </div>
       </Content>
+
+      {/* 分页器 */}
       <div className={style.pageBox}>
         <Pagination defaultCurrent={pageNum} total={total} onChange={pageChange}/>
       </div>

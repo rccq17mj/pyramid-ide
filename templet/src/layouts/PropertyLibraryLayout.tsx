@@ -1,5 +1,5 @@
-import React, {FunctionComponent, useEffect, useState} from 'react';
-import styles from './ProjectModalLayout.less';
+import React, {FunctionComponent, useState} from 'react';
+import styles from './PropertyLayout.less';
 import {Icon} from "antd";
 import router from "umi/router";
 
@@ -16,12 +16,12 @@ interface IProps {
 const Component: FunctionComponent<IProps> = props => {
 
   const [leftButtons, setLeftButtons] = useState<ILeftBtn[]>([
-/*    {
-      icon: 'border',
-      name: '模块',
-      url: '/property/PropertyLibrary/PropertyLibraryModule',
-      open: true
-    },*/
+    /*    {
+          icon: 'border',
+          name: '模块',
+          url: '/property/PropertyLibrary/PropertyLibraryModule',
+          open: true
+        },*/
     {
       icon: 'appstore',
       name: '区块',
@@ -30,17 +30,17 @@ const Component: FunctionComponent<IProps> = props => {
     }
   ]);
 
-/*  useEffect(() => {
-    // clickLeftBtn(leftButtons[2], 2);
-    leftButtons.forEach((item)=>{
-      if(item.url == window.location.pathname){
-        item.open = true
-      }else{
-        item.open = false
-      }
-    })
-    setLeftButtons(leftButtons)
-  });*/
+  /*  useEffect(() => {
+      // clickLeftBtn(leftButtons[2], 2);
+      leftButtons.forEach((item)=>{
+        if(item.url == window.location.pathname){
+          item.open = true
+        }else{
+          item.open = false
+        }
+      })
+      setLeftButtons(leftButtons)
+    });*/
 
   const clickLeftBtn = (btn: ILeftBtn, index: number) => {
     router.push(btn.url);
