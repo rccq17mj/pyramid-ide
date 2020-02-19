@@ -1,82 +1,86 @@
 .main {
-    :global {
+  :global {
+    .ant-card-body {
+      background-color: rgba(33, 33, 33, 1);
+    }
+  }
+
+  .inputAppName {
+    background-color: #212121;
+    color: rgba(255, 255, 255, 0.65);
+  }
+
+  :global {
+    .ant-checkbox-wrapper {
+      color: white;
+    }
+  }
+  .rightBox{
+    Button{
+      margin-right: 1rem;
+    }
+  }
+
+  .cardBody {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    margin: 1rem 0;
+
+    .flexBox {
+      width: 14.19rem;
+      height: 10.5rem;
+      color: white;
+      justify-content: center;
+      align-items: center;
+      background: rgba(49, 49, 49, 1);
+      border-radius: 5px;
+      border: 1px solid rgba(234, 234, 234, 1);
+      padding: 0;
+      margin: 0 20px 20px 0;
+      text-align: center;
+      cursor: pointer;
+
+      p {
+        text-align: center;
+        line-height: 1.2rem;
+        margin: 0;
+        color: rgba(255, 255, 255, 0.45);
+      }
+
+      p.name {
+        color: rgba(255, 255, 255, 1);
+      }
+
+      p.path {
+        word-break:break-all;
+      }
+
+      .addBox {
+        margin-top: 2rem;
+      }
+
+      .add {
+        font-size: 4rem;
+        font-weight: lighter;
+      }
+
+      .iconApp {
+        width: 30%;
+      }
+
+      :global {
         .ant-card-body {
-            background-color: rgba(33, 33, 33, 1);
+          padding: 1rem;
+          background: none;
         }
+      }
+
+      .checkItem {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+      }
     }
-
-    .inputAppName {
-        background-color: #212121;
-        color: rgba(255, 255, 255, 0.65);
-    }
-
-    :global {
-        .ant-checkbox-wrapper {
-            color: white;
-        }
-    }
-    .rightBox{
-        Button{
-            margin-right: 1rem;
-        }
-    }
-
-    .cardBody {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: flex-start;
-        margin: 1rem 0;
-
-        .flexBox {
-            width: 14.19rem;
-            height: 10.5rem;
-            color: white;
-            justify-content: center;
-            align-items: center;
-            background: rgba(49, 49, 49, 1);
-            border-radius: 0.5rem;
-            border: 0.06rem solid rgba(234, 234, 234, 1);
-            padding: 0;
-            margin: 1rem 0.5rem;
-            text-align: center;
-
-            p {
-                text-align: center;
-                line-height: 1.2rem;
-                margin: 0;
-                color: rgba(255, 255, 255, 0.45);
-            }
-
-            p.name {
-                color: rgba(255, 255, 255, 1);
-            }
-
-            .addBox {
-                margin-top: 2rem;
-            }
-
-            .add {
-                font-size: 4rem;
-                font-weight: lighter;
-            }
-
-            .iconApp {
-                width: 30%;
-            }
-
-            :global {
-                .ant-card-body {
-                    padding: 1rem;
-                    background: none;
-                }
-            }
-
-            .checkItem {
-                position: absolute;
-                top: 10px;
-                right: 10px;
-            }
-        }
-    }
-
+  }
 }

@@ -6,7 +6,6 @@ import { PyramidUISendProjectCreateAction, PyramidUISendProjectChoosePathAction 
 import {PyramidUIActionTypes} from "@/core/pyramid-ui/action";
 import {PyramidUIReceiveProjectChoosePathAction} from "@/core/pyramid-ui/action/pyramid-ui-receive.action";
 import {EPlatform} from "@/enums/platform.enum";
-import styles from './Index.less';
 
 const FormItem = Form.Item;
 const { TabPane } = Tabs;
@@ -18,6 +17,8 @@ interface IProps extends FormComponentProps {
 }
 
 const Component: FunctionComponent<IProps> = props => {
+  const [activeKey, setActiveKey] = useState<string>('1');
+
   const {
     form,
     form: { getFieldDecorator },
@@ -32,7 +33,9 @@ const Component: FunctionComponent<IProps> = props => {
     { label: 'yarn', value: 'yarn' },
   ];
 
-  const [congoOpen, setCongoOpen] = useState(false);
+  const handleSelectPath = () => {
+    pyramidUiService.sendMessageFn(new PyramidUISendProjectChoosePathAction());
+  };
 
   useEffect(() => {
     const messageKey = pyramidUiService.getMessageFn((action: PyramidUIReceiveProjectChoosePathAction) => {
@@ -55,7 +58,11 @@ const Component: FunctionComponent<IProps> = props => {
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
-    form.validateFields((err, fieldsValue) => {
+    form.validateFieldsAndScroll((err, fieldsValue) => {
+      if (err) {
+        return;
+      }
+
       switch (props.params.platform) {
         case EPlatform.PC:
           pyramidUiService.sendMessageFn(new PyramidUISendProjectCreateAction({...fieldsValue,platform: EPlatform.PC}));
@@ -64,7 +71,7 @@ const Component: FunctionComponent<IProps> = props => {
           pyramidUiService.sendMessageFn(new PyramidUISendProjectCreateAction({...fieldsValue,platform: EPlatform.MOBILE}));
           break;
       }
-      props.closeModal(true)
+      props.closeModal(true);
     });
   };
 
@@ -77,164 +84,152 @@ const Component: FunctionComponent<IProps> = props => {
       footer={null}
       onCancel={() => props.closeModal()}>
 
-      <Tabs defaultActiveKey="1">
+      <Tabs activeKey={activeKey} onChange={activeKey => {
+        setActiveKey(activeKey);
+      }}>
         {/* 新建 */}
         <TabPane tab="新建应用" key="1">
-          <Form onSubmit={handleSubmit} className={styles.formBox}>
-            <FormItem label={'中文名称'}>
-              {getFieldDecorator(`name_cn`, {
-                rules: [
-                  { required: true, message: '必填' }
-                ],
-              })(<Input placeholder="请输入" />)}
-            </FormItem>
+          {
+            activeKey === '1' ? (
+              <Form onSubmit={handleSubmit}>
+                <FormItem label={'中文名称'}>
+                  {getFieldDecorator(`name_cn`, {
+                    rules: [
+                      { required: true, message: '必填' }
+                    ],
+                  })(<Input placeholder="请输入" />)}
+                </FormItem>
 
-            <FormItem label='英文名称'>
-              {getFieldDecorator(`name`, {
-                rules: [
-                  { required: true, message: '必填' },
-                ],
-              })(<Input placeholder="请输入" />)}
-            </FormItem>
-
-            <FormItem label='目录'>
-              {getFieldDecorator(`path`, {
-                rules: [
-                  { required: true, message: '必填' }
-                ],
-              })(<Input placeholder="请选择" onClick={() => {
-                pyramidUiService.sendMessageFn(new PyramidUISendProjectChoosePathAction());
-              }} />)}
-            </FormItem>
-
-            <FormItem label={'包管理器'}>
-              {getFieldDecorator('pkgmt', {
-                initialValue: pkgmtOptions[0].value,
-                rules: [
-                  { required: true, message: '必选' }
-                ],
-              })(
-                <Select
-                  placeholder="包管理器"
-                  allowClear={false}
-                >
-                  {pkgmtOptions.map(data => {
-                    return (
-                      <Select.Option value={data.value} key={data.value}>
-                        {data.label}
-                      </Select.Option>
-                    );
-                  })}
-                </Select>
-              )}
-            </FormItem>
-
-            <FormItem label='模板工程地址'>
-              {getFieldDecorator('template', {
-                initialValue: templetOptions[0].value,
-                rules: [
-                  { required: true, message: '必选' }
-                ]
-              })(
-                <Select
-                  placeholder="模板工程地址"
-                  allowClear={false}
-                >
-                  {templetOptions.map(data => {
-                    return (
-                      <Select.Option value={data.value} key={data.value}>
-                        {data.label}
-                      </Select.Option>
-                    );
-                  })}
-                </Select>
-              )}
-            </FormItem>
-
-            <FormItem label='备注'>
-              {getFieldDecorator(`remark`, {
-                rules: [
-                ],
-              })(<Input placeholder="请输入" />)}
-            </FormItem>
-
-            <FormItem label='是否接入热果'>
-              {getFieldDecorator(`accessCongo`, {
-                rules: [
-                  { required: true, message: '必选' }
-                ],
-              })(
-                <Switch
-                  checkedChildren={<Icon type="check" />}
-                  unCheckedChildren={<Icon type="close" />}
-                />
-              )}
-            </FormItem>
-
-            {/*<p style={{ marginTop: '10px' }}>是否接入热果？</p>*/}
-
-
-
-            <div>
-              {congoOpen ?
-                <div className={styles.congoBox}>
-                  <FormItem>
-                    请选择项目 {getFieldDecorator(`remark`, {
+                <FormItem label='英文名称'>
+                  {getFieldDecorator(`name`, {
                     rules: [
                       { required: true, message: '必填' },
-                      {
-                      },
                     ],
-                  })(<Input placeholder="请选择项目" />)}
-                  </FormItem>
-                  <FormItem>
-                    appKey {getFieldDecorator(`remark`, {
-                    rules: [
-                      { required: true, message: '必填' },
-                      {
-                      },
-                    ],
-                  })(<Input placeholder="appKey" />)}
-                  </FormItem>
-                  <FormItem>
-                    应用编码 {getFieldDecorator(`remark`, {
-                    rules: [
-                      { required: true, message: '必填' },
-                      {
-                      },
-                    ],
-                  })(<Input placeholder="应用编码" />)}
-                  </FormItem>
-                </div> : null}
-            </div>
+                  })(<Input placeholder="请输入" />)}
+                </FormItem>
 
-            <FormItem >
-              <Button type="primary" htmlType="submit" style={{ marginRight: '2rem', marginTop: '1rem' }}>
-                创建
-              </Button>
-            </FormItem>
-          </Form>
+                <FormItem label='目录'>
+                  {getFieldDecorator(`path`, {
+                    rules: [
+                      { required: true, message: '必填' }
+                    ],
+                  })(<Input placeholder="请选择" onClick={() => {
+                    handleSelectPath();
+                  }} />)}
+                </FormItem>
 
+                <FormItem label={'包管理器'}>
+                  {getFieldDecorator('pkgmt', {
+                    initialValue: pkgmtOptions[0].value,
+                    rules: [
+                      { required: true, message: '必选' }
+                    ],
+                  })(
+                    <Select
+                      placeholder="包管理器"
+                      allowClear={false}
+                    >
+                      {pkgmtOptions.map(data => {
+                        return (
+                          <Select.Option value={data.value} key={data.value}>
+                            {data.label}
+                          </Select.Option>
+                        );
+                      })}
+                    </Select>
+                  )}
+                </FormItem>
+
+                <FormItem label='模板工程地址'>
+                  {getFieldDecorator('template', {
+                    initialValue: templetOptions[0].value,
+                    rules: [
+                      { required: true, message: '必选' }
+                    ]
+                  })(
+                    <Select
+                      placeholder="模板工程地址"
+                      allowClear={false}
+                    >
+                      {templetOptions.map(data => {
+                        return (
+                          <Select.Option value={data.value} key={data.value}>
+                            {data.label}
+                          </Select.Option>
+                        );
+                      })}
+                    </Select>
+                  )}
+                </FormItem>
+
+                <FormItem label='备注'>
+                  {getFieldDecorator(`remark`, {
+                    rules: [
+                    ],
+                  })(<Input placeholder="请输入" />)}
+                </FormItem>
+
+                <FormItem label='是否接入热果'>
+                  {getFieldDecorator(`accessCongo`, {
+                    initialValue: false,
+                    valuePropName: 'checked',
+                    rules: [
+                      { required: true, message: '必选' }
+                    ],
+                  })(
+                    <Switch
+                      checkedChildren={<Icon type="check" />}
+                      unCheckedChildren={<Icon type="close" />}
+                    />
+                  )}
+                </FormItem>
+
+                {
+                  form.getFieldValue('accessCongo') ? (
+                    <>
+                      <FormItem label='appKey'>
+                        {getFieldDecorator(`appKey`, {
+                          rules: [
+                            { required: true, message: '必填' },
+                            {
+                            },
+                          ],
+                        })(<Input placeholder="请输入" />)}
+                      </FormItem>
+                    </>
+                  ) : null
+                }
+
+                <FormItem >
+                  <Button type="primary" htmlType="submit">
+                    创建
+                  </Button>
+                </FormItem>
+              </Form>
+            ) : null
+          }
         </TabPane>
 
         {/* 导入应用 */}
         <TabPane tab="导入应用" key="2">
-          <div className={styles.mainBox}>
-            <Form>
-              <FormItem>
-                请选择目录{getFieldDecorator(`path`, {
-                rules: [
-                  { required: true, message: '必填' }
-                ],
-              })(<Input placeholder="请选择目录" onClick={() => handleSelectPath()} />)}
-              </FormItem>
-              <FormItem >
-                <Button type="primary" htmlType="submit" style={{ marginTop: '1rem' }}>
-                  确定
-                </Button>
-              </FormItem>
-            </Form>
-          </div>
+          {
+            activeKey === '2' ? (
+              <Form>
+                <FormItem label='请选择目录'>
+                  {getFieldDecorator(`importPath`, {
+                    rules: [
+                      { required: true, message: '必填' }
+                    ],
+                  })(<Input placeholder="请选择" onClick={() => handleSelectPath()} />)}
+                </FormItem>
+                <FormItem >
+                  <Button type="primary" htmlType="submit">
+                    确定
+                  </Button>
+                </FormItem>
+              </Form>
+            ) : null
+          }
         </TabPane>
 
       </Tabs>

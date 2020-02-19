@@ -145,7 +145,7 @@ const Component: FunctionComponent<IProps> = props => {
 
   return (
     <div className={styles.main}>
-      <Card bordered={false} className={styles.cards}>
+      <Card bordered={false}>
         {/* 表单 */}
         <Form
           layout="inline"
@@ -190,24 +190,26 @@ const Component: FunctionComponent<IProps> = props => {
         </Form>
 
         <div className={styles.cardBody}>
-          <div className={styles.flexBox}>
+          {/* 新增应用 */}
+          <div className={styles.flexBox} onClick={() => {
+            setModalParams({platform});
+            setAddModalVisible(true);
+          }}>
             <div className={styles.addBox}>
-              <Icon type="plus" onClick={() => {
-                setModalParams({platform});
-                setAddModalVisible(true);
-              }} className={styles.add} />
+              <Icon type="plus" className={styles.add} />
               <p className={styles.name}>新增应用</p>
             </div>
           </div>
 
+          {/* 已经创建的应用 */}
           {
             cards.map((card, index) => {
               return (
-                <Card key={card._id} className={styles.flexBox} hoverable onClick={() => startProject(card)}>
+                <Card key={card._id} className={styles.flexBox} onClick={() => startProject(card)}>
                   <img src={iconApp} alt="" className={styles.iconApp} />
                   <p className={styles.name}>{card.name}</p>
-                  <p>{card.path}</p>
-                  <p>V1.0.1</p>
+                  <p className={styles.path}>{card.path}</p>
+                  <p>V1.0.0</p>
                   {editBoxShow ?
                     <Checkbox
                       onChange={(e) => { onChange(e, index) }}
