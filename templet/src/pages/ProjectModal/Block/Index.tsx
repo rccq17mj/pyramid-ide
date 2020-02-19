@@ -16,6 +16,7 @@ import {
   PyramidUIReceiveActionsUnion,
 } from "@/core/pyramid-ui/action/pyramid-ui-receive.action";
 import LibraryModal from "@/pages/Property/PropertyLibrary/PropertyLibraryModal";
+import {EBlockPackageAssemblyType, EBlockPackageSource} from "@/dicts/block-package.dict";
 
 const { SubMenu } = Menu;
 const { TabPane } = Tabs;
@@ -25,7 +26,7 @@ interface IProps {}
 const Component: FunctionComponent<IProps> = () => {
   const localStorageModuleMenusKey = 'module-menus-key';
 
-  const [tabActiveKey, setTabActiveKey] = useState<string>('1');
+  const [tabActiveKey, setTabActiveKey] = useState<EBlockPackageSource>(EBlockPackageSource.Community);
 
   const [current, setCurrent] = useState<number>(1);
   const [total, setTotal] = useState<number>(0);
@@ -73,7 +74,7 @@ const Component: FunctionComponent<IProps> = () => {
    * 获取区块包列表
    */
   const queryPackages = () => {
-    if (tabActiveKey === '1') {// 社区
+    if (tabActiveKey === EBlockPackageSource.Community) {// 社区
       // TODO 需要增加参数
       const params = {};
       params['pageNum'] = current;
@@ -87,7 +88,7 @@ const Component: FunctionComponent<IProps> = () => {
           setMenus(list);
         }
       });
-    } else if (tabActiveKey === '2') {// 私有
+    } else if (tabActiveKey === EBlockPackageSource.Private) {// 私有
 
     }
   };
@@ -167,7 +168,9 @@ const Component: FunctionComponent<IProps> = () => {
       <div className={styles.left}>
         <div className={styles['left-container']}>
           {/* TAB */}
-          <Tabs className={styles.tabs} activeKey={tabActiveKey} onChange={key => setTabActiveKey(key)}>
+          <Tabs className={styles.tabs} activeKey={tabActiveKey} onChange={key => {
+            setTabActiveKey(key as EBlockPackageSource)
+          }}>
             <TabPane tab="社区" key="1">
             </TabPane>
             <TabPane tab="私有" key="2">
@@ -307,7 +310,7 @@ const Component: FunctionComponent<IProps> = () => {
       {subscribeModalVisible ? (
         <LibraryModal
           modalVisible={subscribeModalVisible}
-          params={{type: 1, blockType: 1}}
+          params={{source: tabActiveKey, assemblyType: EBlockPackageAssemblyType.BLOCK}}
           closeModal={() => {
             setSubscribeModalVisible(false);
             // 重新获取数据

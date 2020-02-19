@@ -5,6 +5,7 @@ import {FormComponentProps} from "antd/lib/form";
 import block from "@/assets/block.png";
 import {blockPackageRequest} from "@/requests/block-package.request";
 import LibraryDetailModal from './Detail';
+import {EBlockPackageAssemblyType, EBlockPackageEndType, EBlockPackageSource} from "@/dicts/block-package.dict";
 
 const FormItem = Form.Item;
 const { Content } = Layout;
@@ -19,10 +20,13 @@ interface ILeftBtn {
 interface IProps extends FormComponentProps{
   modalVisible: boolean;
   closeModal: (data?: any) => void;
-  // TODO 以后要传区块还是模块参数
   params: {
-    blockType: 1 | 2 // 1-区块 2-模块
-    type: 1 | 2 // 1-社区 2-私有
+    // 组件类型
+    assemblyType: EBlockPackageAssemblyType
+    // 来源
+    source: EBlockPackageSource
+    // TODO 端类型
+    endType?: EBlockPackageEndType
   }
 }
 const Component: FunctionComponent<IProps> = props => {
