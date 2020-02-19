@@ -3,9 +3,10 @@ import { Tabs, Button, Select, Form, Input, Modal, Switch, Icon } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 import { pyramidUiService } from '@/core/pyramid-ui/service/pyramid-ui.service';
 import { PyramidUISendProjectCreateAction, PyramidUISendProjectChoosePathAction } from "@/core/pyramid-ui/action/pyramid-ui-send.action";
-import styles from './Index.less';
 import {PyramidUIActionTypes} from "@/core/pyramid-ui/action";
 import {PyramidUIReceiveProjectChoosePathAction} from "@/core/pyramid-ui/action/pyramid-ui-receive.action";
+import {EPlatform} from "@/enums/platform.enum";
+import styles from './Index.less';
 
 const FormItem = Form.Item;
 const { TabPane } = Tabs;
@@ -13,10 +14,10 @@ const { TabPane } = Tabs;
 interface IProps extends FormComponentProps {
   modalVisible: boolean;
   closeModal: (data?: any) => void;
+  params: {platform: EPlatform}
 }
 
 const Component: FunctionComponent<IProps> = props => {
-
   const {
     form,
     form: { getFieldDecorator },
@@ -29,8 +30,8 @@ const Component: FunctionComponent<IProps> = props => {
 
   const pkgmtOptions = [
     { label: 'yarn', value: 'yarn' },
-    { label: 'npm', value: 'npm' }
   ];
+
   const [congoOpen, setCongoOpen] = useState(false);
 
   useEffect(() => {
@@ -55,24 +56,16 @@ const Component: FunctionComponent<IProps> = props => {
     e.preventDefault();
 
     form.validateFields((err, fieldsValue) => {
-      let urlName = window.location.pathname;
-      if(urlName==='/pc'){
-        pyramidUiService.sendMessageFn(new PyramidUISendProjectCreateAction({...fieldsValue,platform:'pc'}));
-      }else{
-        pyramidUiService.sendMessageFn(new PyramidUISendProjectCreateAction({...fieldsValue,platform:'mobile'}));
+      switch (props.params.platform) {
+        case EPlatform.PC:
+          pyramidUiService.sendMessageFn(new PyramidUISendProjectCreateAction({...fieldsValue,platform: EPlatform.PC}));
+          break;
+        case EPlatform.MOBILE:
+          pyramidUiService.sendMessageFn(new PyramidUISendProjectCreateAction({...fieldsValue,platform: EPlatform.MOBILE}));
+          break;
       }
-
       props.closeModal(true)
-
     });
-  };
-
-  const handleSelectPath = () => {
-    pyramidUiService.sendMessageFn(new PyramidUISendProjectChoosePathAction());
-  };
-
-  const onChange = (checked) => {
-    setCongoOpen(checked);
   };
 
   return (
@@ -85,36 +78,45 @@ const Component: FunctionComponent<IProps> = props => {
       onCancel={() => props.closeModal()}>
 
       <Tabs defaultActiveKey="1">
+        {/* 新建 */}
         <TabPane tab="新建应用" key="1">
           <Form onSubmit={handleSubmit} className={styles.formBox}>
-            <FormItem>
-              中文名称{getFieldDecorator(`name_cn`, {
-              rules: [
-                { required: true, message: '必填' }
-              ],
-            })(<Input placeholder="中文名称" />)}
-            </FormItem>
-            <FormItem>
-              英文名称 {getFieldDecorator(`name`, {
-              rules: [
-                { required: true, message: '必填' },
-              ],
-            })(<Input placeholder="英文名称" />)}
-            </FormItem>
-            <FormItem>
-              目录{getFieldDecorator(`path`, {
-              rules: [
-                { required: true, message: '必填' }
-              ],
-            })(<Input placeholder="目录" onClick={() => handleSelectPath()} />)}
+            <FormItem label={'中文名称'}>
+              {getFieldDecorator(`name_cn`, {
+                rules: [
+                  { required: true, message: '必填' }
+                ],
+              })(<Input placeholder="请输入" />)}
             </FormItem>
 
-            <FormItem>
-              包管理器
-              {getFieldDecorator('pkgmt', { initialValue: pkgmtOptions[0].value })(
+            <FormItem label='英文名称'>
+              {getFieldDecorator(`name`, {
+                rules: [
+                  { required: true, message: '必填' },
+                ],
+              })(<Input placeholder="请输入" />)}
+            </FormItem>
+
+            <FormItem label='目录'>
+              {getFieldDecorator(`path`, {
+                rules: [
+                  { required: true, message: '必填' }
+                ],
+              })(<Input placeholder="请选择" onClick={() => {
+                pyramidUiService.sendMessageFn(new PyramidUISendProjectChoosePathAction());
+              }} />)}
+            </FormItem>
+
+            <FormItem label={'包管理器'}>
+              {getFieldDecorator('pkgmt', {
+                initialValue: pkgmtOptions[0].value,
+                rules: [
+                  { required: true, message: '必选' }
+                ],
+              })(
                 <Select
                   placeholder="包管理器"
-                  allowClear={true}
+                  allowClear={false}
                 >
                   {pkgmtOptions.map(data => {
                     return (
@@ -127,12 +129,16 @@ const Component: FunctionComponent<IProps> = props => {
               )}
             </FormItem>
 
-            <FormItem>
-              模板工程
-              {getFieldDecorator('template', { initialValue: templetOptions[0].value })(
+            <FormItem label='模板工程地址'>
+              {getFieldDecorator('template', {
+                initialValue: templetOptions[0].value,
+                rules: [
+                  { required: true, message: '必选' }
+                ]
+              })(
                 <Select
-                  placeholder="模板工程"
-                  allowClear={true}
+                  placeholder="模板工程地址"
+                  allowClear={false}
                 >
                   {templetOptions.map(data => {
                     return (
@@ -145,22 +151,30 @@ const Component: FunctionComponent<IProps> = props => {
               )}
             </FormItem>
 
-            <FormItem>
-              备注 {getFieldDecorator(`remark`, {
-              rules: [
-                { required: true, message: '必填' },
-                {
-                },
-              ],
-            })(<Input placeholder="备注" />)}
+            <FormItem label='备注'>
+              {getFieldDecorator(`remark`, {
+                rules: [
+                ],
+              })(<Input placeholder="请输入" />)}
             </FormItem>
-            <p style={{ marginTop: '10px' }}>是否接入热果？</p>
 
-            <Switch
-              checkedChildren={<Icon type="check" />}
-              unCheckedChildren={<Icon type="close" />}
-              onChange={onChange}
-            />
+            <FormItem label='是否接入热果'>
+              {getFieldDecorator(`accessCongo`, {
+                rules: [
+                  { required: true, message: '必选' }
+                ],
+              })(
+                <Switch
+                  checkedChildren={<Icon type="check" />}
+                  unCheckedChildren={<Icon type="close" />}
+                />
+              )}
+            </FormItem>
+
+            {/*<p style={{ marginTop: '10px' }}>是否接入热果？</p>*/}
+
+
+
             <div>
               {congoOpen ?
                 <div className={styles.congoBox}>
@@ -202,6 +216,8 @@ const Component: FunctionComponent<IProps> = props => {
           </Form>
 
         </TabPane>
+
+        {/* 导入应用 */}
         <TabPane tab="导入应用" key="2">
           <div className={styles.mainBox}>
             <Form>
@@ -220,6 +236,7 @@ const Component: FunctionComponent<IProps> = props => {
             </Form>
           </div>
         </TabPane>
+
       </Tabs>
 
     </Modal>

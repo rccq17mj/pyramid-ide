@@ -103,8 +103,7 @@ class receive {
                         break;
                     case ActionTypes.SEND_PROJECT_CREATE:
                             const projectInfo = arg.payload;
-                            // projectService.passAction('cmd-project-create', projectInfo, self.window_objs.runWindow)
-                            this.pyramidControl.createProject(projectInfo, this.window_objs.runWindow)
+                            this.pyramidControl.createProject(projectInfo, this.window_objs.runWindow);
                         break;
                     // 项目删除    
                     case ActionTypes.SEND_PROJECT_REMOVE:
@@ -116,6 +115,7 @@ class receive {
                     // 查询项目列表的请求
                     case ActionTypes.SEND_PROJECT_LIST:
                         const option = arg.payload.hasOwnProperty('platform') ? { platform: arg.payload.platform } : {};
+                        console.log(option);
                         this.pyramidControl.findProject(option, (res) => {
                             this.window_objs.mainWindow.webContents.send('site-message',
                                 {
@@ -125,7 +125,7 @@ class receive {
                                     }
                                 }
                             );
-                        })
+                        });
                         break;
                     // 路径选择
                     case ActionTypes.SEND_PROJECT_CHOOSE_PATH:

@@ -4,6 +4,7 @@ import {
 } from "@/core/pyramid-ui/action/pyramid-ui-receive.action";
 import {PyramidUIAction, PyramidUIActionTypes} from "@/core/pyramid-ui/action/index";
 import {ECmdResultCode, getCmdResultStrByCode} from "../../../../../core/config/cmdResultCode";
+import {EPlatform} from "@/enums/platform.enum";
 
 
 // 所有动作集合（注意格式：PyramidUISend + 模块 + 功能 + 定义 + Action）
@@ -76,7 +77,7 @@ export class PyramidUISendCMDExecuteResultAction implements PyramidUIAction {
 export class PyramidUISendProjectCreateAction implements PyramidUIAction {
   readonly type = PyramidUIActionTypes.SEND_PROJECT_CREATE;
   constructor(public payload: {
-    platform: 'pc' | 'mobile',
+    platform: EPlatform,
     // 其他项目信息
     [key: string]: any;
   }) {}
@@ -90,7 +91,7 @@ export class PyramidUISendProjectOpenWindowAction implements PyramidUIAction {
 export class PyramidUISendProjectListAction implements PyramidUIAction {
   readonly type = PyramidUIActionTypes.SEND_PROJECT_LIST;
   constructor(public payload: {
-    platform: 'pc' | 'mobile'
+    platform: EPlatform
   }) {}
 }
 // 请求启动项目

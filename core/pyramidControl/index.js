@@ -1,4 +1,4 @@
-var Datastore = require('nedb'), db = new Datastore({
+const Datastore = require('nedb'), db = new Datastore({
     filename: 'public/projects.db',
     autoload: true
   }),blockdb = new Datastore({
@@ -283,46 +283,46 @@ var Datastore = require('nedb'), db = new Datastore({
           // 将此命令发送给渲染窗口执行
           runWindow.webContents.send('cmd-message', cmdArg);
     }
-  
-    /**
-     * 创建项目
-     */
-    createProject(projectInfo,runWindow) {
-      // pyramid init temp1 --skip-inquirer --project-type=PC projectManager=yarn
-  
-      // 保存项目信息
-      if(projectInfo.hasOwnProperty('name')) {
-        new DataUse(db).save(projectInfo).then(msg=>{})
+
+      /**
+       * 创建项目
+       */
+      createProject(projectInfo,runWindow) {
+          // pyramid init temp1 --skip-inquirer --project-type=PC projectManager=yarn
+
+          // 保存项目信息
+          if(projectInfo.hasOwnProperty('name')) {
+              new DataUse(db).save(projectInfo).then(()=>{});
+          }
+
+          // 用项目信息拼接创建执行命令
+          const cmdArg  = {
+              channel: 'cmd-message',
+              cmdStr: `pyramid init ${projectInfo.name} --skip-inquirer —package-manage=${projectInfo.pkgmt} --project-url=direct:${projectInfo.template}`,
+              cwd: `${projectInfo.path}`,
+              flag: 'cmd-children-project-create'
+          };
+
+          // 将此命令发送给渲染窗口执行
+          runWindow.webContents.send('cmd-message', cmdArg);
       }
-  
-      // this.saveProject(projectInfo)
-      // 用项目信息拼接创建执行命令
-      const cmdArg  = {
-        channel: 'cmd-message',
-        cmdStr: `pyramid init ${projectInfo.name} --skip-inquirer —package-manage=${projectInfo.pkgmt} --project-url=direct:${projectInfo.template}`,
-        cwd: `${projectInfo.path}`,
-        flag: 'cmd-children-project-create'
-      }
-  
-      // 将此命令发送给渲染窗口执行
-      runWindow.webContents.send('cmd-message', cmdArg);
-    }
-  
-    /**
-     * 查找全部项目
-     * @param {*} callback
-     */
+
+      /**
+       * 查找全部项目
+       * @param option
+       * @param callback
+       */
     findProject(option, callback) {
       new DataUse(db).getRows(option).then(rows => {
-        if(rows.length > 0){
+        if (rows.length > 0){
           callback(rows);
         }else {
           callback([]);
         }
-      }).catch(e=>{
+      }).catch(()=>{
         callback([]);
       })
-    }
+    };
   
     /**
      * 查找全部区块包
