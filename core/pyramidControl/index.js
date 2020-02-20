@@ -329,7 +329,7 @@ class cliBridge {
     const cmdArg = {
       channel: 'cmd-message',
       cmdStr: `${info.pkgmt} install`,
-      cwd: `${info.path}`,
+      cwd: `${info.path}/${info.name}`,
       flag: 'cmd-children-project-import'
     };
     runWindow.webContents.send('cmd-message', cmdArg);

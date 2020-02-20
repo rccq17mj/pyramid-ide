@@ -50,6 +50,7 @@ const Component: FunctionComponent<IProps> = props => {
               import_name: import_name
             });
           else
+            files = files.substring(0,site);
             form.setFieldsValue({
               import_path: files,
               import_name: import_name
