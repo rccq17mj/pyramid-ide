@@ -17,11 +17,11 @@ const Home = () => {
 
   useEffect(() => {
     // 初始化
-    const env = sessionStorage.getItem('env');
+    const env = localStorage.getItem('env');
     if(!env){
       const messageKey = pyramidUiService.getMessageFn((pyramidAction: PyramidUIReceiveInitResultAction) => {
         let payload = pyramidAction.payload;
-        sessionStorage.setItem('env', JSON.stringify(payload));
+        localStorage.setItem('env', JSON.stringify(payload));
         setEnv(payload)
       });
       return () => {
