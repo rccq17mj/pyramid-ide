@@ -1,9 +1,10 @@
 import React, {FunctionComponent, useEffect, useState} from "react";
-import {Button, Form, Icon, Input, Menu, Pagination, Spin, Tabs} from "antd";
+import {Button, Form, Icon, Input, Menu, Spin, Tabs} from "antd";
 import {IBlockItem} from "@/interfaces/block/block.interface";
 import {pyramidUiService} from "@/core/pyramid-ui/service/pyramid-ui.service";
 import {
   PyramidUISendBlockPackageInfoAction,
+  PyramidUISendGetPrivateBlockPackageListAction,
   PyramidUISendProjectBlockSelectAction
 } from "@/core/pyramid-ui/action/pyramid-ui-send.action";
 import {PyramidUIActionTypes} from "@/core/pyramid-ui/action";
@@ -12,11 +13,10 @@ import {EBlockPackageFetchStatus} from "@/enums/block-package.enum";
 import * as _ from 'lodash';
 import styles from './Index.less';
 import {IBlockPackage, IBlockPackageInfo} from "@/interfaces/block-package/block-package.interface";
-import {
-  PyramidUIReceiveActionsUnion,
-} from "@/core/pyramid-ui/action/pyramid-ui-receive.action";
+import {PyramidUIReceiveActionsUnion,} from "@/core/pyramid-ui/action/pyramid-ui-receive.action";
 import LibraryModal from "@/pages/Property/PropertyLibrary/PropertyLibraryModal";
-import {EBlockPackageAssemblyType, EBlockPackageSource} from "@/dicts/block-package.dict";
+import {BlockPackageSourceDict, EBlockPackageAssemblyType, EBlockPackageSource} from "@/dicts/block-package.dict";
+import LibraryPrivateModal from "@/pages/Property/PropertyLibrary/PropertyLibraryPrivateModal";
 
 const { SubMenu } = Menu;
 const { TabPane } = Tabs;
@@ -28,8 +28,8 @@ const Component: FunctionComponent<IProps> = () => {
 
   const [tabActiveKey, setTabActiveKey] = useState<EBlockPackageSource>(EBlockPackageSource.Community);
 
-  const [current, setCurrent] = useState<number>(1);
-  const [total, setTotal] = useState<number>(0);
+  // const [current, setCurrent] = useState<number>(1);
+  // const [total, setTotal] = useState<number>(0);
   const [cards, setCards] = useState<IBlockItem[]>([]);
 
   // 菜单选项
@@ -38,6 +38,7 @@ const Component: FunctionComponent<IProps> = () => {
 
   // 订阅
   const [subscribeModalVisible, setSubscribeModalVisible] = useState<boolean>(false);
+  const [addPrivateModalVisible, setAddPrivateModalVisible] = useState<boolean>(false);
 
   useEffect(() => {
     queryPackages();
@@ -47,18 +48,33 @@ const Component: FunctionComponent<IProps> = () => {
         case PyramidUIActionTypes.RECEIVE_PROJECT_BLOCK_PACKAGE_INFO:
           const packageInfo = pyramidAction.payload.packageInfo || null;
           const projectId = pyramidAction.payload.projectId;
-          if (projectId) {
-            // 注意这里，监听的时候因为拿不到外部的 menus 对象，所以只能用 localStorage 保存起来并读取
-            const storageMenus: IBlockPackage[] = JSON.parse(localStorage.getItem(localStorageModuleMenusKey));
-            localStorage.setItem(localStorageModuleMenusKey, null);
+          // 注意这里，监听的时候因为拿不到外部的 menus 对象，所以只能用 localStorage 保存起来并读取
+          const storageMenus: IBlockPackage[] = JSON.parse(localStorage.getItem(localStorageModuleMenusKey));
+          localStorage.setItem(localStorageModuleMenusKey, null);
 
-            const findMenu = findMenuByKey(storageMenus, projectId);
-            if (findMenu) {
-              findMenu.packageInfoFetchStatus = EBlockPackageFetchStatus.fetchEnd;
-              findMenu.packageInfo = packageInfo;
-              setMenus(storageMenus);
-            }
+          const findMenu = findMenuByKey(storageMenus, projectId);
+          if (findMenu) {
+            findMenu.packageInfoFetchStatus = EBlockPackageFetchStatus.fetchEnd;
+            findMenu.packageInfo = packageInfo;
+            setMenus(storageMenus);
           }
+          break;
+        case PyramidUIActionTypes.RECEIVE_GET_PRIVATE_BLOCK_PACKAGE_LIST:
+          const list: IBlockPackageInfo[] = pyramidAction.payload.packageInfoList;
+          const arr: IBlockPackage[] = [];
+          list.forEach(item => {
+            const obj: IBlockPackage = {
+              id: item._id,
+              chineseName: item.blockPackageName,
+              englishName: item.blockPackageName,
+              packageInfo: item,
+              packageInfoFetchStatus: EBlockPackageFetchStatus.fetchEnd,
+              applyType: '',
+              storeAddress: ''
+            };
+            arr.push(obj);
+          });
+          setMenus(arr);
           break;
         default:
           break;
@@ -70,6 +86,13 @@ const Component: FunctionComponent<IProps> = () => {
     }
   }, []);
 
+  useEffect(() => {
+    setMenus([]);
+    setMenuOpenKeys([]);
+    setCards([]);
+    queryPackages();
+  }, [tabActiveKey]);
+
   /**
    * 获取区块包列表
    */
@@ -77,7 +100,7 @@ const Component: FunctionComponent<IProps> = () => {
     if (tabActiveKey === EBlockPackageSource.Community) {// 社区
       // TODO 需要增加参数
       const params = {};
-      params['pageNum'] = current;
+      params['pageNum'] = 1;
       params['pageSize'] = 100000;
       blockPackageRequest.blockPackageSubscribePage(params).then(res => {
         if (res) {
@@ -89,7 +112,7 @@ const Component: FunctionComponent<IProps> = () => {
         }
       });
     } else if (tabActiveKey === EBlockPackageSource.Private) {// 私有
-
+      pyramidUiService.sendMessageFn(new PyramidUISendGetPrivateBlockPackageListAction());
     }
   };
 
@@ -119,12 +142,12 @@ const Component: FunctionComponent<IProps> = () => {
     }));
   };
 
-  /**
-   * 分页器改变事件
-   */
-  const paginationChange = (page: number) => {
-    setCurrent(page);
-  };
+  // /**
+  //  * 分页器改变事件
+  //  */
+  // const paginationChange = (page: number) => {
+  //   setCurrent(page);
+  // };
 
   /**
    * 根据key找到对应 menu
@@ -158,7 +181,7 @@ const Component: FunctionComponent<IProps> = () => {
     });
 
     setCards(findBlocks);
-    setTotal(findBlocks.length);
+    // setTotal(findBlocks.length);
   };
 
   return (
@@ -171,10 +194,13 @@ const Component: FunctionComponent<IProps> = () => {
           <Tabs className={styles.tabs} activeKey={tabActiveKey} onChange={key => {
             setTabActiveKey(key as EBlockPackageSource)
           }}>
-            <TabPane tab="社区" key="1">
-            </TabPane>
-            <TabPane tab="私有" key="2">
-            </TabPane>
+            {
+              BlockPackageSourceDict.map(v => {
+                return (
+                  <TabPane tab={v.label} key={v.value} />
+                )
+              })
+            }
           </Tabs>
 
           {/* 菜单 */}
@@ -184,22 +210,24 @@ const Component: FunctionComponent<IProps> = () => {
               theme="dark"
               openKeys={menuOpenKeys}
               onOpenChange={param => {
-                const diffArr = _.difference(param, menuOpenKeys);
-                if (diffArr.length > 0) {
-                  const key = diffArr[0];
-                  const findMenu = findMenuByKey(menus, key);
-                  if (findMenu && findMenu.packageInfoFetchStatus === 'noFetch') {
-                    findMenu.packageInfoFetchStatus = EBlockPackageFetchStatus.fetching;
+                if (tabActiveKey === EBlockPackageSource.Community) {
+                  const diffArr = _.difference(param, menuOpenKeys);
+                  if (diffArr.length > 0) {
+                    const key = diffArr[0];
+                    const findMenu = findMenuByKey(menus, key);
+                    if (findMenu && findMenu.packageInfoFetchStatus === 'noFetch') {
+                      findMenu.packageInfoFetchStatus = EBlockPackageFetchStatus.fetching;
 
-                    // 临时保存
-                    localStorage.setItem(localStorageModuleMenusKey, JSON.stringify(menus));
+                      // 临时保存
+                      localStorage.setItem(localStorageModuleMenusKey, JSON.stringify(menus));
 
-                    pyramidUiService.sendMessageFn(new PyramidUISendBlockPackageInfoAction({
-                      // TODO 因为还没有同步到测试仓库里去，所以这里先写死 发送获取区块信息 storeAddress，差一个端口 10080
-                      projectGitUrl: 'https://github.com/guccihuiyuan/pyramid-blocks',
-                      projectGitBranch: 'master',
-                      projectId: findMenu.id
-                    }));
+                      pyramidUiService.sendMessageFn(new PyramidUISendBlockPackageInfoAction({
+                        // TODO 因为还没有同步到测试仓库里去，所以这里先写死 发送获取区块信息 storeAddress，差一个端口 10080
+                        projectGitUrl: 'https://github.com/guccihuiyuan/pyramid-blocks',
+                        projectGitBranch: 'master',
+                        projectId: findMenu.id
+                      }));
+                    }
                   }
                 }
 
@@ -213,7 +241,7 @@ const Component: FunctionComponent<IProps> = () => {
                       key={menu.id}
                       title={
                         <span>
-                          <Icon type="mail" />
+                          <Icon type="folder" />
                           <span>{menu.chineseName}</span>
                         </span>
                       }
@@ -252,7 +280,11 @@ const Component: FunctionComponent<IProps> = () => {
 
           {/* 底部订阅标题 */}
           <div className={styles['bottom-toolbar']} onClick={() => {
-            setSubscribeModalVisible(true);
+            if (tabActiveKey === EBlockPackageSource.Community) {
+              setSubscribeModalVisible(true);
+            } else if (tabActiveKey === EBlockPackageSource.Private) {
+              setAddPrivateModalVisible(true);
+            }
           }}>
             <Icon type="plus-circle" style={{ marginRight: 10 }} />
             <span>订阅</span>
@@ -299,10 +331,10 @@ const Component: FunctionComponent<IProps> = () => {
             }
           </div>
 
-          {/* 分页 */}
-          <div className={styles.pagination} style={{textAlign: 'right', color: 'white', marginTop: 20}}>
-            <Pagination showTotal={total => `共 ${total} 条`} size="small" current={current} total={total} onChange={paginationChange} />
-          </div>
+          {/*/!* 分页 *!/*/}
+          {/*<div className={styles.pagination} style={{textAlign: 'right', color: 'white', marginTop: 20}}>*/}
+          {/*  <Pagination showTotal={total => `共 ${total} 条`} size="small" current={current} total={total} onChange={paginationChange} />*/}
+          {/*</div>*/}
         </div>
       </div>
 
@@ -319,6 +351,17 @@ const Component: FunctionComponent<IProps> = () => {
         />
       ) : null}
 
+      {
+        addPrivateModalVisible? (
+          <LibraryPrivateModal
+            modalVisible={addPrivateModalVisible}
+            closeModal={() => {
+              setAddPrivateModalVisible(false);
+              queryPackages();
+            }}
+          />
+        ): null
+      }
     </div>
   )
 };
