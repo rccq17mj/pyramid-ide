@@ -19,10 +19,10 @@ class receive {
                         this.pyramidControl.getBlockPackageInfo(this.window_objs.runWindow, arg.payload);
                         break;
                     case ActionTypes.SEND_INSERT_PRIVATE_BLOCK_PACKAGE_INFO:
-                        this.pyramidControl.insertPrivateBlockPackage(arg.payload, (err) => {
+                        this.pyramidControl.insertPrivateBlockPackage(arg.payload, (errMessage) => {
                             let result = true;
                             let resultCode = 0;
-                            if (err) {
+                            if (errMessage) {
                                 result = false;
                                 // 随便指定一个
                                 resultCode = -1;
@@ -34,7 +34,7 @@ class receive {
                                     pyramidUIActionType: ActionTypes.SEND_INSERT_PRIVATE_BLOCK_PACKAGE_INFO,
                                     cmdExecuteResult: result,
                                     cmdExecuteResultCode: resultCode,
-                                    cmdExecuteMessage: ''
+                                    cmdExecuteMessage: errMessage
                                 }
                             });
                         });

@@ -374,8 +374,21 @@ class cliBridge {
    * @param callback
    */
   insertPrivateBlockPackage = (blockPackageInfo, callback) => {
-    private_block_package_db.insert(blockPackageInfo, (err) => {
-      callback(err);
+    const condition = {
+      blockPackageGitUrl: blockPackageInfo.blockPackageGitUrl
+    };
+    private_block_package_db.findOne(condition, (err, result) => {
+      if (err) {
+        callback(err || null);
+        return;
+      }
+      if (result) {
+        callback('已经存在该区块包信息');
+        return;
+      }
+      private_block_package_db.insert(blockPackageInfo, (err) => {
+        callback(err || null);
+      });
     });
   };
 

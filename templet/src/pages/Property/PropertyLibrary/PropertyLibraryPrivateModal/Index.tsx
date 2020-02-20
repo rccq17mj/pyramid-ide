@@ -50,7 +50,7 @@ const Component: FunctionComponent<IProps> = props => {
             setLoading(false);
             message.destroy();
             if (!pyramidAction.payload.cmdExecuteResult) {
-              message.error('保存区块信息失败，请重新尝试');
+              message.error(pyramidAction.payload.cmdExecuteMessage);
               return;
             }
             message.success('信息保存成功');
@@ -113,7 +113,7 @@ const Component: FunctionComponent<IProps> = props => {
         </FormItem>
 
         <FormItem>
-          <Button type={"primary"} htmlType="submit" style={{marginRight: 10}}>新增</Button>
+          <Button disabled={loading} type={"primary"} htmlType="submit" style={{marginRight: 10}}>新增</Button>
           <Button
             disabled={loading}
             type={"danger"}
