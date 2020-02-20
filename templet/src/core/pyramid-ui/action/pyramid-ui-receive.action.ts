@@ -120,6 +120,13 @@ export class PyramidUIReceiveBlockPackageInfoAction implements PyramidUIAction {
     projectId?: string;
   }) { }
 }
+// 获取私有区块包列表
+export class PyramidUIReceivePrivateBlockPackageListAction implements PyramidUIAction {
+  readonly type = PyramidUIActionTypes.RECEIVE_GET_PRIVATE_BLOCK_PACKAGE_LIST;
+  constructor(public payload: {
+    packageInfoList: IBlockPackageInfo[],
+  }) { }
+}
 /******************** 区块包 ********************/
 
 
@@ -127,6 +134,7 @@ export class PyramidUIReceiveBlockPackageInfoAction implements PyramidUIAction {
 
 
 export type PyramidUIReceiveActionsUnion =
+  PyramidUIReceivePrivateBlockPackageListAction |
   PyramidUIReceiveCMDExecuteResultAction|
   PyramidUIReceivePublicCMD |
   PyramidUIReceiveCliMessageAction |

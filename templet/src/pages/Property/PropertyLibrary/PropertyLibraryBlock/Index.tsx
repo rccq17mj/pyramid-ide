@@ -1,5 +1,5 @@
-import React, {FunctionComponent, useState, useEffect} from 'react';
-import {Layout, Pagination, Form, Button, Input, Select, Card, Checkbox, Tabs} from 'antd';
+import React, {FunctionComponent, useEffect, useState} from 'react';
+import {Button, Card, Checkbox, Form, Input, Layout, Pagination, Select, Tabs} from 'antd';
 import {FormComponentProps} from "antd/lib/form";
 import style from "../../Property.less";
 import plus from "@/assets/plus.png";
@@ -8,11 +8,15 @@ import {blockPackageRequest} from "@/requests/block-package.request";
 import LibraryModal from '@/pages/Property/PropertyLibrary/PropertyLibraryModal';
 import LibraryPrivateModal from '@/pages/Property/PropertyLibrary/PropertyLibraryPrivateModal';
 import {
-  BlockPackageSourceDict,
   BlockPackageEndType,
-  EBlockPackageSource,
-  EBlockPackageAssemblyType
+  BlockPackageSourceDict,
+  EBlockPackageAssemblyType,
+  EBlockPackageSource
 } from "@/dicts/block-package.dict";
+import {pyramidUiService} from "@/core/pyramid-ui/service/pyramid-ui.service";
+import {PyramidUISendGetPrivateBlockPackageListAction} from "@/core/pyramid-ui/action/pyramid-ui-send.action";
+import {PyramidUIReceiveActionsUnion} from "@/core/pyramid-ui/action/pyramid-ui-receive.action";
+import {PyramidUIActionTypes} from "@/core/pyramid-ui/action";
 
 const { Content } = Layout;
 const FormItem = Form.Item;
@@ -23,6 +27,7 @@ interface IProps extends FormComponentProps {
 }
 
 const PropertyLibraryBlock: FunctionComponent<IProps> = (props) => {
+  const pageSize = 1;
   // tab
   const [tabActiveKey, setTabActiveKey] = useState<EBlockPackageSource>(EBlockPackageSource.Community);
 
@@ -45,7 +50,7 @@ const PropertyLibraryBlock: FunctionComponent<IProps> = (props) => {
     if (tabActiveKey === EBlockPackageSource.Community) {
       const params = form.getFieldsValue();
       params['pageNum'] = pageNum;
-      params['pageSize'] = 10;
+      params['pageSize'] = pageSize;
       // TODO 这里还差移动端或者pc端参数
       blockPackageRequest.blockPackageSubscribePage(params).then(res => {
         if(res){
@@ -56,9 +61,31 @@ const PropertyLibraryBlock: FunctionComponent<IProps> = (props) => {
         }
       });
     } else if (tabActiveKey === EBlockPackageSource.Private) {
-
+      pyramidUiService.sendMessageFn(new PyramidUISendGetPrivateBlockPackageListAction());
     }
   };
+
+  useEffect(() => {
+    const messageKey = pyramidUiService.getMessageFn((action: PyramidUIReceiveActionsUnion) => {
+      switch (action.type) {
+        case PyramidUIActionTypes.RECEIVE_GET_PRIVATE_BLOCK_PACKAGE_LIST:
+          const list = action.payload.packageInfoList;
+          // 数据转换保持和原来数据一致
+          list.forEach(item => {
+            item.id = item._id;
+            // todo 这里是否需要增加中文名称
+            item.chineseName = item.blockPackageName;
+            item.englishName = item.blockPackageName;
+          });
+          setCards(list);
+          break;
+      }
+    });
+
+    return () => {
+      pyramidUiService.clearMessageFn(messageKey);
+    }
+  }, []);
 
   useEffect(() => {
     let selectList = [];
@@ -72,10 +99,13 @@ const PropertyLibraryBlock: FunctionComponent<IProps> = (props) => {
 
   // 请求区块列表
   useEffect(() => {
-    getBlockList();
+    if (tabActiveKey === EBlockPackageSource.Community) {// 只有请求才需要请求数据
+      getBlockList();
+    }
   }, [pageNum]);
 
   useEffect(() => {
+    // 重置信息
     setCards([]);
     setTotal(0);
     if (pageNum === 1) {
@@ -263,9 +293,13 @@ const PropertyLibraryBlock: FunctionComponent<IProps> = (props) => {
       </Content>
 
       {/* 分页器 */}
-      <div className={style.pagination}>
-        <Pagination defaultCurrent={pageNum} total={total} onChange={pageChange}/>
-      </div>
+      {
+        tabActiveKey === EBlockPackageSource.Community ? (
+          <div className={style.pagination}>
+            <Pagination defaultCurrent={pageNum} pageSize={ pageSize } total={total} onChange={pageChange}/>
+          </div>
+        ) : null
+      }
 
       {/* 新增订阅 */}
       {addModalVisible ? (

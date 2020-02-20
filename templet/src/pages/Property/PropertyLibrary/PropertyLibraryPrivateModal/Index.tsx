@@ -3,7 +3,10 @@ import React, {FormEvent, FunctionComponent, useEffect, useState} from "react";
 import {Button, Form, Input, message, Modal} from "antd";
 import {REGEX_CONFIG} from "@/core/configs/regex.config";
 import {pyramidUiService} from "@/core/pyramid-ui/service/pyramid-ui.service";
-import {PyramidUISendBlockPackageInfoAction} from "@/core/pyramid-ui/action/pyramid-ui-send.action";
+import {
+  PyramidUISendBlockPackageInfoAction,
+  PyramidUISendInsertPrivateBlockPackageInfoAction
+} from "@/core/pyramid-ui/action/pyramid-ui-send.action";
 import {PyramidUIReceiveActionsUnion} from "@/core/pyramid-ui/action/pyramid-ui-receive.action";
 import {PyramidUIActionTypes} from "@/core/pyramid-ui/action";
 
@@ -22,20 +25,36 @@ const Component: FunctionComponent<IProps> = props => {
   useEffect(() => {
     const messageKey = pyramidUiService.getMessageFn((pyramidAction: PyramidUIReceiveActionsUnion) => {
       switch (pyramidAction.type) {
+        // 读取线上区块包信息
         case PyramidUIActionTypes.RECEIVE_PROJECT_BLOCK_PACKAGE_INFO:
           // 这两个要在执行结果里面处理
           const packageInfo = pyramidAction.payload.packageInfo || null;
-          console.log(packageInfo);
-          // TODO 将信息存到数据库中
+          // 将信息存到数据库中
+          if (packageInfo) {
+            message.loading('正在保存信息，请稍等...', 0);
+            pyramidUiService.sendMessageFn(new PyramidUISendInsertPrivateBlockPackageInfoAction(packageInfo));
+          }
 
           break;
+        // 执行反馈
         case PyramidUIActionTypes.RECEIVE_CMD_EXECUTE_RESULT:
+          // 获取线上区块包信息
           if (pyramidAction.payload.pyramidUIActionType === PyramidUIActionTypes.SEND_PROJECT_BLOCK_PACKAGE_INFO) {
-            setLoading(true);
-            message.destroy();
             if (!pyramidAction.payload.cmdExecuteResult) {
+              setLoading(false);
               message.error('读取git信息失败，请确认该地址是否有效');
             }
+          }
+          // 保存私有区块包
+          else if (pyramidAction.payload.pyramidUIActionType === PyramidUIActionTypes.SEND_INSERT_PRIVATE_BLOCK_PACKAGE_INFO) {
+            setLoading(false);
+            message.destroy();
+            if (!pyramidAction.payload.cmdExecuteResult) {
+              message.error('保存区块信息失败，请重新尝试');
+              return;
+            }
+            message.success('信息保存成功');
+            props.closeModal(true);
           }
           break;
       }

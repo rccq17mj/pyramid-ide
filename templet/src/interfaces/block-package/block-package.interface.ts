@@ -1,5 +1,6 @@
 import {EBlockPackageFetchStatus} from "@/enums/block-package.enum";
 import {IBlockItem} from "@/interfaces/block/block.interface";
+import {EPlatform} from "@/enums/platform.enum";
 
 /**
  * 区块包接口数据
@@ -27,6 +28,9 @@ export interface IBlockPackage {
  * 区块包信息
  */
 export interface IBlockPackageInfo {
+  blockPackageName: string,
+  blockPackageType: EPlatform,
+  blockPackageGitUrl: string,
   category: {
     blocks: string[],
     templates: string[]

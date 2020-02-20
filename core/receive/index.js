@@ -18,18 +18,51 @@ class receive {
                     case ActionTypes.SEND_PROJECT_BLOCK_PACKAGE_INFO:
                         this.pyramidControl.getBlockPackageInfo(this.window_objs.runWindow, arg.payload);
                         break;
+                    case ActionTypes.SEND_INSERT_PRIVATE_BLOCK_PACKAGE_INFO:
+                        this.pyramidControl.insertPrivateBlockPackage(arg.payload, (err) => {
+                            let result = true;
+                            let resultCode = 0;
+                            if (err) {
+                                result = false;
+                                // 随便指定一个
+                                resultCode = -1;
+                            }
+                            // 反馈
+                            this.window_objs.mainWindow.webContents.send('site-message', {
+                                type: ActionTypes.RECEIVE_CMD_EXECUTE_RESULT,
+                                payload: {
+                                    pyramidUIActionType: ActionTypes.SEND_INSERT_PRIVATE_BLOCK_PACKAGE_INFO,
+                                    cmdExecuteResult: result,
+                                    cmdExecuteResultCode: resultCode,
+                                    cmdExecuteMessage: ''
+                                }
+                            });
+                        });
+                        break;
+                        // 查找私有区块包列表
+                    case ActionTypes.SEND_GET_PRIVATE_BLOCK_PACKAGE_LIST:
+                        this.pyramidControl.findPrivateBlockPackageList((rows) => {
+                            this.window_objs.mainWindow.webContents.send('site-message', {
+                                type: ActionTypes.RECEIVE_GET_PRIVATE_BLOCK_PACKAGE_LIST,
+                                payload: {
+                                    packageInfoList: rows
+                                }
+                            });
+                        });
+                        break;
                     case ActionTypes.SEND_CMD_EXECUTE_RESULT:
                         // TODO 根据 pyramidUIActionType 判断往哪个窗口发
                         const { pyramidUIActionType } = arg.payload;
-                        if (pyramidUIActionType === ActionTypes.SEND_PROJECT_CREATE) {
-                            // 主窗口
-                            this.window_objs.mainWindow.webContents.send('site-message', {
-                                type: ActionTypes.RECEIVE_CMD_EXECUTE_RESULT,
-                                payload: arg.payload
-                            });
-                        } else {
-
-                        }
+                        // 主窗口
+                        this.window_objs.mainWindow.webContents.send('site-message', {
+                            type: ActionTypes.RECEIVE_CMD_EXECUTE_RESULT,
+                            payload: arg.payload
+                        });
+                        // if (pyramidUIActionType === ActionTypes.SEND_PROJECT_CREATE) {
+                        //
+                        // } else {
+                        //
+                        // }
                         break;
                     // 打开指定项目操作窗口
                     case ActionTypes.SEND_PROJECT_OPENWINDOW:

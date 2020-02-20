@@ -73,5 +73,10 @@ export const ActionTypes = {
     /******************** 区块包 ********************/
     SEND_PROJECT_BLOCK_PACKAGE_INFO:'pyramid.ui.send.project.block.package.info',
     RECEIVE_PROJECT_BLOCK_PACKAGE_INFO:'pyramid.ui.receive.project.block.package.info',
+    // 保存私有区块包
+    SEND_INSERT_PRIVATE_BLOCK_PACKAGE_INFO: 'pyramid.ui.send.insert.private.block.package.info',
+    // 获取私有区块包列表
+    SEND_GET_PRIVATE_BLOCK_PACKAGE_LIST: 'pyramid.ui.send.get.private.block.package.list',
+    RECEIVE_GET_PRIVATE_BLOCK_PACKAGE_LIST: 'pyramid.ui.receive.get.private.block.package.list'
     /******************** 区块包 ********************/
 };

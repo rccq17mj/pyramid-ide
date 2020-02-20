@@ -5,6 +5,7 @@ import {
 import {PyramidUIAction, PyramidUIActionTypes} from "@/core/pyramid-ui/action/index";
 import {ECmdResultCode, getCmdResultStrByCode} from "../../../../../core/config/cmdResultCode";
 import {EPlatform} from "@/enums/platform.enum";
+import {IBlockPackageInfo} from "@/interfaces/block-package/block-package.interface";
 
 
 // 所有动作集合（注意格式：PyramidUISend + 模块 + 功能 + 定义 + Action）
@@ -225,12 +226,28 @@ export class PyramidUISendBlockPackageInfoAction implements PyramidUIAction {
     projectGitBranch?: string;
   }) { }
 }
+
+// 保存私有区块包
+export class PyramidUISendInsertPrivateBlockPackageInfoAction implements PyramidUIAction {
+  readonly type = PyramidUIActionTypes.SEND_INSERT_PRIVATE_BLOCK_PACKAGE_INFO;
+  constructor(public payload: {
+    // 区块包信息
+    packageInfo: IBlockPackageInfo,
+  }) { }
+}
+
+// 获取私有区块包信息
+export class PyramidUISendGetPrivateBlockPackageListAction implements PyramidUIAction {
+  readonly type = PyramidUIActionTypes.SEND_GET_PRIVATE_BLOCK_PACKAGE_LIST;
+  constructor(public payload: void) { }
+}
 /******************** 区块包 ********************/
 
 
 
 
 export type PyramidUISendActionsUnion =
+  PyramidUISendInsertPrivateBlockPackageInfoAction |
   PyramidUISendCMDExecuteResultAction |
   PyramidUISendProjectRemoveAction |
   PyramidUISendProjectBlockTypesCreateAction |

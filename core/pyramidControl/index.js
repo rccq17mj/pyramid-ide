@@ -13,6 +13,9 @@ const Datastore = require('nedb'), db = new Datastore({
 }), now_use_project_db = new Datastore({
   filename: 'public/now_projects.db',
   autoload: true
+}), private_block_package_db = new Datastore({ // 私有区块包，存在本地
+  filename: 'public/private_block_package.db',
+  autoload: true
 });
 
 const DataUse = require("./dataUse");
@@ -364,6 +367,30 @@ class cliBridge {
       callback([]);
     })
   }
+
+  /**
+   * 私有区块包插入
+   * @param blockPackageInfo
+   * @param callback
+   */
+  insertPrivateBlockPackage = (blockPackageInfo, callback) => {
+    private_block_package_db.insert(blockPackageInfo, (err) => {
+      callback(err);
+    });
+  };
+
+  /**
+   * 查找所有区块包信息
+   * @param callback
+   */
+  findPrivateBlockPackageList = (callback) => {
+    private_block_package_db.find({}, (err, rows) => {
+      if (err) {
+        callback([]);
+      }
+      callback(rows);
+    });
+  };
 
   /**
    * 查找全部区块
