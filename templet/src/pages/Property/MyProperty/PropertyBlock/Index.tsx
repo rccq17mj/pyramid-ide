@@ -209,7 +209,7 @@ const PropertyBlock: FunctionComponent<IProps> = props => {
 
           {
             cards.map((card, index) => (
-              <Card className={style.cards} key={index} onClick={() => { startProject(card) }}>
+              <Card className={style['card-item']} key={index} onClick={() => { startProject(card) }}>
                 <img src={block} width={50} height={50} alt='' />
                 <p>{card.menuNameZh}</p>
                 <div>{card.menuNameEn}</div>
