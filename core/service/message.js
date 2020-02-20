@@ -1,6 +1,6 @@
 const { ipcMain } = require('electron');
 const ipcConfig = require('../config/ipcArg.config');
-const eventConfig = require('../config/event.config');
+const {ActionTypes} = require('../config/event.config');
 const ENV = require('../config/env.config');
 const receive = require('../receive');
 const response = require('../response');
@@ -21,17 +21,24 @@ class message {
     detectionTest() {
         this.window_objs.runWindow.once('show', () => {
             /** 检测通过 */
-            ipcMain.on(ipcConfig.ON_DE_PYARMID_SUCCESS, (event, arg) => {
-                this.window_objs.mainWindow.reload();
-                this.window_objs.mainWindow.show();
-                switch (process.env.ELE_ENV) {
-                    case ENV.ELE_ENV_DEV:
-                    case ENV.ELE_ENV_TEST:
-                    case ENV.ELE_ENV_PRO:
-                        this.window_objs.runWindow.hide();
-                        break;
-                    default:
-                        break;
+            // 这里我需要发消息给内部窗口 直接告诉其版本号，就不用在里面再查询了
+            ipcMain.on(ipcConfig.ON_DE_SUCCESS, (event, arg) => {
+                // 全部检测通过
+                if(arg.type === 'pyramid'){
+                    this.window_objs.mainWindow.webContents.send('site-message', {
+                        type: ActionTypes.RECEIVE_PUBLIC_INIT,
+                        payload: arg.msg
+                    });
+                    this.window_objs.mainWindow.show();
+                    switch (process.env.ELE_ENV) {
+                        case ENV.ELE_ENV_DEV:
+                        case ENV.ELE_ENV_TEST:
+                        case ENV.ELE_ENV_PRO:
+                            this.window_objs.runWindow.hide();
+                            break;
+                        default:
+                            break;
+                    }
                 }
             });
             /** 检测失败 */

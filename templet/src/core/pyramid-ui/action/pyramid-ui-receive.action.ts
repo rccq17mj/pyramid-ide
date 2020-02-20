@@ -53,6 +53,11 @@ export class PyramidUIReceiveCMDExecuteResultAction implements PyramidUIAction {
     cmdExecuteMessage?: string;
   }) { }
 }
+// 系统初始化完成
+export class PyramidUIReceiveInitResultAction implements PyramidUIAction {
+  readonly type = PyramidUIActionTypes.RECEIVE_PUBLIC_INIT;
+  constructor(public payload: any) { }
+}
 /******************** 全局 ********************/
 
 
