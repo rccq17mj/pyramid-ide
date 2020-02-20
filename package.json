@@ -55,7 +55,7 @@
       }
     },
     "directories": {
-      "output": "../test/package02"
+      "output": "./dist"
     },
     "asar": false,
     "files": [
