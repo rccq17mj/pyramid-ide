@@ -1,51 +1,91 @@
-import React, {FunctionComponent, useState, useEffect} from 'react';
-import { Layout, Pagination, Form, Button, Input, Select, Card, Checkbox } from 'antd';
+import React, {FunctionComponent, useEffect, useState} from 'react';
+import {Button, Card, Checkbox, Form, Input, Layout, Pagination, Select, Tabs} from 'antd';
 import {FormComponentProps} from "antd/lib/form";
 import style from "../../Property.less";
 import plus from "@/assets/plus.png";
 import block from "@/assets/block.png";
-
-import LibraryModal from '@/pages/Property/PropertyLibrary/PropertyLibraryModal';
 import {blockPackageRequest} from "@/requests/block-package.request";
+import LibraryModal from '@/pages/Property/PropertyLibrary/PropertyLibraryModal';
+import LibraryPrivateModal from '@/pages/Property/PropertyLibrary/PropertyLibraryPrivateModal';
+import {
+  BlockPackageEndType,
+  BlockPackageSourceDict,
+  EBlockPackageAssemblyType,
+  EBlockPackageSource
+} from "@/dicts/block-package.dict";
+import {pyramidUiService} from "@/core/pyramid-ui/service/pyramid-ui.service";
+import {PyramidUISendGetPrivateBlockPackageListAction} from "@/core/pyramid-ui/action/pyramid-ui-send.action";
+import {PyramidUIReceiveActionsUnion} from "@/core/pyramid-ui/action/pyramid-ui-receive.action";
+import {PyramidUIActionTypes} from "@/core/pyramid-ui/action";
 
 const { Content } = Layout;
 const FormItem = Form.Item;
 const { Option } = Select;
+const { TabPane } = Tabs;
 
 interface IProps extends FormComponentProps {
 }
 
-const PropertyLibraryBlock: FunctionComponent<IProps> = (props) =>{
-  const [extraParams, setExtraParams] = useState<object>({});
-  const [addModalVisible, setAddModalVisible] = useState<boolean>(false);
-  const [cards, setCards] = useState<any[]>([]);
+const PropertyLibraryBlock: FunctionComponent<IProps> = (props) => {
+  const pageSize = 1;
+  // tab
+  const [tabActiveKey, setTabActiveKey] = useState<EBlockPackageSource>(EBlockPackageSource.Community);
 
-  // 管理模式
-  const [isManege, setIsManege] = useState<boolean>(false);
-  const [selectList, setSelectList] = useState<any[]>([]);
+  // 模态框
+  const [addModalVisible, setAddModalVisible] = useState<boolean>(false);
+  const [addPrivateModalVisible, setAddPrivateModalVisible] = useState<boolean>(false);
+
+  // card 数量
+  const [cards, setCards] = useState<any[]>([]);
   const [pageNum, setPageNum] = useState<number>(1);
   const [total, setTotal] = useState<number>(0);
 
+  // 管理模式
+  const [isManage, setIsManage] = useState<boolean>(false);
+  const [selectList, setSelectList] = useState<any[]>([]);
+
   const {form, form: { getFieldDecorator } } = props;
 
-  const extraParamsChange = () => {
-    const params = { ...form.getFieldsValue() };
-    setExtraParams(params);
+  const getBlockList = () => {
+    if (tabActiveKey === EBlockPackageSource.Community) {
+      const params = form.getFieldsValue();
+      params['pageNum'] = pageNum;
+      params['pageSize'] = pageSize;
+      // TODO 这里还差移动端或者pc端参数
+      blockPackageRequest.blockPackageSubscribePage(params).then(res => {
+        if(res){
+          const list = res ? (res.list || []) : [];
+          const total = res ? (res.total || 0) : 0;
+          setCards(list);
+          setTotal(total);
+        }
+      });
+    } else if (tabActiveKey === EBlockPackageSource.Private) {
+      pyramidUiService.sendMessageFn(new PyramidUISendGetPrivateBlockPackageListAction());
+    }
   };
 
-  const getBlockList = () =>{
-    let params = extraParams;
-    params['pageNum'] = pageNum;
-    params['pageSize'] = 7;
-    blockPackageRequest.blockPackageSubscribePage(params).then(res => {
-      if(res){
-        const list = res ? (res.list || []) : [];
-        const total = res ? (res.total || 0) : 0;
-        setCards(list);
-        setTotal(total);
+  useEffect(() => {
+    const messageKey = pyramidUiService.getMessageFn((action: PyramidUIReceiveActionsUnion) => {
+      switch (action.type) {
+        case PyramidUIActionTypes.RECEIVE_GET_PRIVATE_BLOCK_PACKAGE_LIST:
+          const list = action.payload.packageInfoList;
+          // 数据转换保持和原来数据一致
+          list.forEach(item => {
+            item.id = item._id;
+            // todo 这里是否需要增加中文名称
+            item.chineseName = item.blockPackageName;
+            item.englishName = item.blockPackageName;
+          });
+          setCards(list);
+          break;
       }
-    })
-  };
+    });
+
+    return () => {
+      pyramidUiService.clearMessageFn(messageKey);
+    }
+  }, []);
 
   useEffect(() => {
     let selectList = [];
@@ -59,24 +99,30 @@ const PropertyLibraryBlock: FunctionComponent<IProps> = (props) =>{
 
   // 请求区块列表
   useEffect(() => {
-    getBlockList()
-  }, [pageNum, extraParams]);
+    if (tabActiveKey === EBlockPackageSource.Community) {// 只有请求才需要请求数据
+      getBlockList();
+    }
+  }, [pageNum]);
 
-
-  const startProject = (projectInfo) => {
-    console.log('projectInfo', projectInfo)
-    // sendMessage({'openProjectWindow': true});
-  };
-
+  useEffect(() => {
+    // 重置信息
+    setCards([]);
+    setTotal(0);
+    if (pageNum === 1) {
+      getBlockList();
+    } else {
+      setPageNum(1);
+    }
+  }, [tabActiveKey]);
 
   // 管理模式
   const management = (flag) =>{
-    setIsManege(flag);
+    setIsManage(flag);
     let newCards = [...cards];
     newCards.forEach((item)=>{
       item.checked = false
     });
-    setCards(newCards)
+    setCards(newCards);
   };
 
   // 选中项
@@ -87,7 +133,7 @@ const PropertyLibraryBlock: FunctionComponent<IProps> = (props) =>{
         item.checked = !item.checked
       }
     });
-    setCards(newCards)
+    setCards(newCards);
   };
 
   // 全选
@@ -101,121 +147,183 @@ const PropertyLibraryBlock: FunctionComponent<IProps> = (props) =>{
 
   // 取消订阅
   const deleteItem = () => {
-    let params = {
-      blockId: selectList.toString()
-    };
-    blockPackageRequest.blockUnsubscribe(params).then(res => {
-      if(res){
-        getBlockList()
-      }
-    })
+    if (tabActiveKey === EBlockPackageSource.Community) {
+      let params = {
+        blockId: selectList.toString()
+      };
+      blockPackageRequest.blockUnsubscribe(params).then(res => {
+        if (res) {
+          getBlockList()
+        }
+      });
+    } else if (tabActiveKey === EBlockPackageSource.Private) {
+
+    }
   };
 
   const pageChange = (page) =>{
-    setPageNum(page)
+    setPageNum(page);
   };
 
   return(
     <Layout style={{ padding: '0 24px 24px' }}>
-      {/*    <Breadcrumb style={{color:'#fff'}}>
-          <Breadcrumb.Item>区块</Breadcrumb.Item>
-          <Breadcrumb.Item>移动端</Breadcrumb.Item>
-        </Breadcrumb>*/}
       <Content
+        className={style['property-library-content']}
         style={{
           background: '#212121',
-          padding: 24,
           margin: 0,
           minHeight: 280,
         }}
       >
+        {/* tab */}
+        <Tabs activeKey={tabActiveKey} onChange={activeKey => {
+          setTabActiveKey(activeKey as EBlockPackageSource);
+        }}>
+          {
+            BlockPackageSourceDict.map(v => {
+              return (
+                <TabPane tab={v.label} key={v.value} />
+              )
+            })
+          }
+        </Tabs>
+
         {/* 表单 */}
         <Form
+          className={style['form-container']}
           layout="inline"
           onSubmit={e => {
             e.preventDefault();
-            extraParamsChange();
+            getBlockList();
           }}
         >
           <FormItem>
             {getFieldDecorator('applyType',{
-              initialValue:'0',
+              initialValue: '',
             })(
               <Select
                 size={'default'}
                 style={{minWidth:'80px'}}
               >
-                <Option value="0">全部</Option>
-                <Option value="2">移动端</Option>
-                <Option value="1">PC端</Option>
+                <Option value={''}>全部</Option>
+                {
+                  BlockPackageEndType.map(v => {
+                    return (
+                      <Option key={v.value} value={v.value}>{v.label}</Option>
+                    )
+                  })
+                }
               </Select>
             )}
           </FormItem>
+
           <FormItem>
             {getFieldDecorator('chineseName')(<Input placeholder="请输入资产名称" />)}
           </FormItem>
-          {isManege ?
-            <FormItem>
-              <Button disabled={selectList.length <= 0} onClick={()=>{deleteItem()}}>
-                取消订阅
-              </Button>
-              <Button
-                onClick={() => {
-                  management(false)
-                }}
-                style={{ marginLeft: 8 }}
-                type="primary"
-              >
-                完成
-              </Button>
-              <Checkbox className={style.allCheck} onChange={allCheckOnChange}>全选</Checkbox>
-            </FormItem> :
-            <FormItem>
-              <Button type="primary" htmlType="submit">
-                搜索
-              </Button>
-              <Button
-                onClick={() => {
-                  management(true)
-                }}
-                style={{ marginLeft: 8 }}
-              >
-                管理
-              </Button>
-            </FormItem>}
-        </Form>
-        <Card className={style.cards} onClick={() => setAddModalVisible(true)}>
-          <img src={plus} width={50} height={50} alt='' />
-          <p>新增订阅</p>
-        </Card>
-        {
-          cards.map((card, index) => {
-            return (
-              <Card className={style.cards} key={card.id + index} onClick={() => startProject(card)}>
-                <img src={block} width={50} height={50} alt='' />
-                <p>{card.chineseName}</p>
-                <span>{card.englishName}</span>
-                { isManege ?  <Checkbox className={style.checkBox} checked={card.checked} onClick={(e)=>{e.stopPropagation()}}  onChange={()=>{checkOnChange(card.id)}} /> : null}
-              </Card>
+
+          {
+            isManage ? (
+              <>
+                <FormItem>
+                  <Button disabled={selectList.length <= 0} onClick={()=>{deleteItem()}}>
+                    取消订阅
+                  </Button>
+                </FormItem>
+                <FormItem>
+                  <Button
+                    onClick={() => {
+                      management(false);
+                    }}
+                    type="primary"
+                  >
+                    完成
+                  </Button>
+                  <Checkbox className={style['all-check-box']} onChange={allCheckOnChange}>全选</Checkbox>
+                </FormItem>
+              </>
+            ) : (
+              <>
+                <FormItem>
+                  <Button type="primary" htmlType="submit">
+                    搜索
+                  </Button>
+                </FormItem>
+                <FormItem>
+                  <Button
+                    onClick={() => {
+                      management(true)
+                    }}
+                  >
+                    管理
+                  </Button>
+                </FormItem>
+              </>
             )
-          })
-        }
+          }
+        </Form>
+
+        {/* card */}
+        <div className={style['card-container']}>
+          {/* 新增订阅 */}
+          <Card className={style['card-item']} onClick={() => {
+            if (tabActiveKey === EBlockPackageSource.Community) {
+              setAddModalVisible(true);
+            } else if (tabActiveKey === EBlockPackageSource.Private) {
+              setAddPrivateModalVisible(true);
+            }
+          }}>
+            <img src={plus} width={50} height={50} alt='' />
+            <p>新增订阅</p>
+          </Card>
+
+          {/* 已经订阅的 */}
+          {
+            cards.map((card, index) => {
+              return (
+                <Card className={style['card-item']} key={card.id + index}>
+                  <img src={block} width={50} height={50} alt='' />
+                  <p>{card.chineseName}</p>
+                  <span>{card.englishName}</span>
+                  { isManage ?  <Checkbox className={style['card-item-check-box']} checked={card.checked} onClick={(e)=>{e.stopPropagation()}}  onChange={()=>{checkOnChange(card.id)}} /> : null}
+                </Card>
+              )
+            })
+          }
+        </div>
       </Content>
-      <div className={style.pageBox}>
-        <Pagination defaultCurrent={pageNum} total={total} onChange={pageChange}/>
-      </div>
+
+      {/* 分页器 */}
+      {
+        tabActiveKey === EBlockPackageSource.Community ? (
+          <div className={style.pagination}>
+            <Pagination defaultCurrent={pageNum} pageSize={ pageSize } total={total} onChange={pageChange}/>
+          </div>
+        ) : null
+      }
 
       {/* 新增订阅 */}
       {addModalVisible ? (
         <LibraryModal
           modalVisible={addModalVisible}
-          params={{type: 1, blockType: 1}}
+          params={{source: tabActiveKey, assemblyType: EBlockPackageAssemblyType.BLOCK}}
           closeModal={() => {
             setAddModalVisible(false);
             getBlockList()
           }}
         />
       ) : null}
+
+      {
+        addPrivateModalVisible? (
+          <LibraryPrivateModal
+            modalVisible={addPrivateModalVisible}
+            closeModal={() => {
+              setAddPrivateModalVisible(false);
+              getBlockList();
+            }}
+          />
+        ): null
+      }
     </Layout>
   )
 };

@@ -1,6 +1,8 @@
 // 所有指令集合（注意格式：pyramid.ui + send | receive + 模块 + 功能 + 定义）
 export const ActionTypes = {
     /******************** 全局 ********************/
+    // 系统初始化完成
+    RECEIVE_PUBLIC_INIT: 'pyramid.ui.receive.public.init',
     // 打开devTools
     SEND_PUBLIC_OPEN_CONSOLE: 'pyramid.ui.send.public.console',
     // 接收Cli消息
@@ -24,6 +26,7 @@ export const ActionTypes = {
     RECEIVE_PROJECT_LIST: 'pyramid.ui.receive.project.list',
     SEND_PROJECT_START: 'pyramid.ui.send.project.start',
     SEND_PROJECT_CREATE: 'pyramid.ui.send.project.create',
+    SEND_PROJECT_IMPORT: 'pyramid.ui.send.project.import',
     SEND_PROJECT_CHOOSE_PATH: 'pyramid.ui.send.project.choosePath',
     SEND_PROJECT_TOOLBAR: 'pyramid.ui.send.project.SEND_PROJECT_TOOLBAR',
     RECEIVE_PROJECT_CHOOSE_PATH: 'pyramid.ui.receive.project.choosePath',
@@ -72,5 +75,10 @@ export const ActionTypes = {
     /******************** 区块包 ********************/
     SEND_PROJECT_BLOCK_PACKAGE_INFO:'pyramid.ui.send.project.block.package.info',
     RECEIVE_PROJECT_BLOCK_PACKAGE_INFO:'pyramid.ui.receive.project.block.package.info',
+    // 保存私有区块包
+    SEND_INSERT_PRIVATE_BLOCK_PACKAGE_INFO: 'pyramid.ui.send.insert.private.block.package.info',
+    // 获取私有区块包列表
+    SEND_GET_PRIVATE_BLOCK_PACKAGE_LIST: 'pyramid.ui.send.get.private.block.package.list',
+    RECEIVE_GET_PRIVATE_BLOCK_PACKAGE_LIST: 'pyramid.ui.receive.get.private.block.package.list'
     /******************** 区块包 ********************/
 };

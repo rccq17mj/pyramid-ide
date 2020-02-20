@@ -1,5 +1,5 @@
 import React, {FormEvent, FunctionComponent, useEffect, useState} from 'react';
-import {Avatar, Button, Select, Empty, Form, Input, message, Modal, Upload, Icon, Switch} from 'antd';
+import {Button, Form, Input, Modal, Icon, Switch} from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 import { urlParames } from '@/utils/utils';
 
@@ -13,36 +13,29 @@ interface IProps extends FormComponentProps {
 }
 
 const Component: FunctionComponent<IProps> = props => {
-
   const [isPublic, setIsPublic] = useState(false);
   const {
     form,
     form: { getFieldDecorator },
   } = props;
 
-
   useEffect(()=>{
-    console.log('url参数',urlParames())
-  },[])
-
+  },[]);
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
     form.validateFields((err, fieldsValue) => {
       if (!err) {
-        console.log('fieldsValue', fieldsValue)
         let params = fieldsValue;
-        params['applyType'] = urlParames().applyType;
-        params['packageManager'] = urlParames().package;
+        params['applyType'] = urlParames()['applyType'];
+        params['packageManager'] = urlParames()['package'];
         params['isPublic'] = '0';
         if(isPublic){
           params['isPublic'] = '1';
         }
-        console.log('最终params数据', params)
         blockPackageRequest.blockPackageAdd(params).then(res => {
           if(res){
-            console.log('res122223',res);
             props.closeModal(true)
           }
         })
@@ -62,7 +55,7 @@ const Component: FunctionComponent<IProps> = props => {
     }
   };
 
-  const validateEnglishnName = (rule, value, callback) => {
+  const validateEnglishName = (rule, value, callback) => {
     const regex = /^\w+$/;
     if (value && regex.test(value)) {
       callback();
@@ -82,7 +75,7 @@ const Component: FunctionComponent<IProps> = props => {
 
   const onSwitchChange = (checked) => {
     setIsPublic(checked)
-  }
+  };
 
   return (
     <Modal
@@ -110,7 +103,7 @@ const Component: FunctionComponent<IProps> = props => {
           rules: [
             { required: true, message: '必填' },
             {
-              validator: validateEnglishnName,
+              validator: validateEnglishName,
             },
           ],
         })(<Input placeholder="英文名称" />)}

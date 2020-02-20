@@ -4,18 +4,15 @@ import {HTTP_CONTENT_TYPE} from "@/core/configs/http.config";
 import {IBlockPackage} from "@/interfaces/block-package/block-package.interface";
 
 class BlockPackageRequest extends BaseRequest {
-  blockPackageGet(params: any): Promise<boolean> {
-    return this.add(API_CONFIG.MAIN.BLOCK_PACKAGE.GET, params);
-  }
+  // blockPackageGet(params: any): Promise<boolean> {
+  //   return this.add(API_CONFIG.MAIN.BLOCK_PACKAGE.GET, params);
+  // }
 
   blockPackageAdd(params: any): Promise<boolean> {
     return this.add(API_CONFIG.MAIN.BLOCK_PACKAGE.ADD, params,{ ...{options: HTTP_CONTENT_TYPE.JSON}});
   }
 
   blockPackageListPage(params: any): Promise<{total: number, list: any[]}> {
-/*    return httpService.request('POST', API_CONFIG.MAIN.BLOCK_PACKAGE.LIST_PAGE, params).then(res => {
-      return res.flag ? res.data['data'] : null
-    });*/
     return this.list(API_CONFIG.MAIN.BLOCK_PACKAGE.LIST_PAGE, params);
   }
 
@@ -44,10 +41,6 @@ class BlockPackageRequest extends BaseRequest {
     return this.add(API_CONFIG.MAIN.BLOCK_PACKAGE.UPDATE_HISTORY_LIST_PAGE, params);
   }
   blockPackageSubscribe(params: any): Promise<boolean> {
-/*    const formData = new FormData();
-    Object.keys(params).forEach((key) => {
-        formData.append(key, params[key]);
-    });*/
     return this.add(API_CONFIG.MAIN.BLOCK_PACKAGE.UPDATE_HISTORY_SUBSCRIBE, params,  { ...{options: HTTP_CONTENT_TYPE.JSON}});
   }
 }

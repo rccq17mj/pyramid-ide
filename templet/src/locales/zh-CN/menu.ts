@@ -6,16 +6,18 @@ export default {
     'menu.project-modal-module': '模块',
     'menu.project-modal-block': '区块',
 
-
     'menu.pc': 'PC应用',
     'menu.mobile': '移动端应用',
+
     'menu.assets': '资产',
     'menu.assets.myProperty': '我的资产',
     'menu.assets.myProperty.module': '模块',
     'menu.assets.myProperty.block': '区块',
+
     'menu.assets.propertyLibrary': '资产库',
     'menu.assets.propertyLibrary.block': '区块',
     'menu.assets.propertyLibrary.module': '模块',
+
     'menu.more-blocks': '更多区块',
     'menu.home': '首页',
     'menu.login': '登录',

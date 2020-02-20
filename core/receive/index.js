@@ -18,19 +18,59 @@ class receive {
                     case ActionTypes.SEND_PROJECT_BLOCK_PACKAGE_INFO:
                         this.pyramidControl.getBlockPackageInfo(this.window_objs.runWindow, arg.payload);
                         break;
+                    case ActionTypes.SEND_INSERT_PRIVATE_BLOCK_PACKAGE_INFO:
+                        this.pyramidControl.insertPrivateBlockPackage(arg.payload, (errMessage) => {
+                            let result = true;
+                            let resultCode = 0;
+                            if (errMessage) {
+                                result = false;
+                                // 随便指定一个
+                                resultCode = -1;
+                            }
+                            // 反馈
+                            this.window_objs.mainWindow.webContents.send('site-message', {
+                                type: ActionTypes.RECEIVE_CMD_EXECUTE_RESULT,
+                                payload: {
+                                    pyramidUIActionType: ActionTypes.SEND_INSERT_PRIVATE_BLOCK_PACKAGE_INFO,
+                                    cmdExecuteResult: result,
+                                    cmdExecuteResultCode: resultCode,
+                                    cmdExecuteMessage: errMessage
+                                }
+                            });
+                        });
+                        break;
+                        // 查找私有区块包列表
+                    case ActionTypes.SEND_GET_PRIVATE_BLOCK_PACKAGE_LIST:
+                        this.pyramidControl.findPrivateBlockPackageList((rows) => {
+                            this.window_objs.mainWindow.webContents.send('site-message', {
+                                type: ActionTypes.RECEIVE_GET_PRIVATE_BLOCK_PACKAGE_LIST,
+                                payload: {
+                                    packageInfoList: rows
+                                }
+                            });
+                            if (this.moduleWindow) {
+                                this.moduleWindow.webContents.send('site-message', {
+                                    type: ActionTypes.RECEIVE_GET_PRIVATE_BLOCK_PACKAGE_LIST,
+                                    payload: {
+                                        packageInfoList: rows
+                                    }
+                                });
+                            }
+                        });
+                        break;
                     case ActionTypes.SEND_CMD_EXECUTE_RESULT:
                         // TODO 根据 pyramidUIActionType 判断往哪个窗口发
                         const { pyramidUIActionType } = arg.payload;
-                        if (pyramidUIActionType === ActionTypes.SEND_PROJECT_CREATE) {
-                            // 主窗口
-                            this.window_objs.mainWindow.webContents.send('site-message', {
-                                type: ActionTypes.RECEIVE_CMD_EXECUTE_RESULT,
-                                payload: arg.payload
-                            });
-                        } else {
-
-                        }
-
+                        // 主窗口
+                        this.window_objs.mainWindow.webContents.send('site-message', {
+                            type: ActionTypes.RECEIVE_CMD_EXECUTE_RESULT,
+                            payload: arg.payload
+                        });
+                        // if (pyramidUIActionType === ActionTypes.SEND_PROJECT_CREATE) {
+                        //
+                        // } else {
+                        //
+                        // }
                         break;
                     // 打开指定项目操作窗口
                     case ActionTypes.SEND_PROJECT_OPENWINDOW:
@@ -101,10 +141,13 @@ class receive {
                         // 将此命令发送给渲染窗口执行
                         this.window_objs.runWindow.webContents.send('cmd-message', cmdArg);
                         break;
+                    // 创建项目    
                     case ActionTypes.SEND_PROJECT_CREATE:
-                            const projectInfo = arg.payload;
-                            // projectService.passAction('cmd-project-create', projectInfo, self.window_objs.runWindow)
-                            this.pyramidControl.createProject(projectInfo, this.window_objs.runWindow)
+                            this.pyramidControl.createProject(arg.payload, this.window_objs.runWindow);
+                        break;
+                    // 导入项目
+                    case ActionTypes.SEND_PROJECT_IMPORT:
+                        this.pyramidControl.importProject(arg.payload, this.window_objs.runWindow);
                         break;
                     // 项目删除    
                     case ActionTypes.SEND_PROJECT_REMOVE:
@@ -116,6 +159,7 @@ class receive {
                     // 查询项目列表的请求
                     case ActionTypes.SEND_PROJECT_LIST:
                         const option = arg.payload.hasOwnProperty('platform') ? { platform: arg.payload.platform } : {};
+                        console.log(option);
                         this.pyramidControl.findProject(option, (res) => {
                             this.window_objs.mainWindow.webContents.send('site-message',
                                 {
@@ -125,7 +169,7 @@ class receive {
                                     }
                                 }
                             );
-                        })
+                        });
                         break;
                     // 路径选择
                     case ActionTypes.SEND_PROJECT_CHOOSE_PATH:

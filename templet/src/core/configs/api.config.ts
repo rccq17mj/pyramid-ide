@@ -11,16 +11,19 @@ const local = {
 const dev = {
   API_MAIN_PREFIX: 'http://10.10.11.107:25017',
   API_SSO: 'http://10.10.11.104:28400',
+  API_UPLOAD: '/upload-api',
   QIC: 'dsy_tANgkaKqbieJ'
 };
 const test = {
   API_MAIN_PREFIX: 'http://10.10.11.107:25069',
   API_SSO: 'http://10.10.11.104:28400',
+  API_UPLOAD: '/upload-api',
   QIC: 'dsy_tANgkaKqbieJ'
 };
 const pro = {
   API_MAIN_PREFIX: 'https://open.gcongo.com/openWeb',
   API_SSO: 'https://auth.gcongo.com',
+  API_UPLOAD: '/upload-api',
   QIC: 'dsy_tANgkaKqbieJ'
 };
 // 环境区分
