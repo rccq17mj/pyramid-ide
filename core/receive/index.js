@@ -48,6 +48,14 @@ class receive {
                                     packageInfoList: rows
                                 }
                             });
+                            if (this.moduleWindow) {
+                                this.moduleWindow.webContents.send('site-message', {
+                                    type: ActionTypes.RECEIVE_GET_PRIVATE_BLOCK_PACKAGE_LIST,
+                                    payload: {
+                                        packageInfoList: rows
+                                    }
+                                });
+                            }
                         });
                         break;
                     case ActionTypes.SEND_CMD_EXECUTE_RESULT:
