@@ -31,7 +31,8 @@ interface IProps {
         _id: string;
         applyType: string;
         absolutePath: string;
-      }
+      },
+      blockPackageAssemblyType: EBlockPackageAssemblyType
     }
   }
 }
@@ -128,18 +129,27 @@ const PropertyManage: FunctionComponent<IProps> = (props) => {
     setLeftButtons(copyLeftButtons);
   };
 
-
   const renderList = () => {
     return(
-      <div>
-        <Card className={styles.cards} onClick={() => setAddModalVisible(true)}>
+      <div className={styles['card-container']}>
+        {/* 新建 */}
+        <Card className={styles['card-item']} onClick={() => {
+          setModalParams({
+            categories: leftButtons,
+            blockPackageAssemblyType: props.location.query.blockPackageAssemblyType,
+            absolutePath: props.location.query.projectInfo.absolutePath
+          });
+          setAddModalVisible(true);
+        }}>
           <img src={plus} width={50} height={50} alt='' />
-          <p>新建新区块 </p>
+          <p>新建新区块</p>
         </Card>
+
+        {/* 数据 */}
         {
           cards.map((card, index) => {
             return (
-              <Card className={styles.cards} key={card.key + index}
+              <Card className={styles['card-item']} key={card.key + index}
                     onMouseEnter={()=>hoverChange(card, true)}
                     onMouseLeave={()=>hoverChange(card, false)}>
                 {card.hover ?
@@ -193,8 +203,7 @@ const PropertyManage: FunctionComponent<IProps> = (props) => {
         <div className={styles.left}>
           <div className={styles['left-btn']} onClick={() => {
             setModalParams({
-              // TODO 这里以后要从外面传进来
-              categoryType: EBlockPackageAssemblyType.BLOCK,
+              categoryType: props.location.query.blockPackageAssemblyType,
               absolutePath: props.location.query.projectInfo.absolutePath
             });
             setTypesModalVisible(true);
@@ -224,10 +233,12 @@ const PropertyManage: FunctionComponent<IProps> = (props) => {
       {addModalVisible ? (
         <Add
           modalVisible={addModalVisible}
-          categories={leftButtons}
+          params={modalParams}
           closeModal={success => {
+            setModalParams(null);
             setAddModalVisible(false);
             if (success) {
+              getBlockTypeList();
             }
           }}
         />

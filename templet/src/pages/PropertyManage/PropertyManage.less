@@ -37,14 +37,23 @@
       flex: 1;
       background: #313131;
       padding: 2.5rem;
-      .cards{
-        margin: 2rem 2rem 2rem 0rem;
+      .card-container {
+        display: flex;
+        flex-wrap: wrap;
+      }
+      .card-item {
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin: 20px 20px 20px 0;
         width: 14.19rem;
         height:10.5rem;
         background-color: #313131;
         color: #ffffff;
-        border-radius: .5rem;
-        float: left;
+        border-radius: 5px;
+        //float: left;
         text-align: center;
         .positionBox{
           width: 100%;

@@ -178,16 +178,13 @@ class cliBridge {
    * 创建区块
    */
   createBlockItem(blockInfo, runWindow) {
-    // 保存区块信息
-    //     new DataUse(block_itemdb).save(blockInfo).then(msg=>{})
-    console.log('区块blockInfo', blockInfo)
     // 用项目信息拼接创建执行命令
     const cmdArg = {
       channel: 'cmd-message',
-      cmdStr: `pyramid block create ${blockInfo.menuNameEn} --create-block-type=${blockInfo.type} --create-block-name-zh=${blockInfo.menuNameZh} --create-block-description=${blockInfo.description} --create-block-categories=${blockInfo.categories} --create-block-image=${blockInfo.remarkImg}`,
-      cwd: `${blockInfo.filePath}`,
+      cmdStr: `pyramid block create ${blockInfo.blockName} --create-block-name-zh=${blockInfo.blockNameZn} --create-block-type=${blockInfo.blockType} --create-block-description=${blockInfo.blockDescription} --create-block-categories=${blockInfo.blockCategories} --create-block-image=${blockInfo.blockImage}`,
+      cwd: `${blockInfo.projectPath}`,
       flag: 'cmd-block-item-create',
-    }
+    };
 
     // 将此命令发送给渲染窗口执行
     runWindow.webContents.send('cmd-message', cmdArg);

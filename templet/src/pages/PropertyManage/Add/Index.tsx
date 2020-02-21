@@ -1,23 +1,30 @@
-import React, {FormEvent, FunctionComponent, useState} from 'react';
+import React, {FormEvent, FunctionComponent, useEffect, useState} from 'react';
 import { Button, Select, Form, Input, message, Modal, Upload, Icon  } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 import { pyramidUiService } from '@/core/pyramid-ui/service/pyramid-ui.service';
 import {
   PyramidUISendProjectBlockItemCreateAction
 } from "@/core/pyramid-ui/action/pyramid-ui-send.action";
-import { urlParames } from '@/utils/utils';
-import styles from './Index.less';
 import {mainRequest} from "@/requests/main.request";
+import {EBlockPackageAssemblyType} from "@/dicts/block-package.dict";
+import {PyramidUIReceiveActionsUnion} from "@/core/pyramid-ui/action/pyramid-ui-receive.action";
+import {PyramidUIActionTypes} from "@/core/pyramid-ui/action";
+import {ActionTypes} from "../../../../../core/config/event.config";
 
 const FormItem = Form.Item;
 
 interface IProps extends FormComponentProps {
   modalVisible: boolean;
-  categories: Array<object>;
   closeModal: (data?: any) => void;
+  params: {
+    categories: [{name: string}],
+    blockPackageAssemblyType: EBlockPackageAssemblyType,
+    absolutePath: string;
+  }
 }
 
 const Component: FunctionComponent<IProps> = props => {
+  const [categories, setCategories] = useState<string[]>([]);
 
   const [imageUrl, setImageUrl] = useState('');
   const [imgLoading, setImgLoading] = useState(false);
@@ -25,29 +32,56 @@ const Component: FunctionComponent<IProps> = props => {
   const {
     form,
     form: { getFieldDecorator },
-    categories
   } = props;
 
-  /**
-   * 正则表达式
-   */
-  const validateChineseName = (rule, value, callback) => {
-    const regex = /^[\u4e00-\u9fa5]+$/;
-    if (value && regex.test(value)) {
-      callback();
-    } else {
-      callback(new Error('中文名必须输入汉字'));
+  useEffect(() => {
+    if (props.params.categories) {
+      // 要保存起来，不知道怎么搞的，刷新的时候消失了
+      const list = props.params.categories.map(v => v.name);
+      setCategories(list);
     }
-  };
 
-  const validateEnglishnName = (rule, value, callback) => {
-    const regex = /^\w+$/;
-    if (value && regex.test(value)) {
-      callback();
-    } else {
-      callback(new Error('英文名必须输入字母或数字'));
+    const messageKey = pyramidUiService.getMessageFn((pyramidAction: PyramidUIReceiveActionsUnion) => {
+      switch (pyramidAction.type) {
+        case PyramidUIActionTypes.RECEIVE_CMD_EXECUTE_RESULT:
+          if (pyramidAction.payload.pyramidUIActionType === ActionTypes.SEND_PROJECT_BLOCK_ITEM_CREATE) {
+            message.destroy();
+            if (!pyramidAction.payload.cmdExecuteResult) {
+              message.error('创建区块失败');
+              return;
+            }
+            props.closeModal(true);
+          }
+          break;
+      }
+    });
+
+    return () => {
+      message.destroy();
+      pyramidUiService.clearMessageFn(messageKey);
     }
-  };
+  }, []);
+
+  // /**
+  //  * 正则表达式
+  //  */
+  // const validateChineseName = (rule, value, callback) => {
+  //   const regex = /^[\u4e00-\u9fa5]+$/;
+  //   if (value && regex.test(value)) {
+  //     callback();
+  //   } else {
+  //     callback(new Error('中文名必须输入汉字'));
+  //   }
+  // };
+  //
+  // const validateEnglishnName = (rule, value, callback) => {
+  //   const regex = /^\w+$/;
+  //   if (value && regex.test(value)) {
+  //     callback();
+  //   } else {
+  //     callback(new Error('英文名必须输入字母或数字'));
+  //   }
+  // };
 
 
   const handleSubmit = (e: FormEvent) => {
@@ -56,16 +90,28 @@ const Component: FunctionComponent<IProps> = props => {
     form.validateFields((err, fieldsValue) => {
       if (!err) {
         delete fieldsValue['img'];
-        let params = fieldsValue;
-        params['remarkImg'] = imageUrl;
-        params['type'] = 'block';
-        params['parentId'] = urlParames().parentId;
-        params['categories'] = params['categories'].toString();
-        pyramidUiService.sendMessageFn(new PyramidUISendProjectBlockItemCreateAction(params));
+        const params = {...fieldsValue};
+        params['blockType'] = getCliBlockType();
+        params['blockImage'] = imageUrl;
+        params['blockCategories'] = params['blockCategories'].toString();
+        params['projectPath'] = props.params.absolutePath;
 
-        props.closeModal(true)
+        pyramidUiService.sendMessageFn(new PyramidUISendProjectBlockItemCreateAction(params));
+        message.loading('正在创建区块信息，请稍等...', 0);
       }
     });
+  };
+
+  const getCliBlockType = () => {
+    let result = 'block';
+    if (props.params.blockPackageAssemblyType) {
+      if (props.params.blockPackageAssemblyType === EBlockPackageAssemblyType.BLOCK) {
+        result = 'block';
+      } else if (props.params.blockPackageAssemblyType === EBlockPackageAssemblyType.MODULE) {
+        result = 'template';
+      }
+    }
+    return result;
   };
 
   // 将base64转换成formData
@@ -127,82 +173,80 @@ const Component: FunctionComponent<IProps> = props => {
   return (
     <Modal
       destroyOnClose={true}
-      title="新建"
+      title="新建区块"
       width={800}
       visible={props.modalVisible}
       footer={null}
       onCancel={() => props.closeModal()}>
 
       <Form onSubmit={handleSubmit}>
-        <FormItem>
-          中文名称{getFieldDecorator(`menuNameZh`, {
-          rules: [
-            { required: true, message: '必填' },
-            {
-              validator: validateChineseName,
-            }
-          ],
-        })(<Input placeholder="中文名称" />)}
+        <FormItem label='英文名称'>
+          {getFieldDecorator(`blockName`, {
+            rules: [
+              { required: true, message: '必填' },
+              // {
+              //   validator: validateEnglishnName,
+              // }
+            ],
+          })(<Input placeholder="请输入" />)}
         </FormItem>
-        <FormItem>
-          英文名称 {getFieldDecorator(`menuNameEn`, {
-          rules: [
-            { required: true, message: '必填' },
-            {
-              validator: validateEnglishnName,
-            }
-          ],
-        })(<Input placeholder="英文名称" />)}
+
+        <FormItem label='中文名称'>
+          {getFieldDecorator(`blockNameZn`, {
+            rules: [
+              { required: true, message: '必填' },
+              // {
+              //   validator: validateChineseName,
+              // }
+            ],
+          })(<Input placeholder="请输入" />)}
         </FormItem>
-        <FormItem>
-          分类
-          {getFieldDecorator('categories', {
+
+        <FormItem label='分类'>
+          {getFieldDecorator('blockCategories', {
             rules: [
               { required: true, message: '必填' },
             ]})(
             <Select
-              placeholder="分类"
+              placeholder="请选择"
               mode="multiple"
-              allowClear={true}
+              allowClear={false}
             >
               {categories.map(data => {
                 return (
-                  <Select.Option value={data.name} key={data.name}>
-                    {data.name}
+                  <Select.Option value={data} key={data}>
+                    {data}
                   </Select.Option>
                 );
               })}
             </Select>
           )}
         </FormItem>
-        <FormItem>
-          描述{getFieldDecorator(`description`, {
-          rules: [
-            { required: true, message: '必填' }
-          ],
-        })(<Input placeholder="描述" />)}
+
+        <FormItem label='描述'>
+          {getFieldDecorator(`blockDescription`, {
+            rules: [
+              { required: true, message: '必填' }
+            ],
+          })(<Input placeholder="请输入" />)}
         </FormItem>
-        <FormItem className={styles.uploadImg}>
-          图片描述{getFieldDecorator(`img`, {
-          /*      rules: [
-                  { required: true, message: '必填' }
-                ],*/
-        })(
-          <Upload
-            name="avatar"
-            listType="picture-card"
-            showUploadList={false}
-            /*   action={API_CONFIG.MAIN.UPLOAD_IMG}*/
-            beforeUpload={beforeUpload}
-            onChange={handleChange}
-          >
-            {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
-          </Upload>
-        )}
-          <div style={{fontSize:'12px', color:'rgba(1, 1, 1, 0.45)'}}>只支持.jpg格式</div>
+
+        <FormItem label={'图片'} extra='只支持.jpg格式'>
+          {getFieldDecorator(`img`)(
+            <Upload
+              name="avatar"
+              listType="picture-card"
+              showUploadList={false}
+              beforeUpload={beforeUpload}
+              onChange={handleChange}
+            >
+              {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
+            </Upload>
+          )}
         </FormItem>
+
         <FormItem >
-          <Button type="primary" htmlType="submit">
+          <Button type="primary" htmlType="submit" style={{marginRight: 10}}>
             确定
           </Button>
           <Button htmlType="reset" onClick={() => props.closeModal()}>

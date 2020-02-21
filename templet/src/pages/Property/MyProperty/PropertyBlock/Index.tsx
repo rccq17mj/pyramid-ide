@@ -16,7 +16,7 @@ import {
 } from "@/core/pyramid-ui/action/pyramid-ui-receive.action";
 import {PyramidUIActionTypes} from "@/core/pyramid-ui/action";
 import style from '../../Property.less';
-import {BlockPackageEndType} from "@/dicts/block-package.dict";
+import {BlockPackageEndType, EBlockPackageAssemblyType} from "@/dicts/block-package.dict";
 import router from 'umi/router';
 
 const { Content } = Layout;
@@ -76,10 +76,10 @@ const PropertyBlock: FunctionComponent<IProps> = props => {
     router.push({
       pathname: '/property-manage',
       query: {
-        projectInfo
+        projectInfo,
+        blockPackageAssemblyType: EBlockPackageAssemblyType.BLOCK
       }
     });
-    // Router.push(`/property-manage?parentId=${projectInfo._id}&package=${projectInfo.package}&applyType=${projectInfo.applyType}&path=${projectInfo.filePath}/${projectInfo.menuNameEn}`)
   };
 
   const getBlockData = () => {
