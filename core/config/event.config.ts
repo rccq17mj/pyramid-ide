@@ -39,6 +39,8 @@ export const ActionTypes = {
 
     /******************** 布局 ********************/
     SEND_PROJECT_LAYOUT_CHOOSE: 'pyramid.ui.send.project.layout.choose',
+    SEND_PROJECT_LAYOUT_CLICKSECTION: 'pyramid.ui.children.send.project.layout.clickSection',
+    RECEIVE_PROJECT_LAYOUT_SELECTCOLUMN: 'pyramid.ui.children.receive.project.layout.selectColumn',
     /******************** 布局 ********************/
 
 
@@ -57,6 +59,7 @@ export const ActionTypes = {
 
     /******************** 区块 ********************/
     SEND_PROJECT_BLOCK_SELECT: 'pyramid.ui.send.project.block.select',
+    RECEIVE_PROJECT_BLOCK_SELECT: 'pyramid.ui.children.receive.project.block.select',
     SEND_PROJECT_BLOCK_CREATE: 'pyramid.ui.send.project.block.create',
     SEND_PROJECT_BLOCK_TYPES_CREATE: 'pyramid.ui.send.project.block.types.create',
     SEND_PROJECT_BLOCK_ITEM_CREATE: 'pyramid.ui.send.project.block.item.create',
@@ -65,6 +68,7 @@ export const ActionTypes = {
     RECEIVE_PROJECT_BLOCK_ITEM_LIST: 'pyramid.ui.receive.project.block.item.list',
     SEND_PROJECT_BLOCK_REMOVE: 'pyramid.ui.send.project.block.remove',
     RECEIVE_PROJECT_BLOCK_REMOVE:'pyramid.ui.receive.project.block.remove',
+    SEND_PROJECT_BLOCK_CLICKSECTION:'pyramid.ui.children.send.project.block.clickSection',
     /******************** 区块 ********************/
 
 
