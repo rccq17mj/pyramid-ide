@@ -210,7 +210,7 @@ class receive {
                         this.window_objs.mainWindow.focus();
                         const { key, gitUrl } = arg.payload;
                         this.view.webContents.send('site-message', {
-                            type: 'pyramid.ui.children.receive.project.block.select',
+                            type: ActionTypes.RECEIVE_PROJECT_BLOCK_SELECT,
                             payload: {
                                 key,
                                 gitUrl
@@ -218,7 +218,7 @@ class receive {
                         });
                         break;
                     //    添加区块到项目（请不要随便删除）
-                    case 'pyramid.ui.children.send.project.block.clickSection':
+                    case ActionTypes.SEND_PROJECT_BLOCK_CLICKSECTION:
                         if (this.moduleWindow) {
                             this.moduleWindow.show();
                         }
@@ -227,7 +227,7 @@ class receive {
                         });
                         break;
                     //    添加布局到项目（请不要随便删除）
-                    case 'pyramid.ui.children.send.project.layout.clickSection':
+                    case ActionTypes.SEND_PROJECT_LAYOUT_CLICKSECTION:
                         if (this.moduleWindow) {
                             this.moduleWindow.show();
                         }
@@ -348,7 +348,7 @@ class receive {
                         // self.moduleWindow.close();
                         this.window_objs.mainWindow.focus();
                         this.view.webContents.send('site-message', {
-                            type: 'pyramid.ui.children.receive.project.layout.selectColumn',
+                            type: ActionTypes.RECEIVE_PROJECT_LAYOUT_SELECTCOLUMN,
                             payload: {
                                 column: column
                             }
