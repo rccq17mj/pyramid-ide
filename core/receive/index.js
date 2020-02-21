@@ -361,8 +361,9 @@ class receive {
                     case ActionTypes.SEND_PROJECT_START:
                         new killPort(9100, (s) => {
                             // 将当前需要操作的项目信息保存到库
-                            this.pyramidControl.updataProjectInfo(arg.payload.projectInfo);
-                            this.pyramidControl.start(arg.payload.projectInfo, this.window_objs.runWindow)
+                            this.pyramidControl.updataProjectInfo(arg.payload.projectInfo, () => {
+                                this.pyramidControl.start(arg.payload.projectInfo, this.window_objs.runWindow)
+                            });
                         });
                         break;
                     default:
