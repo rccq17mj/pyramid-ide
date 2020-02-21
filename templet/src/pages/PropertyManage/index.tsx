@@ -48,12 +48,13 @@ const PropertyManage: FunctionComponent<IProps> = (props) => {
   const [modalParams, setModalParams] = useState<any>(null);
 
   const getBlockTypeList = () => {
-    // TODO 先写死
-    const projectPath = props.location.query.projectInfo ? props.location.query.projectInfo.absolutePath : 'C:\\Users\\70480\\Desktop\\test\\package1';
+    const projectPath = props.location.query.projectInfo.absolutePath;
     if (projectPath) {
       pyramidUiService.sendMessageFn(new PyramidUISendBlockPackageInfoAction({
         projectPath: projectPath,
       }));
+    } else {
+      router.push({pathname: '/property/myProperty'});
     }
   };
 
