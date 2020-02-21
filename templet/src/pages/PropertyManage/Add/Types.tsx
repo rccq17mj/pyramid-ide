@@ -24,8 +24,7 @@ const Component: FunctionComponent<IProps> = props => {
 
 
   useEffect(()=>{
-    console.log('url参数',urlParames())
-  },[])
+  },[]);
 
 
   const handleSubmit = (e: FormEvent) => {
@@ -33,11 +32,9 @@ const Component: FunctionComponent<IProps> = props => {
 
     form.validateFields((err, fieldsValue) => {
       if (!err) {
-        console.log('fieldsValue', fieldsValue)
         let params = fieldsValue;
         params['categoryType'] = "blocks";
         params['parentId'] = urlParames().parentId;
-        console.log('最终params数据', params)
         pyramidUiService.sendMessageFn(new PyramidUISendProjectBlockTypesCreateAction(params));
 
         props.closeModal(true)

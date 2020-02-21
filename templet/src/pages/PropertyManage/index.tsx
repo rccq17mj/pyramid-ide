@@ -26,7 +26,7 @@ interface ILeftBtn {
 interface IProps {
 }
 
-const PropertyManage: FunctionComponent<IProps> = props => {
+const PropertyManage: FunctionComponent<IProps> = () => {
 
   const [leftButtons, setLeftButtons] = useState<ILeftBtn[]>([]);
   const [selectType, setSelectType] = useState('');
@@ -42,12 +42,9 @@ const PropertyManage: FunctionComponent<IProps> = props => {
       // TODO 先写死 发送获取区块信息
       projectPath: urlParames().path,
     }));
-
-  }
+  };
 
   useEffect(() => {
-    console.log('url参数',urlParames())
-   // getBlockList();
     getBlockTypeList();
 
     const messageKey = pyramidUiService.getMessageFn((pyramidAction: PyramidUIReceiveActionsUnion) => {
@@ -58,21 +55,20 @@ const PropertyManage: FunctionComponent<IProps> = props => {
           // 渲染区块
           const fatherBlock = blocks.filter((val) => {
             return val.name != ''
-          })
+          });
           setCards(fatherBlock);
           setCardData(fatherBlock);
 
           // 渲染分类
           let category = pyramidAction.payload.packageInfo.category.blocks;
-          console.log('当前的区块包分类',category);
-          let categoryList = []
+          let categoryList = [];
           category.forEach((item, index)=>{
-            let categoryItem
+            let categoryItem;
             if(index == 0){
               categoryItem = {
                 name: item,
                 open: true,
-              }
+              };
               setSelectType(item)
             }else{
               categoryItem = {
@@ -81,9 +77,9 @@ const PropertyManage: FunctionComponent<IProps> = props => {
               }
             }
             categoryList.push(categoryItem)
-          })
+          });
 
-          setLeftButtons(categoryList)
+          setLeftButtons(categoryList);
           break;
       }
     });
@@ -94,22 +90,22 @@ const PropertyManage: FunctionComponent<IProps> = props => {
   },[]);
 
   useEffect(() => {
-    let newCards = [...cardData]
+    let newCards = [...cardData];
     const Cards = newCards.filter((val) => {
       return val.tags.indexOf(selectType) != -1;
-    })
+    });
     setCards(Cards)
-  },[leftButtons, cardData])
+  },[leftButtons, cardData]);
 
   const hoverChange = (card, hover) => {
-    let newCards = [...cards]
+    let newCards = [...cards];
     newCards.forEach((item)=>{
       if(item.key == card.key){
         item['hover'] = hover
       }
-    })
+    });
     setCards(newCards)
-  }
+  };
 
   const clickLeftBtn = (btn: ILeftBtn, index: number) => {
     const copyLeftButtons: ILeftBtn[] = JSON.parse(JSON.stringify(leftButtons));
@@ -118,7 +114,7 @@ const PropertyManage: FunctionComponent<IProps> = props => {
     });
 
     copyLeftButtons[index].open = true;
-    setSelectType(copyLeftButtons[index].name)
+    setSelectType(copyLeftButtons[index].name);
     setLeftButtons(copyLeftButtons);
   };
 
@@ -127,7 +123,7 @@ const PropertyManage: FunctionComponent<IProps> = props => {
     return(
       <div>
         <Card className={styles.cards} onClick={() => setAddModalVisible(true)}>
-          <img src={plus} width={50} height={50}></img>
+          <img src={plus} width={50} height={50} alt='' />
           <p>新建新区块 </p>
         </Card>
         {
@@ -151,7 +147,7 @@ const PropertyManage: FunctionComponent<IProps> = props => {
                     </div>
                   </div> : null
                 }
-                <img src={block} width={50} height={50}></img>
+                <img src={block} width={50} height={50} alt=''/>
                 <p>{card.key}</p>
                 <span>{card.name}</span>
               </Card>
@@ -160,7 +156,7 @@ const PropertyManage: FunctionComponent<IProps> = props => {
         }
       </div>
     )
-  }
+  };
 
   return (
     <div className={styles.all}>
@@ -198,7 +194,7 @@ const PropertyManage: FunctionComponent<IProps> = props => {
         <div className={styles.right}>
           {renderList()}
         </div>
-{/*        <div>
+        {/*        <div>
           预览
         </div>*/}
       </div>

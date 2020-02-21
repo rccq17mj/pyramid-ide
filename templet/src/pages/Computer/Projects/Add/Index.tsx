@@ -1,4 +1,4 @@
-import React, { FormEvent, FunctionComponent, useEffect, useState } from 'react';
+import React, { FormEvent, FunctionComponent, useState } from 'react';
 import { Tabs, Button, Select, Form, Input, Modal, Switch, Icon } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 import { pyramidUiService } from '@/core/pyramid-ui/service/pyramid-ui.service';
