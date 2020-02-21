@@ -153,17 +153,23 @@ class cliBridge {
    */
   createBlock(blockInfo, runWindow) {
     // 保存区块信息
-    new DataUse(blockdb).save(blockInfo).then(msg => { })
+    new DataUse(blockdb).save(blockInfo).then(msg => {});
+
+    let cmd = `pyramid block-package init ${blockInfo.menuNameEn} --init-project-type=${blockInfo.applyType} --init-project-chinese-name=${blockInfo.menuNameZh}`;
+
+    if (blockInfo.remarkImg) {
+      cmd += ` --initProjectCover=${blockInfo.remarkImg}`;
+    }
+
     // 用项目信息拼接创建执行命令
     const cmdArg = {
       channel: 'cmd-message',
-      cmdStr: `pyramid block-package init ${blockInfo.menuNameEn} --init-project-type=${blockInfo.applyType}`,
-      // cmdStr: `pyramid block init ${blockInfo.menuNameEn} --init-block-url=${blockInfo.gitUrl}`,
+      cmdStr: cmd,
       cwd: `${blockInfo.filePath}`,
       flag: 'cmd-block-package-create'
-    }
+    };
 
-    console.log('createBlock-cmdArg', cmdArg)
+    console.log('createBlock-cmdArg', cmdArg);
     // 将此命令发送给渲染窗口执行
     runWindow.webContents.send('cmd-message', cmdArg);
   }
@@ -193,14 +199,14 @@ class cliBridge {
   createBlocksType(blocksTypeInfo, runWindow) {
     // 保存区块信息  暂时不保存在本地
     //  new DataUse(blocks_typedb).save(blocksTypeInfo).then(msg=>{})
-    console.log('区块分类info', blocksTypeInfo)
+
     // 用项目信息拼接创建执行命令
     const cmdArg = {
       channel: 'cmd-message',
       cmdStr: `pyramid block category add ${blocksTypeInfo.name} --category-type=${blocksTypeInfo.categoryType}`,
-      cwd: `${blocksTypeInfo.filePath}`,
+      cwd: `${blocksTypeInfo.projectPath}`,
       flag: 'cmd-blocks-type-create',
-    }
+    };
 
     // 将此命令发送给渲染窗口执行
     runWindow.webContents.send('cmd-message', cmdArg);
@@ -400,8 +406,28 @@ class cliBridge {
     private_block_package_db.find({}, (err, rows) => {
       if (err) {
         callback([]);
+        return;
       }
       callback(rows);
+    });
+  };
+
+  /**
+   * 批量删除
+   * @param ids
+   * @param callback
+   */
+  deletePrivateBlockPackage = (ids, callback) => {
+    const condition = ids.map(v => {
+      return {_id: v}
+    });
+    private_block_package_db.remove({$and :condition}, { multi: true }, (err, numRemoved) => {
+      if (err) {
+        callback('数据删除失败');
+        return;
+      }
+      // 好像不能把数据删除掉，只能做一个标识，要更新下数据把字段都清掉，不然太多了
+      callback(null);
     });
   };
 

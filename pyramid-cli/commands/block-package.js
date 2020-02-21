@@ -135,7 +135,7 @@ module.exports = (options) => {
         const args1 = program.args[1];
         const projectName = program.args[1][0];
 
-        let {initProjectUrl, initProjectType, initProjectGitUrl} = options;
+        let {initProjectUrl, initProjectType, initProjectGitUrl, initProjectChineseName, initProjectCover, initProjectRemark} = options;
 
         // 默认初始化地址
         if (!initProjectUrl) {
@@ -151,10 +151,20 @@ module.exports = (options) => {
         } else if (initProjectType === '2') {
             initProjectType = 'mobile';
         }
+        if (!initProjectCover) {
+            initProjectCover = '';
+        }
+        if (!initProjectRemark) {
+            initProjectRemark = '';
+        }
 
         if (!args1 || !projectName) {
             console.log(chalk.red('请输入区块项目名称'));
             process.exit();
+        }
+
+        if (!initProjectChineseName) {
+            initProjectChineseName = projectName;
         }
 
         // 项目路径
@@ -178,11 +188,13 @@ module.exports = (options) => {
                 process.exit()
             }
 
-            // TODO 替换 json 文件模板
             const meta = {
                 blockPackageName: projectName,
                 blockPackageType: initProjectType,
-                blockPackageGitUrl: initProjectGitUrl
+                blockPackageGitUrl: initProjectGitUrl,
+                blockPackageChineseName: initProjectChineseName,
+                blockPackageCover: initProjectCover,
+                blockPackageRemark: initProjectRemark
             };
             const pyramidBlockJsonFile = `${projectPath}/pyramid-blocks.json`;
             const pyramidBlockJsonContent = fs.readFileSync(pyramidBlockJsonFile).toString();

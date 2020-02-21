@@ -175,11 +175,21 @@ class response {
             // 区块包类型创建
             if (arg.flag === 'cmd-blocks-type-create') {
                 if (this.window_objs.mainWindow != null) {
-                    // 发送CLI消息回显，带上类型
-                    this.window_objs.mainWindow.webContents.send('site-message', {
-                        type: ActionTypes.RECEIVE_CLI_MESSAGE,
-                        payload: { ...arg, type: ECliMessageType.PROJECT_BLOCKS_TYPE_CREATE }
-                    });
+                    if (cmdStatus === 'end') {
+                        this.window_objs.mainWindow.webContents.send('site-message', {
+                            type: ActionTypes.RECEIVE_CMD_EXECUTE_RESULT,
+                            payload: {
+                                pyramidUIActionType: ActionTypes.SEND_PROJECT_BLOCK_TYPES_CREATE,
+                                cmdExecuteResult: cmdCloseCode === 0,
+                                cmdExecuteResultCode: cmdCloseCode
+                            }
+                        });
+                    }
+                    // // 发送CLI消息回显，带上类型
+                    // this.window_objs.mainWindow.webContents.send('site-message', {
+                    //     type: ActionTypes.RECEIVE_CLI_MESSAGE,
+                    //     payload: { ...arg, type: ECliMessageType.PROJECT_BLOCKS_TYPE_CREATE }
+                    // });
                 }
             }
         })

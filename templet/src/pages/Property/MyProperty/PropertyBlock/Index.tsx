@@ -9,7 +9,7 @@ import {
   PyramidUISendBlockGetAction,
   PyramidUISendBlockRemoveAction,
 } from '@/core/pyramid-ui/action/pyramid-ui-send.action';
-import Router from 'umi/router';
+// import Router from 'umi/router';
 import {
   PyramidUIReceiveActionsUnion, PyramidUIReceiveBlockListAction,
   PyramidUIReceiveBlockRemoveAction
@@ -17,6 +17,7 @@ import {
 import {PyramidUIActionTypes} from "@/core/pyramid-ui/action";
 import style from '../../Property.less';
 import {BlockPackageEndType} from "@/dicts/block-package.dict";
+import router from 'umi/router';
 
 const { Content } = Layout;
 const FormItem = Form.Item;
@@ -71,7 +72,14 @@ const PropertyBlock: FunctionComponent<IProps> = props => {
   }, []);
 
   const startProject = projectInfo => {
-    Router.push(`/property-manage?parentId=${projectInfo._id}&package=${projectInfo.package}&applyType=${projectInfo.applyType}&path=${projectInfo.filePath}/${projectInfo.menuNameEn}`)
+    projectInfo['absolutePath'] = `${projectInfo.filePath}/${projectInfo.menuNameEn}`;
+    router.push({
+      pathname: '/property-manage',
+      query: {
+        projectInfo
+      }
+    });
+    // Router.push(`/property-manage?parentId=${projectInfo._id}&package=${projectInfo.package}&applyType=${projectInfo.applyType}&path=${projectInfo.filePath}/${projectInfo.menuNameEn}`)
   };
 
   const getBlockData = () => {

@@ -2,6 +2,7 @@
  * 数据字典模型
  */
 export interface IDict {
+  extraValue?: string;
   value: string;
   label: string;
 }

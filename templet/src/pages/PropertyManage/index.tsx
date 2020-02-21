@@ -1,5 +1,5 @@
 import React, {FunctionComponent, useEffect, useState} from 'react';
-import { Row, Col, Button, Card } from 'antd';
+import {Row, Col, Button, Card, Icon} from 'antd';
 import styles from './PropertyManage.less';
 import plus from "@/assets/plus.png";
 import block from "@/assets/block.png";
@@ -9,7 +9,6 @@ import {pyramidUiService} from "@/core/pyramid-ui/service/pyramid-ui.service";
 import Add from '@/pages/PropertyManage/Add/Index';
 import Release from '@/pages/PropertyManage/Add/Release';
 import Types from '@/pages/PropertyManage/Add/Types';
-import {urlParames} from "@/utils/utils";
 import {
   PyramidUISendBlockPackageInfoAction,
 } from "@/core/pyramid-ui/action/pyramid-ui-send.action";
@@ -17,6 +16,7 @@ import {
   PyramidUIReceiveActionsUnion,
 } from "@/core/pyramid-ui/action/pyramid-ui-receive.action";
 import {PyramidUIActionTypes} from "@/core/pyramid-ui/action";
+import {EBlockPackageAssemblyType} from "@/dicts/block-package.dict";
 
 interface ILeftBtn {
   name: string;
@@ -24,10 +24,19 @@ interface ILeftBtn {
 }
 
 interface IProps {
+  location: {
+    query: {
+      // 项目信息
+      projectInfo: {
+        _id: string;
+        applyType: string;
+        absolutePath: string;
+      }
+    }
+  }
 }
 
-const PropertyManage: FunctionComponent<IProps> = props => {
-
+const PropertyManage: FunctionComponent<IProps> = (props) => {
   const [leftButtons, setLeftButtons] = useState<ILeftBtn[]>([]);
   const [selectType, setSelectType] = useState('');
   const [cards, setCards] = useState<any[]>([]);
@@ -35,44 +44,42 @@ const PropertyManage: FunctionComponent<IProps> = props => {
   const [addModalVisible, setAddModalVisible] = useState<boolean>(false);
   const [releaseModalVisible, setReleaseModalVisible] = useState<boolean>(false);
   const [typesModalVisible, setTypesModalVisible] = useState<boolean>(false);
+  const [modalParams, setModalParams] = useState<any>(null);
 
-
-  const getBlockTypeList = () =>{
-    pyramidUiService.sendMessageFn(new PyramidUISendBlockPackageInfoAction({
-      // TODO 先写死 发送获取区块信息
-      projectPath: urlParames().path,
-    }));
-
-  }
+  const getBlockTypeList = () => {
+    // TODO 先写死
+    const projectPath = props.location.query.projectInfo ? props.location.query.projectInfo.absolutePath : 'C:\\Users\\70480\\Desktop\\test\\package1';
+    if (projectPath) {
+      pyramidUiService.sendMessageFn(new PyramidUISendBlockPackageInfoAction({
+        projectPath: projectPath,
+      }));
+    }
+  };
 
   useEffect(() => {
-    console.log('url参数',urlParames())
-   // getBlockList();
     getBlockTypeList();
 
     const messageKey = pyramidUiService.getMessageFn((pyramidAction: PyramidUIReceiveActionsUnion) => {
-      console.log('监听',pyramidAction);
       switch (pyramidAction.type) {
         case PyramidUIActionTypes.RECEIVE_PROJECT_BLOCK_PACKAGE_INFO:
-          let blocks = pyramidAction.payload.packageInfo.blocks;
+          const blocks = pyramidAction.payload.packageInfo.blocks;
           // 渲染区块
           const fatherBlock = blocks.filter((val) => {
             return val.name != ''
-          })
+          });
           setCards(fatherBlock);
           setCardData(fatherBlock);
 
           // 渲染分类
-          let category = pyramidAction.payload.packageInfo.category.blocks;
-          console.log('当前的区块包分类',category);
-          let categoryList = []
+          const category = pyramidAction.payload.packageInfo.category.blocks;
+          const categoryList = [];
           category.forEach((item, index)=>{
-            let categoryItem
+            let categoryItem;
             if(index == 0){
               categoryItem = {
                 name: item,
                 open: true,
-              }
+              };
               setSelectType(item)
             }else{
               categoryItem = {
@@ -81,9 +88,9 @@ const PropertyManage: FunctionComponent<IProps> = props => {
               }
             }
             categoryList.push(categoryItem)
-          })
+          });
 
-          setLeftButtons(categoryList)
+          setLeftButtons(categoryList);
           break;
       }
     });
@@ -94,31 +101,30 @@ const PropertyManage: FunctionComponent<IProps> = props => {
   },[]);
 
   useEffect(() => {
-    let newCards = [...cardData]
+    let newCards = [...cardData];
     const Cards = newCards.filter((val) => {
       return val.tags.indexOf(selectType) != -1;
-    })
-    setCards(Cards)
-  },[leftButtons, cardData])
+    });
+    setCards(Cards);
+  },[leftButtons, cardData]);
 
   const hoverChange = (card, hover) => {
-    let newCards = [...cards]
+    let newCards = [...cards];
     newCards.forEach((item)=>{
       if(item.key == card.key){
         item['hover'] = hover
       }
-    })
+    });
     setCards(newCards)
-  }
+  };
 
   const clickLeftBtn = (btn: ILeftBtn, index: number) => {
     const copyLeftButtons: ILeftBtn[] = JSON.parse(JSON.stringify(leftButtons));
     copyLeftButtons.forEach(copyLeftButton => {
       copyLeftButton.open = false;
     });
-
     copyLeftButtons[index].open = true;
-    setSelectType(copyLeftButtons[index].name)
+    setSelectType(copyLeftButtons[index].name);
     setLeftButtons(copyLeftButtons);
   };
 
@@ -127,7 +133,7 @@ const PropertyManage: FunctionComponent<IProps> = props => {
     return(
       <div>
         <Card className={styles.cards} onClick={() => setAddModalVisible(true)}>
-          <img src={plus} width={50} height={50}></img>
+          <img src={plus} width={50} height={50} alt='' />
           <p>新建新区块 </p>
         </Card>
         {
@@ -151,7 +157,7 @@ const PropertyManage: FunctionComponent<IProps> = props => {
                     </div>
                   </div> : null
                 }
-                <img src={block} width={50} height={50}></img>
+                <img src={block} width={50} height={50} alt=''/>
                 <p>{card.key}</p>
                 <span>{card.name}</span>
               </Card>
@@ -160,10 +166,11 @@ const PropertyManage: FunctionComponent<IProps> = props => {
         }
       </div>
     )
-  }
+  };
 
   return (
     <div className={styles.all}>
+      {/* 工具栏 */}
       <div style={{backgroundColor: '#30303D', padding: '0.4rem 0.4rem'}}>
         <Row gutter={[8, 8]}>
           <Col span={6}>
@@ -180,10 +187,22 @@ const PropertyManage: FunctionComponent<IProps> = props => {
           </Col>
         </Row>
       </div>
+
+      {/* 内容 */}
       <div className={styles.container}>
         <div className={styles.left}>
-          <div className={styles['left-btn']} onClick={() => {setTypesModalVisible(true)}}>
-            <span>新建分类</span>
+          <div className={styles['left-btn']} onClick={() => {
+            setModalParams({
+              // TODO 这里以后要从外面传进来
+              categoryType: EBlockPackageAssemblyType.BLOCK,
+              absolutePath: props.location.query.projectInfo.absolutePath
+            });
+            setTypesModalVisible(true);
+          }}>
+            <div className={styles['add-btn']}>
+              <Icon type="plus" />
+              <span>新建分类</span>
+            </div>
           </div>
           {
             leftButtons.map((leftBtn, index) => {
@@ -195,13 +214,13 @@ const PropertyManage: FunctionComponent<IProps> = props => {
             })
           }
         </div>
+
         <div className={styles.right}>
           {renderList()}
         </div>
-{/*        <div>
-          预览
-        </div>*/}
       </div>
+
+      {/*  */}
       {addModalVisible ? (
         <Add
           modalVisible={addModalVisible}
@@ -209,11 +228,12 @@ const PropertyManage: FunctionComponent<IProps> = props => {
           closeModal={success => {
             setAddModalVisible(false);
             if (success) {
-              //simpleTable.loadData();
             }
           }}
         />
       ) : null}
+
+      {/* 发布 */}
       {releaseModalVisible ? (
         <Release
           modalVisible={releaseModalVisible}
@@ -225,17 +245,22 @@ const PropertyManage: FunctionComponent<IProps> = props => {
           }}
         />
       ) : null}
+
+      {/* 分类 */}
       {typesModalVisible ? (
         <Types
           modalVisible={typesModalVisible}
+          params={modalParams}
           closeModal={success => {
+            setModalParams(null);
             setTypesModalVisible(false);
             if (success) {
-              //simpleTable.loadData();
+              getBlockTypeList();
             }
           }}
         />
       ) : null}
+
       <StatusBar />
     </div>
   )

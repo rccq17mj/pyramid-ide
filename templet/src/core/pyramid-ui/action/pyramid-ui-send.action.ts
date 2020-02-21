@@ -182,13 +182,17 @@ export class PyramidUISendProjectBlockSelectAction implements PyramidUIAction {
 }
 export class PyramidUISendProjectBlockCreateAction implements PyramidUIAction {
   readonly type = PyramidUIActionTypes.SEND_PROJECT_BLOCK_CREATE;
-  constructor(public payload: any) { }
+  constructor(public payload: {
+    blockPackageInfo: any
+  }) { }
 }
 export class PyramidUISendProjectBlockTypesCreateAction implements PyramidUIAction {
   readonly type = PyramidUIActionTypes.SEND_PROJECT_BLOCK_TYPES_CREATE;
   constructor(public payload: {
-    categoryType?: string;
-    name?: string;
+    categoryType: 'blocks' | 'modules';
+    name: string;
+    // 项目路径
+    projectPath: string;
   }) { }
 }
 export class PyramidUISendProjectBlockItemCreateAction implements PyramidUIAction {
@@ -226,7 +230,6 @@ export class PyramidUISendBlockPackageInfoAction implements PyramidUIAction {
     projectGitBranch?: string;
   }) { }
 }
-
 // 保存私有区块包
 export class PyramidUISendInsertPrivateBlockPackageInfoAction implements PyramidUIAction {
   readonly type = PyramidUIActionTypes.SEND_INSERT_PRIVATE_BLOCK_PACKAGE_INFO;
@@ -235,11 +238,17 @@ export class PyramidUISendInsertPrivateBlockPackageInfoAction implements Pyramid
     packageInfo: IBlockPackageInfo,
   }) { }
 }
-
 // 获取私有区块包信息
 export class PyramidUISendGetPrivateBlockPackageListAction implements PyramidUIAction {
   readonly type = PyramidUIActionTypes.SEND_GET_PRIVATE_BLOCK_PACKAGE_LIST;
   constructor(public payload: void) { }
+}
+// 取消私有区块包订阅
+export class PyramidUISendUnsubscribePrivateBlockPackageAction implements PyramidUIAction {
+  readonly type = PyramidUIActionTypes.SEND_UNSUBSCRIBE_PRIVATE_BLOCK_PACKAGE;
+  constructor(public payload: {
+    ids: string[]
+  }) { }
 }
 /******************** 区块包 ********************/
 

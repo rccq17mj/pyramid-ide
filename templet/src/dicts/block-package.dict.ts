@@ -25,12 +25,18 @@ export enum EBlockPackageEndType {
   PC = 'pc',
   MOBILE = 'mobile'
 }
+export enum EBlockPackageEndNumberType {
+  PC = '1',
+  MOBILE = '2'
+}
 export const BlockPackageEndType: IDict[] = [
   {
+    extraValue: EBlockPackageEndNumberType.PC,
     value: EBlockPackageEndType.PC,
     label: 'PC端',
   },
   {
+    extraValue: EBlockPackageEndNumberType.MOBILE,
     value: EBlockPackageEndType.MOBILE,
     label: '移动端',
   },

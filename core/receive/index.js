@@ -18,6 +18,28 @@ class receive {
                     case ActionTypes.SEND_PROJECT_BLOCK_PACKAGE_INFO:
                         this.pyramidControl.getBlockPackageInfo(this.window_objs.runWindow, arg.payload);
                         break;
+                    //    私有区块包取消订阅
+                    case ActionTypes.SEND_UNSUBSCRIBE_PRIVATE_BLOCK_PACKAGE:
+                        this.pyramidControl.deletePrivateBlockPackage(arg.payload.ids, (errMessage) => {
+                            let result = true;
+                            let resultCode = 0;
+                            if (errMessage) {
+                                result = false;
+                                // 随便指定一个
+                                resultCode = -1;
+                            }
+                            // 反馈
+                            this.window_objs.mainWindow.webContents.send('site-message', {
+                                type: ActionTypes.RECEIVE_CMD_EXECUTE_RESULT,
+                                payload: {
+                                    pyramidUIActionType: ActionTypes.SEND_UNSUBSCRIBE_PRIVATE_BLOCK_PACKAGE,
+                                    cmdExecuteResult: result,
+                                    cmdExecuteResultCode: resultCode,
+                                    cmdExecuteMessage: errMessage
+                                }
+                            });
+                        });
+                        break;
                     case ActionTypes.SEND_INSERT_PRIVATE_BLOCK_PACKAGE_INFO:
                         this.pyramidControl.insertPrivateBlockPackage(arg.payload, (errMessage) => {
                             let result = true;
@@ -226,8 +248,8 @@ class receive {
                         break;
                     // 区块包创建    
                     case ActionTypes.SEND_PROJECT_BLOCK_CREATE:
-                        let blockInfo = arg.payload;
-                        this.pyramidControl.createBlock(blockInfo, this.window_objs.runWindow)
+                        let blockInfo = arg.payload.blockPackageInfo;
+                        this.pyramidControl.createBlock(blockInfo, this.window_objs.runWindow);
                         break;
                     // 区块创建     
                     case ActionTypes.SEND_PROJECT_BLOCK_ITEM_CREATE:
@@ -241,22 +263,26 @@ class receive {
                             let newBlockInfo = { ...blockItemInfo }
                             newBlockInfo['filePath'] = fatherBlock['filePath'] + '/' + fatherBlock['menuNameEn']
                             this.pyramidControl.createBlockItem(newBlockInfo, this.window_objs.runWindow)
-                        })
+                        });
                         break;
                     // 区块分类创建
                     case ActionTypes.SEND_PROJECT_BLOCK_TYPES_CREATE:
-                        const blockTypes = arg.payload;
-                        this.pyramidControl.findBlock((res) => {
-                            console.log('查找区块包', res)
-                            const fatherBlock = res.filter((val) => {
-                                return val._id == blockTypes.parentId
-                            })[0]
-                            console.log('fatherBlock', fatherBlock)
-                            let newBlockTypes = { ...blockTypes }
-                            newBlockTypes['filePath'] = fatherBlock['filePath'] + '/' + fatherBlock['menuNameEn']
-                            this.pyramidControl.createBlocksType(newBlockTypes, this.window_objs.runWindow)
-                        })
+                        const typePayload = arg.payload;
+
+                        // 直接调用
+                        this.pyramidControl.createBlocksType(typePayload, this.window_objs.runWindow);
+
+                        // this.pyramidControl.findBlock((res) => {
+                        //     const fatherBlock = res.filter((val) => {
+                        //         return val._id === typePayload._id;
+                        //     })[0];
+                        //     let newBlockTypes = { ...typePayload };
+                        //     newBlockTypes['filePath'] = fatherBlock['filePath'] + '/' + fatherBlock['menuNameEn'];
+                        //     this.pyramidControl.createBlocksType(newBlockTypes, this.window_objs.runWindow)
+                        // });
+
                         break;
+
                     // 查询区块包    
                     case ActionTypes.SEND_PROJECT_BLOCK_GET:
                         this.pyramidControl.findBlock((res) => {

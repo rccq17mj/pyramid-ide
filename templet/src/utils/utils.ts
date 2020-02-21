@@ -34,6 +34,6 @@ const urlParames = (theurl = decodeURI(window.location.href)) => {
     }
   }
   return theUrlcode
-}
+};
 
 export { isAntDesignProOrDev, isAntDesignPro, isUrl, urlParames};

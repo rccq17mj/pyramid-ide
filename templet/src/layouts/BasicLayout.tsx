@@ -272,7 +272,6 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
 
     // 本地或者混合菜单
     const menus = menuList.map(item => {
-      // TODO 新增本地SVG菜单
       if (item.iconLocal) {
         item.icon = window.location.origin + item.iconLocal;
       }
