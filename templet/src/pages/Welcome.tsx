@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { List, Switch, Icon } from 'antd';
-import { PyramidUISendPublicCMD } from "@/core/pyramid-ui/action/pyramid-ui-send.action";
+import { PyramidUIReceiveInitResultAction } from "@/core/pyramid-ui/action/pyramid-ui-receive.action";
 import { pyramidUiService } from '@/core/pyramid-ui/service/pyramid-ui.service';
 import style from './Welcome.less';
 import homeLogo from "../assets/home-logo.png";
@@ -15,32 +15,50 @@ const Home = () => {
   const [vPyramid, setvPyramid] = useState<any>('...');
   const [dependent, seDependent] = useState<any>(false);
 
-  const sendCmd = (cmd, callback) => {
-    pyramidUiService.sendMessageFn(new PyramidUISendPublicCMD({cmd}, (action) => {
-      if (action.payload.cmdStatus === "progress") {
-        callback(action.payload.cmdMessage);
-      }
-    }));
-  };
-
   useEffect(() => {
-    sendCmd('node -v', (msg) => {
-      setvNode(msg);
-      sendCmd('npm -v', (msg) => {
-        setvNPM(msg);
-        sendCmd('yarn -v', (msg) => {
-          setvYarn(msg);
-          sendCmd('umi -v', (msg) => {
-            setvUmi(msg);
-            sendCmd('pyramid -v', (msg) => {
-              setvPyramid(msg);
-              seDependent(true);
-            })
-          })
-        })
-      })
-    })
+    // 初始化
+    const env = localStorage.getItem('env');
+    if(!env){
+      const messageKey = pyramidUiService.getMessageFn((pyramidAction: PyramidUIReceiveInitResultAction) => {
+        let payload = pyramidAction.payload;
+        localStorage.setItem('env', JSON.stringify(payload));
+        setEnv(payload)
+      });
+      return () => {
+        pyramidUiService.clearMessageFn(messageKey);
+      }
+    }
+    else{
+      setEnv(JSON.parse(env));
+    }
   }, []);
+
+  const setEnv = (payload) => {
+    if(payload){
+              payload.forEach((item) => {
+      switch (item.type) {
+        case 'node':
+          setvNode(item.msg);
+          break;
+        case 'yarn':
+          setvYarn(item.msg);
+          break;
+        case 'npm':
+          setvNPM(item.msg);
+          break;
+        case 'pyramid':
+          setvPyramid(item.msg);
+          break;
+        case 'umi':
+          setvUmi(item.msg);
+          break;
+        default:
+          break;
+      }
+      })
+      seDependent(true);
+    }
+  }
 
   return (
     <div className={style.homeBody}>

@@ -20,6 +20,17 @@ class init {
         return this.cmdPromise('yarn -v');
     }
 
+    /** umi */
+    testUmi() {
+        return this.cmdPromise('umi -v', (resolve, reject, e) => {
+            this.cmd('npm install umi@2.13.3 -g').then(msg => {
+                resolve(msg);
+            }).catch(e => {
+                reject(e);
+            })
+        })
+    }
+
     /** pyramid检测 */
     testPyramid() {
         return this.cmdPromise('pyramid -v', (resolve, reject, e) => {

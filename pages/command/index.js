@@ -11,37 +11,71 @@ var opts = {
 onload = function () {
     /** 初始化检测 */
     const test = new init(cmdRun);
+    const env = [];
+
+    const testPyramid = () => {
+        /** 检测pyramid-cli */
+        test.testPyramid().then((msg) => {
+            var loding = document.getElementById("loding");
+            env.push({
+                type: 'pyramid',
+                msg: msg
+            });
+            ipc.send(ipcConfig.ON_DE_SUCCESS, {
+                type: 'pyramid',
+                msg: env
+            });
+            loding.remove();
+        }).catch(e => {
+            ipc.send(ipcConfig.ON_DE_ERROR, e);
+            console.log('initError:', e);
+        });
+    }
+
     /** 检测node */
     test.testNode().then(msg => {
-        ipc.send(ipcConfig.ON_DE_NODE_SUCCESS, msg);
+        env.push({
+            type: 'node',
+            msg: msg
+        });
         /** 检测npm */
         test.testNPM().then(msg => {
-            ipc.send(ipcConfig.ON_DE_NPM_SUCCESS, msg);
-            /** 检测yarn */
-            test.testYarn().then(msg => {
-                ipc.send(ipcConfig.ON_DE_YARN_SUCCESS, msg);
-            }).catch(e => {
-                alert('抱歉，建议您安装yarn');
-                ipc.send(ipcConfig.ON_DE_YARN_SUCCESS, e);
-                console.log('initError:', e);
+            env.push({
+                type: 'npm',
+                msg: msg
             });
-            /** 检测pyramid-cli */
-            test.testPyramid().then(() => {
-                var loding = document.getElementById("loding");
-                ipc.send(ipcConfig.ON_DE_PYARMID_SUCCESS, null);
-                loding.remove();
+            /** 检测umi */
+            test.testUmi().then(msg => {
+                env.push({
+                    type: 'umi',
+                    msg: msg
+                });
+                /** 检测yarn */
+                test.testYarn().then(msg => {
+                    env.push({
+                        type: 'yarn',
+                        msg: msg
+                    });
+                    testPyramid();
+                }).catch(e => {
+                    testPyramid();
+                    alert('抱歉，建议您安装yarn');
+                    ipc.send(ipcConfig.ON_DE_ERROR, e);
+                    console.log('initError:', e);
+                });
             }).catch(e => {
-                ipc.send(ipcConfig.ON_DE_PYARMID_ERROR, e);
+                alert('抱歉，请安装umi');
+                ipc.send(ipcConfig.ON_DE_ERROR, e);
                 console.log('initError:', e);
             });
         }).catch(e => {
             alert('抱歉，请安装npm');
-            ipc.send(ipcConfig.ON_DE_NPM_ERROR, e);
+            ipc.send(ipcConfig.ON_DE_ERROR, e);
             console.log('initError:', e);
         });
     }).catch(e => {
         alert('抱歉，请安装node.js');
-        ipc.send(ipcConfig.ON_DE_NODE_ERROR, e);
+        ipc.send(ipcConfig.ON_DE_ERROR, e);
         console.log('initError:', e);
     });
 }

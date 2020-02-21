@@ -55,24 +55,30 @@
       }
     },
     "directories": {
-      "output": "build"
+      "output": "./dist"
     },
     "asar": false,
     "files": [
       "./bin/*/**",
-      "./build/*/**/**",
+      "./core/*/**",
       "./node_modules/*",
-      "./binding.gyp",
-      "./index.html",
-      "./hello.js",
+      "./pages/*/**",
+      "./public/*",
+      "./templet/*/**",
+      "./.env",
+      "./build.js",
+      "./child.js",
       "./main.js",
       "./package.json",
       "./preload.js",
-      "./renderer.js",
+      "./start.js",
       "./yarn.lock"
     ],
+    "win": {  
+      "icon": "aa269-vbpy5-001.ico"
+     },
     "mac": {
-      "icon": "hosts.icns",
+      "icon": "aa269-vbpy5-001.ico",
       "target": [
         "dmg",
         "zip"

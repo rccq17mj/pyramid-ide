@@ -1,6 +1,8 @@
 // 所有指令集合（注意格式：pyramid.ui + send | receive + 模块 + 功能 + 定义）
 export const ActionTypes = {
     /******************** 全局 ********************/
+    // 系统初始化完成
+    RECEIVE_PUBLIC_INIT: 'pyramid.ui.receive.public.init',
     // 打开devTools
     SEND_PUBLIC_OPEN_CONSOLE: 'pyramid.ui.send.public.console',
     // 接收Cli消息
