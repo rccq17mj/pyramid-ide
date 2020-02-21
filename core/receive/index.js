@@ -253,17 +253,16 @@ class receive {
                         break;
                     // 区块创建     
                     case ActionTypes.SEND_PROJECT_BLOCK_ITEM_CREATE:
-                        const blockItemInfo = arg.payload;
-                        this.pyramidControl.findBlock((res) => {
-                            console.log('查找区块包', res)
-                            const fatherBlock = res.filter((val) => {
-                                return val._id == blockItemInfo.parentId
-                            })[0]
-                            console.log('fatherBlock', fatherBlock)
-                            let newBlockInfo = { ...blockItemInfo }
-                            newBlockInfo['filePath'] = fatherBlock['filePath'] + '/' + fatherBlock['menuNameEn']
-                            this.pyramidControl.createBlockItem(newBlockInfo, this.window_objs.runWindow)
-                        });
+                        const blockItemPayload = arg.payload;
+                        // this.pyramidControl.findBlock((res) => {
+                        //     const fatherBlock = res.filter((val) => {
+                        //         return val._id == blockItemInfo.parentId
+                        //     })[0]
+                        //     let newBlockInfo = { ...blockItemInfo };
+                        //     newBlockInfo['filePath'] = fatherBlock['filePath'] + '/' + fatherBlock['menuNameEn']
+                        //     this.pyramidControl.createBlockItem(newBlockInfo, this.window_objs.runWindow)
+                        // });
+                        this.pyramidControl.createBlockItem(blockItemPayload, this.window_objs.runWindow);
                         break;
                     // 区块分类创建
                     case ActionTypes.SEND_PROJECT_BLOCK_TYPES_CREATE:
