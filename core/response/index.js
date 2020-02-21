@@ -177,6 +177,21 @@ class response {
                     }
                 }
             }
+            // 区块包发布
+            if (arg.flag === 'cmd-block-package-publish') {
+                if (this.window_objs.mainWindow != null) {
+                    if (cmdStatus === 'end') {
+                        this.window_objs.mainWindow.webContents.send('site-message', {
+                            type: ActionTypes.RECEIVE_CMD_EXECUTE_RESULT,
+                            payload: {
+                                pyramidUIActionType: ActionTypes.SEND_BLOCK_PACKAGE_PUBLISH,
+                                cmdExecuteResult: cmdCloseCode === 0,
+                                cmdExecuteResultCode: cmdCloseCode
+                            }
+                        });
+                    }
+                }
+            }
             // 区块包类型创建
             if (arg.flag === 'cmd-blocks-type-create') {
                 if (this.window_objs.mainWindow != null) {

@@ -258,12 +258,21 @@ export class PyramidUISendUnsubscribePrivateBlockPackageAction implements Pyrami
     ids: string[]
   }) { }
 }
+// 区块包发布
+export class PyramidUISendBlockPackagePublishAction implements PyramidUIAction {
+  readonly type = PyramidUIActionTypes.SEND_BLOCK_PACKAGE_PUBLISH;
+  constructor(public payload: {
+    projectPath: string,
+    gitUrl: string;
+  }) { }
+}
 /******************** 区块包 ********************/
 
 
 
 
 export type PyramidUISendActionsUnion =
+  PyramidUISendBlockPackagePublishAction |
   PyramidUISendInsertPrivateBlockPackageInfoAction |
   PyramidUISendCMDExecuteResultAction |
   PyramidUISendProjectRemoveAction |

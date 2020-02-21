@@ -1,8 +1,12 @@
 import React, {FormEvent, FunctionComponent, useEffect} from 'react';
-import {Button, Form, Input, Modal, Icon, Switch} from 'antd';
+import {Button, Form, Input, Modal, Icon, Switch, message} from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 import {blockPackageRequest} from "@/requests/block-package.request";
 import {EBlockPackageEndNumberType} from "@/dicts/block-package.dict";
+import {pyramidUiService} from "@/core/pyramid-ui/service/pyramid-ui.service";
+import {PyramidUISendBlockPackagePublishAction} from "@/core/pyramid-ui/action/pyramid-ui-send.action";
+import {PyramidUIReceiveActionsUnion} from "@/core/pyramid-ui/action/pyramid-ui-receive.action";
+import {PyramidUIActionTypes} from "@/core/pyramid-ui/action";
 
 const FormItem = Form.Item;
 
@@ -24,19 +28,49 @@ interface IProps extends FormComponentProps {
 }
 
 const Component: FunctionComponent<IProps> = props => {
+  const localStorageKey = 'localStorageKey_publishParams';
+
   const {
     form,
     form: { getFieldDecorator },
   } = props;
 
   useEffect(() => {
-    console.log(props.params.projectInfo);
-    debugger;
     if (props.params.projectInfo) {
       form.setFieldsValue({
         englishnName: props.params.projectInfo.menuNameEn,
         chineseName: props.params.projectInfo.menuNameZh
       });
+    }
+
+    const messageKey = pyramidUiService.getMessageFn((pyramidAction: PyramidUIReceiveActionsUnion) => {
+      switch (pyramidAction.type) {
+        case PyramidUIActionTypes.RECEIVE_CMD_EXECUTE_RESULT:
+          if (pyramidAction.payload.pyramidUIActionType === PyramidUIActionTypes.SEND_BLOCK_PACKAGE_PUBLISH) {
+            message.destroy();
+
+            if (!pyramidAction.payload.cmdExecuteResult) {
+              message.error(pyramidAction.payload.cmdExecuteMessage);
+              return;
+            }
+
+            const params = JSON.parse(localStorage.getItem(localStorageKey));
+            localStorage.setItem(localStorageKey, null);
+
+            blockPackageRequest.blockPackageAdd(params).then(res => {
+              if (res) {
+                props.closeModal(true)
+              }
+            });
+          }
+          break;
+      }
+    });
+
+    return () => {
+      message.destroy();
+      localStorage.setItem(localStorageKey, null);
+      pyramidUiService.clearMessageFn(messageKey);
     }
   },[]);
 
@@ -45,19 +79,19 @@ const Component: FunctionComponent<IProps> = props => {
 
     form.validateFields((err, fieldsValue) => {
       if (!err) {
-        const params = fieldsValue;
+        const params = {...fieldsValue};
         params['applyType'] = props.params.projectInfo.applyType;
         params['packageManager'] = props.params.projectInfo.package;
         params['isPublic'] = params['isPublic'] ? '1' : '0';
 
-        // TODO 这里需要先调用 cli 修改信息，成功后在调用接口发布
+        localStorage.setItem(localStorageKey, JSON.stringify(params));
+        message.loading('正在发布，请稍等...', 0);
 
-
-        // blockPackageRequest.blockPackageAdd(params).then(res => {
-        //   if (res) {
-        //     props.closeModal(true)
-        //   }
-        // });
+        // 这里需要先调用 cli 修改信息，成功后在调用接口发布
+        pyramidUiService.sendMessageFn(new PyramidUISendBlockPackagePublishAction({
+          projectPath: props.params.projectInfo.absolutePath,
+          gitUrl: params.repoAddress
+        }));
       }
     });
   };

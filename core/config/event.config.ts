@@ -85,6 +85,8 @@ export const ActionTypes = {
     SEND_GET_PRIVATE_BLOCK_PACKAGE_LIST: 'pyramid.ui.send.get.private.block.package.list',
     RECEIVE_GET_PRIVATE_BLOCK_PACKAGE_LIST: 'pyramid.ui.receive.get.private.block.package.list',
     // 取消私有区块包订阅
-    SEND_UNSUBSCRIBE_PRIVATE_BLOCK_PACKAGE: 'pyramid.ui.send.unsubscribe.private.block.package'
+    SEND_UNSUBSCRIBE_PRIVATE_BLOCK_PACKAGE: 'pyramid.ui.send.unsubscribe.private.block.package',
+    // 区块包发布
+    SEND_BLOCK_PACKAGE_PUBLISH: 'pyramid.ui.send.block.package.publish'
     /******************** 区块包 ********************/
 };
