@@ -31,6 +31,10 @@ export const ActionTypes = {
     SEND_PROJECT_TOOLBAR: 'pyramid.ui.send.project.SEND_PROJECT_TOOLBAR',
     RECEIVE_PROJECT_CHOOSE_PATH: 'pyramid.ui.receive.project.choosePath',
     SEND_PROJECT_REMOVE: 'pyramid.ui.send.project.remove',
+    // 当应用工程的url改变时通知topbar更新url
+    RECEIVE_PROJECT_ROUTE: 'pyramid.ui.receive.project.route',
+    // 刷新url
+    SEND_PROJECT_ROUTE_ROUTE: 'pyramid.ui.send.project.route',
     /******************** 项目 ********************/
 
 

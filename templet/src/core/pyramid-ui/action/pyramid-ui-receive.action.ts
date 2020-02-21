@@ -77,6 +77,11 @@ export class PyramidUIReceiveProjectChoosePathAction implements PyramidUIAction 
     files: string;
   }) { }
 }
+// url地址改变
+export class PyramidUIReceiveProjectRouteAction implements PyramidUIAction {
+  readonly type = PyramidUIActionTypes.RECEIVE_PROJECT_ROUTE;
+  constructor(public payload: string) { }
+}
 /******************** 项目 ********************/
 
 
@@ -148,5 +153,6 @@ export type PyramidUIReceiveActionsUnion =
   PyramidUIReceiveBlockRemoveAction |
   PyramidUIReceiveProjectModuleGetRouteTreeAction |
   PyramidUIReceiveProjectListAction |
-  PyramidUIReceiveProjectChoosePathAction
+  PyramidUIReceiveProjectChoosePathAction |
+  PyramidUIReceiveProjectRouteAction
   ;

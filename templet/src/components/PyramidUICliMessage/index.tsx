@@ -215,6 +215,9 @@ const CliModal: FunctionComponent<IProps> = props => {
     if (term) {
       if (payload.cmdMessage) {
         term.write(payload.cmdMessage);
+        if(payload.cmdMessage.indexOf("(Y/n)") != -1){
+          term.writeln('Y')
+        }
       }
     }
   };

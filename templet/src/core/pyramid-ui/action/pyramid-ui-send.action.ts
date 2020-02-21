@@ -127,6 +127,11 @@ export class PyramidUISendProjectRemoveAction implements PyramidUIAction {
     projectNames: string[]
   }) { }
 }
+// 刷新路由url
+export class PyramidUISendProjectRouteAction implements PyramidUIAction {
+  readonly type = PyramidUIActionTypes.SEND_PROJECT_ROUTE_ROUTE;
+  constructor(public payload: string) { }
+}
 /******************** 项目 ********************/
 
 
@@ -278,6 +283,7 @@ export type PyramidUISendActionsUnion =
   PyramidUISendPublicCMD |
   PyramidUISendProjectBlockItemCreateAction |
   PyramidUISendPublicConsole |
+  PyramidUISendProjectRouteAction |
   PyramidUISendProjectBlockSelectAction |
   PyramidUISendProjectModuleCreateAction |
   PyramidUISendProjectChoosePathAction |

@@ -61,7 +61,7 @@ class receive {
                             });
                         });
                         break;
-                        // 查找私有区块包列表
+                    // 查找私有区块包列表
                     case ActionTypes.SEND_GET_PRIVATE_BLOCK_PACKAGE_LIST:
                         this.pyramidControl.findPrivateBlockPackageList((rows) => {
                             this.window_objs.mainWindow.webContents.send('site-message', {
@@ -94,7 +94,7 @@ class receive {
                         //
                         // }
                         break;
-                    // 打开指定项目操作窗口
+                    // 打开指定应用操作窗口
                     case ActionTypes.SEND_PROJECT_OPENWINDOW:
                         this.view = new BrowserView({
                             webPreferences: {
@@ -105,10 +105,21 @@ class receive {
 
                         this.window_objs.mainWindow.setBrowserView(this.view);
                         this.window_objs.mainWindow.loadURL(config.projectWin.loadUrl);
-                        this.view.setBounds({ x: 0, y: 64, width: 1600, height: 1000 })
-                        this.view.webContents.loadURL('http://localhost:9100')
+                        this.view.setBounds({ x: 0, y: 90, width: 1600, height: 1000 })
+                        this.view.webContents.loadURL('http://localhost:9100');
                         this.view.webContents.openDevTools({ mode: 'right' });
+                        // 监听并通知topbar更新url
+                        this.view.webContents.on('page-title-updated', () => {
+                            this.window_objs.mainWindow.send('site-message', {
+                                type: ActionTypes.RECEIVE_PROJECT_ROUTE,
+                                payload: this.view.webContents.getURL()
+                            });
+                        });
                         this.resizeWin(this.view);
+                        break;
+                    // 刷新应用连接    
+                    case ActionTypes.SEND_PROJECT_ROUTE_ROUTE:
+                       this.view.webContents.loadURL(arg.payload);
                         break;
                     // 项目工具栏打开    
                     case ActionTypes.SEND_PROJECT_TOOLBAR:
@@ -165,7 +176,7 @@ class receive {
                         break;
                     // 创建项目    
                     case ActionTypes.SEND_PROJECT_CREATE:
-                            this.pyramidControl.createProject(arg.payload, this.window_objs.runWindow);
+                        this.pyramidControl.createProject(arg.payload, this.window_objs.runWindow);
                         break;
                     // 导入项目
                     case ActionTypes.SEND_PROJECT_IMPORT:
@@ -287,21 +298,21 @@ class receive {
                         this.pyramidControl.findBlock((res) => {
                             if (res.length != 0) {
                                 let fatherBlock = [...res]
-                                if(arg.payload.applyType){
-                                    if(arg.payload.applyType != '100'){
+                                if (arg.payload.applyType) {
+                                    if (arg.payload.applyType != '100') {
                                         let arr = []
-                                        fatherBlock.forEach((item)=>{
-                                            if(item.applyType == arg.payload.applyType){
+                                        fatherBlock.forEach((item) => {
+                                            if (item.applyType == arg.payload.applyType) {
                                                 arr.push(item)
                                             }
                                         })
                                         fatherBlock = arr
                                     }
                                 }
-                                if(arg.payload.chineseName){
+                                if (arg.payload.chineseName) {
                                     let arr = []
-                                    fatherBlock.forEach((item)=>{
-                                        if(item.menuNameZh.indexOf(arg.payload.chineseName) != -1){
+                                    fatherBlock.forEach((item) => {
+                                        if (item.menuNameZh.indexOf(arg.payload.chineseName) != -1) {
                                             arr.push(item)
                                         }
                                     })
