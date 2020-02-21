@@ -275,6 +275,10 @@ class receive {
                         // });
                         this.pyramidControl.createBlockItem(blockItemPayload, this.window_objs.runWindow);
                         break;
+                    //    区块包发布
+                    case ActionTypes.SEND_BLOCK_PACKAGE_PUBLISH:
+                        this.pyramidControl.publishBlockPackage(arg.payload, this.window_objs.runWindow);
+                        break;
                     // 区块分类创建
                     case ActionTypes.SEND_PROJECT_BLOCK_TYPES_CREATE:
                         const typePayload = arg.payload;

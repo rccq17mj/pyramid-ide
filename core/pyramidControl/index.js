@@ -206,6 +206,23 @@ class cliBridge {
   }
 
   /**
+   * 区块发布
+   * @param blockPackageInfo
+   * @param runWindow
+   */
+  publishBlockPackage(blockPackageInfo, runWindow) {
+    const cmdArg = {
+      channel: 'cmd-message',
+      cmdStr: `pyramid block-package update --update-project-path=${blockPackageInfo.projectPath} --update-project-git-url=${blockPackageInfo.gitUrl}`,
+      cwd: ``,
+      flag: 'cmd-block-package-publish',
+    };
+
+    // 将此命令发送给渲染窗口执行
+    runWindow.webContents.send('cmd-message', cmdArg);
+  }
+
+  /**
    * 创建区块分类
    */
   createBlocksType(blocksTypeInfo, runWindow) {

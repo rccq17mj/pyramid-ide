@@ -26,6 +26,8 @@ const traverse = require('@babel/traverse').default;
 const generate = require('@babel/generator').default;
 const t = require('@babel/types');
 
+const resultCode = require('../config/result-code');
+
 // 区块模板工程下载
 // GITHUB下载路径
 // const projectGitRepo = 'guccihuiyuan/pyramid-blocks';
@@ -107,6 +109,7 @@ module.exports = (options) => {
         }
     }
     else if (cmdStr === 'test') {
+        console.log(resultCode);
         // console.log('11111');
         // console.error('2222');
         // process.exit();
@@ -127,6 +130,60 @@ module.exports = (options) => {
         //     console.log('errorCode：' + errorCode);
         //     process.exit();
         // });
+    }
+    else if (cmdStr === 'update') {// 更新
+        const {updateProjectPath, updateProjectGitUrl} = options;
+
+        if (!updateProjectPath) {
+            console.log(chalk.red(resultCode.MISSING_PARAMS.desc));
+            process.exit(resultCode.MISSING_PARAMS.code);
+        }
+
+        const spinner = ora();
+        spinner.start('🔥  正在修改文件信息');
+
+        // 读取的JSON文件
+        const jsonFileName = 'pyramid-blocks.json';
+
+        const jsonFile = fs.readFileSync(path.join(updateProjectPath, jsonFileName), 'utf-8');
+
+        // 转换成json对象
+        let jsonObj = {};
+        try {
+            jsonObj = JSON.parse(jsonFile);
+        }catch (e) {
+            jsonObj = null;
+        }
+
+        if (!jsonObj) {
+            spinner.fail();
+            console.log(chalk.red(resultCode.READ_FILE_FAIL.desc));
+            process.exit(resultCode.READ_FILE_FAIL.code);
+            return;
+        }
+
+        spinner.succeed();
+
+        if (updateProjectGitUrl) {
+            const trueUpdateProjectGitUrl = updateProjectGitUrl.replace('.git', '');
+            jsonObj['blockPackageGitUrl'] = trueUpdateProjectGitUrl;
+            jsonObj['blocks'].forEach(item => {
+                item.gitUrl = trueUpdateProjectGitUrl + '/tree/master' + item.previewUrl;
+            });
+            jsonObj['templates'].forEach(item => {
+                item.gitUrl = trueUpdateProjectGitUrl + '/tree/master' + item.previewUrl;
+            });
+        }
+
+        const writeJsonContent = JSON.stringify(jsonObj);
+        const prettierCode = prettier.format(writeJsonContent, {
+            tabWidth: 4,
+            semi: false,
+            singleQuote: true,
+            parser: 'json',
+        });
+        fs.writeFileSync(path.join(updateProjectPath, 'pyramid-blocks.json'), prettierCode);
+        process.exit();
     }
     else if (cmdStr === 'init') {// 下载区块模板工程
         // pyramid block init a

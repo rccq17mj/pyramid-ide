@@ -2,7 +2,7 @@ import {IBlockPackageInfo} from "@/interfaces/block-package/block-package.interf
 import {IPyramidUiRouterTree} from "@/core/pyramid-ui/action/pyramid-ui-send.action";
 import {PyramidUIAction, PyramidUIActionTypes} from "@/core/pyramid-ui/action/index";
 import {ECliMessageType} from "../../../../../core/config/cliMessageType.config";
-import {ECmdResultCode} from "../../../../../core/config/cmdResultCode";
+import {ECmdResultCode, getCmdResultStrByCode} from "../../../../../core/config/cmdResultCode";
 
 // 所有动作集合（注意格式：PyramidUIReceive + 模块 + 功能 + 定义 + Action）
 
@@ -51,7 +51,12 @@ export class PyramidUIReceiveCMDExecuteResultAction implements PyramidUIAction {
     cmdExecuteResultCode: ECmdResultCode;
     // 成功的时候一般不返回
     cmdExecuteMessage?: string;
-  }) { }
+  }) {
+    if (payload.cmdExecuteResultCode && !payload.cmdExecuteMessage) {
+      // 自动转义
+      payload.cmdExecuteMessage = getCmdResultStrByCode(payload.cmdExecuteResultCode);
+    }
+  }
 }
 // 系统初始化完成
 export class PyramidUIReceiveInitResultAction implements PyramidUIAction {

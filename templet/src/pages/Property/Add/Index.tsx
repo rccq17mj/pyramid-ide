@@ -23,7 +23,7 @@ const Component: FunctionComponent<IProps> = props => {
   const [imgLoading, setImgLoading] = useState(false);
 
   useEffect(() => {
-    pyramidUiService.getMessageFn((action: PyramidUIReceiveProjectChoosePathAction) => {
+    const messageKey = pyramidUiService.getMessageFn((action: PyramidUIReceiveProjectChoosePathAction) => {
       switch (action.type) {
         case PyramidUIActionTypes.RECEIVE_PROJECT_CHOOSE_PATH:
           form.setFieldsValue({
@@ -34,6 +34,10 @@ const Component: FunctionComponent<IProps> = props => {
           break;
       }
     });
+
+    return () => {
+      pyramidUiService.clearMessageFn(messageKey);
+    }
   }, []);
 
   const {
