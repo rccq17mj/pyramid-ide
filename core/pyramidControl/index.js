@@ -1,3 +1,5 @@
+var fs = require('fs');
+
 const Datastore = require('nedb'), db = new Datastore({
   filename: 'public/projects.db',
   autoload: true
@@ -49,19 +51,32 @@ class cliBridge {
    * 更新当前项目的信息
    * @param {*} projectInfo
    */
-  updataProjectInfo(projectInfo) {
-    now_use_project_db.remove({}, {
-      multi: true
-    }, (err, ret) => {
-      now_use_project_db.insert(projectInfo, (err, ret) => {
-        if (err) console.log('err', err)
-        if (ret) {
-          console.log('当前新值己插入');
-        }
-      });
-
+  updataProjectInfo(projectInfo, callback) {
+    // 获取模版工程的版本号
+    fs.readFile(`${projectInfo.path}/${projectInfo.name}/package.json`, 'utf-8', (err, data) => {
+      if (err) {
+        if (err) console.log('获取应用"/package.json"文件失败 error:', err)
+        callback(false);
+      } else {
+        now_use_project_db.remove({}, {
+          multi: true
+        }, (err, ret) => {
+          const {name, version} = JSON.parse(data);
+          projectInfo.package = {name, version};
+          now_use_project_db.insert(projectInfo, (err, ret) => {
+            if (err) {
+              console.log('写入运行环境文件"now_projects.db" 失败 err:', err);
+              callback(false);
+            } if (ret) {
+              this.getNowProjectInfo((projectInfo) => {
+                console.log('当前运行项目信息:', projectInfo);
+              })
+              callback(true);
+            }
+          });
+        });
+      }
     });
-
   }
 
   /**
@@ -153,7 +168,7 @@ class cliBridge {
    */
   createBlock(blockInfo, runWindow) {
     // 保存区块信息
-    new DataUse(blockdb).save(blockInfo).then(msg => {});
+    new DataUse(blockdb).save(blockInfo).then(msg => { });
 
     let cmd = `pyramid block-package init ${blockInfo.menuNameEn} --init-project-type=${blockInfo.applyType} --init-project-chinese-name=${blockInfo.menuNameZh}`;
 
@@ -416,9 +431,9 @@ class cliBridge {
    */
   deletePrivateBlockPackage = (ids, callback) => {
     const condition = ids.map(v => {
-      return {_id: v}
+      return { _id: v }
     });
-    private_block_package_db.remove({$and :condition}, { multi: true }, (err, numRemoved) => {
+    private_block_package_db.remove({ $and: condition }, { multi: true }, (err, numRemoved) => {
       if (err) {
         callback('数据删除失败');
         return;
