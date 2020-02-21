@@ -1,5 +1,5 @@
 import React, {FunctionComponent, useEffect, useState} from 'react';
-import {Button, Card, Checkbox, Form, Input, Layout, Pagination, Select, Tabs} from 'antd';
+import {Button, Card, Checkbox, Form, Input, Layout, message, Pagination, Select, Tabs} from 'antd';
 import {FormComponentProps} from "antd/lib/form";
 import style from "../../Property.less";
 import plus from "@/assets/plus.png";
@@ -14,7 +14,10 @@ import {
   EBlockPackageSource
 } from "@/dicts/block-package.dict";
 import {pyramidUiService} from "@/core/pyramid-ui/service/pyramid-ui.service";
-import {PyramidUISendGetPrivateBlockPackageListAction} from "@/core/pyramid-ui/action/pyramid-ui-send.action";
+import {
+  PyramidUISendGetPrivateBlockPackageListAction,
+  PyramidUISendUnsubscribePrivateBlockPackageAction
+} from "@/core/pyramid-ui/action/pyramid-ui-send.action";
 import {PyramidUIReceiveActionsUnion} from "@/core/pyramid-ui/action/pyramid-ui-receive.action";
 import {PyramidUIActionTypes} from "@/core/pyramid-ui/action";
 
@@ -47,6 +50,8 @@ const PropertyLibraryBlock: FunctionComponent<IProps> = (props) => {
   const {form, form: { getFieldDecorator } } = props;
 
   const getBlockList = () => {
+    clearData();
+
     if (tabActiveKey === EBlockPackageSource.Community) {
       const params = form.getFieldsValue();
       params['pageNum'] = pageNum;
@@ -65,6 +70,11 @@ const PropertyLibraryBlock: FunctionComponent<IProps> = (props) => {
     }
   };
 
+  const clearData = () => {
+    setCards([]);
+    setTotal(0);
+  };
+
   useEffect(() => {
     const messageKey = pyramidUiService.getMessageFn((action: PyramidUIReceiveActionsUnion) => {
       switch (action.type) {
@@ -78,6 +88,16 @@ const PropertyLibraryBlock: FunctionComponent<IProps> = (props) => {
             item.englishName = item.blockPackageName;
           });
           setCards(list);
+          break;
+        case PyramidUIActionTypes.RECEIVE_CMD_EXECUTE_RESULT:
+          if (action.payload.pyramidUIActionType === PyramidUIActionTypes.SEND_UNSUBSCRIBE_PRIVATE_BLOCK_PACKAGE) {
+            if (!action.payload.cmdExecuteResult) {
+              message.error(action.payload.cmdExecuteMessage);
+              return;
+            }
+            clearData();
+            pyramidUiService.sendMessageFn(new PyramidUISendGetPrivateBlockPackageListAction());
+          }
           break;
       }
     });
@@ -94,7 +114,7 @@ const PropertyLibraryBlock: FunctionComponent<IProps> = (props) => {
         selectList.push(item.id)
       }
     });
-    setSelectList(selectList)
+    setSelectList(selectList);
   }, [cards]);
 
   // 请求区块列表
@@ -106,8 +126,6 @@ const PropertyLibraryBlock: FunctionComponent<IProps> = (props) => {
 
   useEffect(() => {
     // 重置信息
-    setCards([]);
-    setTotal(0);
     if (pageNum === 1) {
       getBlockList();
     } else {
@@ -157,7 +175,7 @@ const PropertyLibraryBlock: FunctionComponent<IProps> = (props) => {
         }
       });
     } else if (tabActiveKey === EBlockPackageSource.Private) {
-
+      pyramidUiService.sendMessageFn(new PyramidUISendUnsubscribePrivateBlockPackageAction({ids: selectList}));
     }
   };
 

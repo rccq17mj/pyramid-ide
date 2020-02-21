@@ -18,6 +18,28 @@ class receive {
                     case ActionTypes.SEND_PROJECT_BLOCK_PACKAGE_INFO:
                         this.pyramidControl.getBlockPackageInfo(this.window_objs.runWindow, arg.payload);
                         break;
+                    //    私有区块包取消订阅
+                    case ActionTypes.SEND_UNSUBSCRIBE_PRIVATE_BLOCK_PACKAGE:
+                        this.pyramidControl.deletePrivateBlockPackage(arg.payload.ids, (errMessage) => {
+                            let result = true;
+                            let resultCode = 0;
+                            if (errMessage) {
+                                result = false;
+                                // 随便指定一个
+                                resultCode = -1;
+                            }
+                            // 反馈
+                            this.window_objs.mainWindow.webContents.send('site-message', {
+                                type: ActionTypes.RECEIVE_CMD_EXECUTE_RESULT,
+                                payload: {
+                                    pyramidUIActionType: ActionTypes.SEND_UNSUBSCRIBE_PRIVATE_BLOCK_PACKAGE,
+                                    cmdExecuteResult: result,
+                                    cmdExecuteResultCode: resultCode,
+                                    cmdExecuteMessage: errMessage
+                                }
+                            });
+                        });
+                        break;
                     case ActionTypes.SEND_INSERT_PRIVATE_BLOCK_PACKAGE_INFO:
                         this.pyramidControl.insertPrivateBlockPackage(arg.payload, (errMessage) => {
                             let result = true;

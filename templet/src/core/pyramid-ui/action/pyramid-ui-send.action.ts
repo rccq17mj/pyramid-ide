@@ -226,7 +226,6 @@ export class PyramidUISendBlockPackageInfoAction implements PyramidUIAction {
     projectGitBranch?: string;
   }) { }
 }
-
 // 保存私有区块包
 export class PyramidUISendInsertPrivateBlockPackageInfoAction implements PyramidUIAction {
   readonly type = PyramidUIActionTypes.SEND_INSERT_PRIVATE_BLOCK_PACKAGE_INFO;
@@ -235,11 +234,17 @@ export class PyramidUISendInsertPrivateBlockPackageInfoAction implements Pyramid
     packageInfo: IBlockPackageInfo,
   }) { }
 }
-
 // 获取私有区块包信息
 export class PyramidUISendGetPrivateBlockPackageListAction implements PyramidUIAction {
   readonly type = PyramidUIActionTypes.SEND_GET_PRIVATE_BLOCK_PACKAGE_LIST;
   constructor(public payload: void) { }
+}
+// 取消私有区块包订阅
+export class PyramidUISendUnsubscribePrivateBlockPackageAction implements PyramidUIAction {
+  readonly type = PyramidUIActionTypes.SEND_UNSUBSCRIBE_PRIVATE_BLOCK_PACKAGE;
+  constructor(public payload: {
+    ids: string[]
+  }) { }
 }
 /******************** 区块包 ********************/
 

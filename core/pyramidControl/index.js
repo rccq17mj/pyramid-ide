@@ -400,8 +400,28 @@ class cliBridge {
     private_block_package_db.find({}, (err, rows) => {
       if (err) {
         callback([]);
+        return;
       }
       callback(rows);
+    });
+  };
+
+  /**
+   * 批量删除
+   * @param ids
+   * @param callback
+   */
+  deletePrivateBlockPackage = (ids, callback) => {
+    const condition = ids.map(v => {
+      return {_id: v}
+    });
+    private_block_package_db.remove({$and :condition}, { multi: true }, (err, numRemoved) => {
+      if (err) {
+        callback('数据删除失败');
+        return;
+      }
+      // 好像不能把数据删除掉，只能做一个标识，要更新下数据把字段都清掉，不然太多了
+      callback(null);
     });
   };
 
