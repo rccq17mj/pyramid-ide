@@ -263,22 +263,26 @@ class receive {
                             let newBlockInfo = { ...blockItemInfo }
                             newBlockInfo['filePath'] = fatherBlock['filePath'] + '/' + fatherBlock['menuNameEn']
                             this.pyramidControl.createBlockItem(newBlockInfo, this.window_objs.runWindow)
-                        })
+                        });
                         break;
                     // 区块分类创建
                     case ActionTypes.SEND_PROJECT_BLOCK_TYPES_CREATE:
-                        const blockTypes = arg.payload;
-                        this.pyramidControl.findBlock((res) => {
-                            console.log('查找区块包', res)
-                            const fatherBlock = res.filter((val) => {
-                                return val._id == blockTypes.parentId
-                            })[0]
-                            console.log('fatherBlock', fatherBlock)
-                            let newBlockTypes = { ...blockTypes }
-                            newBlockTypes['filePath'] = fatherBlock['filePath'] + '/' + fatherBlock['menuNameEn']
-                            this.pyramidControl.createBlocksType(newBlockTypes, this.window_objs.runWindow)
-                        })
+                        const typePayload = arg.payload;
+
+                        // 直接调用
+                        this.pyramidControl.createBlocksType(typePayload, this.window_objs.runWindow);
+
+                        // this.pyramidControl.findBlock((res) => {
+                        //     const fatherBlock = res.filter((val) => {
+                        //         return val._id === typePayload._id;
+                        //     })[0];
+                        //     let newBlockTypes = { ...typePayload };
+                        //     newBlockTypes['filePath'] = fatherBlock['filePath'] + '/' + fatherBlock['menuNameEn'];
+                        //     this.pyramidControl.createBlocksType(newBlockTypes, this.window_objs.runWindow)
+                        // });
+
                         break;
+
                     // 查询区块包    
                     case ActionTypes.SEND_PROJECT_BLOCK_GET:
                         this.pyramidControl.findBlock((res) => {

@@ -189,8 +189,10 @@ export class PyramidUISendProjectBlockCreateAction implements PyramidUIAction {
 export class PyramidUISendProjectBlockTypesCreateAction implements PyramidUIAction {
   readonly type = PyramidUIActionTypes.SEND_PROJECT_BLOCK_TYPES_CREATE;
   constructor(public payload: {
-    categoryType?: string;
-    name?: string;
+    categoryType: 'blocks' | 'modules';
+    name: string;
+    // 项目路径
+    projectPath: string;
   }) { }
 }
 export class PyramidUISendProjectBlockItemCreateAction implements PyramidUIAction {

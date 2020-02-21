@@ -199,14 +199,14 @@ class cliBridge {
   createBlocksType(blocksTypeInfo, runWindow) {
     // 保存区块信息  暂时不保存在本地
     //  new DataUse(blocks_typedb).save(blocksTypeInfo).then(msg=>{})
-    console.log('区块分类info', blocksTypeInfo)
+
     // 用项目信息拼接创建执行命令
     const cmdArg = {
       channel: 'cmd-message',
       cmdStr: `pyramid block category add ${blocksTypeInfo.name} --category-type=${blocksTypeInfo.categoryType}`,
-      cwd: `${blocksTypeInfo.filePath}`,
+      cwd: `${blocksTypeInfo.projectPath}`,
       flag: 'cmd-blocks-type-create',
-    }
+    };
 
     // 将此命令发送给渲染窗口执行
     runWindow.webContents.send('cmd-message', cmdArg);
