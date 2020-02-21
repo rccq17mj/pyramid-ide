@@ -47,6 +47,7 @@ program
 
     // init -- options
     .option('--init-project-url <initProjectUrl>', 'create block template project with url')
+    .option('--init-project-chinese-name <initProjectChineseName>', 'create block template project with chineseName')
     .option('--init-project-type <initProjectType>', 'create block template project with type 1 | 2', '1')
     .option('--init-project-git-url <initProjectGitUrl>', 'create block template project with git url', '')
 
