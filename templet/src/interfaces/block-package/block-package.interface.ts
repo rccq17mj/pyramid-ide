@@ -30,9 +30,18 @@ export interface IBlockPackage {
 export interface IBlockPackageInfo {
   // 保存在数据库中的信息
   _id?: string;
+  // 英文名称
   blockPackageName: string,
+  // 中文名称
+  blockPackageChineseName: string;
+  // 类型
   blockPackageType: EPlatform,
+  // git地址
   blockPackageGitUrl: string,
+  // 封面
+  blockPackageCover: string;
+  // 备注
+  blockPackageRemark: string;
   category: {
     blocks: string[],
     templates: string[]

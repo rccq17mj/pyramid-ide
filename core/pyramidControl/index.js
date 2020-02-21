@@ -153,17 +153,23 @@ class cliBridge {
    */
   createBlock(blockInfo, runWindow) {
     // 保存区块信息
-    new DataUse(blockdb).save(blockInfo).then(msg => { })
+    new DataUse(blockdb).save(blockInfo).then(msg => {});
+
+    let cmd = `pyramid block-package init ${blockInfo.menuNameEn} --init-project-type=${blockInfo.applyType} --init-project-chinese-name=${blockInfo.menuNameZh}`;
+
+    if (blockInfo.remarkImg) {
+      cmd += ` --initProjectCover=${blockInfo.remarkImg}`;
+    }
+
     // 用项目信息拼接创建执行命令
     const cmdArg = {
       channel: 'cmd-message',
-      cmdStr: `pyramid block-package init ${blockInfo.menuNameEn} --init-project-type=${blockInfo.applyType}`,
-      // cmdStr: `pyramid block init ${blockInfo.menuNameEn} --init-block-url=${blockInfo.gitUrl}`,
+      cmdStr: cmd,
       cwd: `${blockInfo.filePath}`,
       flag: 'cmd-block-package-create'
-    }
+    };
 
-    console.log('createBlock-cmdArg', cmdArg)
+    console.log('createBlock-cmdArg', cmdArg);
     // 将此命令发送给渲染窗口执行
     runWindow.webContents.send('cmd-message', cmdArg);
   }

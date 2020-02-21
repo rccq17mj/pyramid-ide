@@ -248,8 +248,8 @@ class receive {
                         break;
                     // 区块包创建    
                     case ActionTypes.SEND_PROJECT_BLOCK_CREATE:
-                        let blockInfo = arg.payload;
-                        this.pyramidControl.createBlock(blockInfo, this.window_objs.runWindow)
+                        let blockInfo = arg.payload.blockPackageInfo;
+                        this.pyramidControl.createBlock(blockInfo, this.window_objs.runWindow);
                         break;
                     // 区块创建     
                     case ActionTypes.SEND_PROJECT_BLOCK_ITEM_CREATE:

@@ -134,10 +134,10 @@ export class BaseRequest {
       setTimeout(hide, 0);
       if (res.flag) {
         message.success(res.data.msg);
-        const result = res.data ? res.data : [];
+        const result = res.data ? res.data : null;
         return Promise.resolve(result);
       }
-      return Promise.resolve([]);
+      return Promise.resolve(null);
     });
   }
 

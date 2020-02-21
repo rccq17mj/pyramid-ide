@@ -49,8 +49,6 @@ const Component: FunctionComponent<IProps> = props => {
         clickLeftBtn(leftButton, index);
       }
     });
-
-    // TODO 存储项目信息，比如项目类型之类的
   }, []);
 
   const clickLeftBtn = (btn: ILeftBtn, index: number) => {

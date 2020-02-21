@@ -65,7 +65,7 @@ const Component: FunctionComponent<IProps> = () => {
           list.forEach(item => {
             const obj: IBlockPackage = {
               id: item._id,
-              chineseName: item.blockPackageName,
+              chineseName: item.blockPackageChineseName || item.blockPackageName,
               englishName: item.blockPackageName,
               packageInfo: item,
               packageInfoFetchStatus: EBlockPackageFetchStatus.fetchEnd,

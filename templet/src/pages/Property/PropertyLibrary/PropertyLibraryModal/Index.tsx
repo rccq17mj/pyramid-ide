@@ -30,7 +30,7 @@ interface IProps extends FormComponentProps {
     assemblyType: EBlockPackageAssemblyType
     // 来源
     source: EBlockPackageSource
-    // TODO 端类型
+    // 端类型
     endType?: EBlockPackageEndType
   }
 }

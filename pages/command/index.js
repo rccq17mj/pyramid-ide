@@ -98,7 +98,6 @@ function runCmd(arg) {
                 });
             }
 
-            // TODO 这里组成起来了，参数需要好好处理下，不然 msg 和 arg 的字段可能会冲突
             msg = { ...msg, ...arg };
 
             ipc.send('cmd-message', { ...msg });

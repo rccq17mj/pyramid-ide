@@ -1,4 +1,4 @@
-import React, { FormEvent, FunctionComponent, useState } from 'react';
+import React, {FormEvent, FunctionComponent, useEffect, useState} from 'react';
 import { Button, Select, Form, Input, message, Modal, Upload, Icon  } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 import { pyramidUiService } from '@/core/pyramid-ui/service/pyramid-ui.service';
@@ -7,9 +7,9 @@ import {
   PyramidUISendProjectBlockCreateAction
 } from "@/core/pyramid-ui/action/pyramid-ui-send.action";
 import {PyramidUIActionTypes} from "@/core/pyramid-ui/action";
-import {mainRequest} from '../../../requests/main.request';
-import styles from './Index.less';
 import {PyramidUIReceiveProjectChoosePathAction} from "@/core/pyramid-ui/action/pyramid-ui-receive.action";
+import {mainRequest} from "@/requests/main.request";
+import {BlockPackageEndType} from "@/dicts/block-package.dict";
 
 const FormItem = Form.Item;
 
@@ -19,67 +19,10 @@ interface IProps extends FormComponentProps {
 }
 
 const Component: FunctionComponent<IProps> = props => {
+  const [imageUrl, setImageUrl] = useState('');
+  const [imgLoading, setImgLoading] = useState(false);
 
-  const [imageUrl, setImageUrl] = useState('')
-  const [imgLoading, setImgLoading] = useState(false)
-
-  const {
-    form,
-    form: { getFieldDecorator },
-  } = props;
-
-  const templetOptions = [
-    { label: 'PC端', value: '1' },
-    { label: '移动端', value: '2' }];
-  const pkgmtOptions = [
-    { label: 'yarn', value: 'yarn' },
-    { label: 'npm', value: 'npm' }
-  ]
-
-  /**
-   * 正则表达式
-   */
-  const validateChineseName = (rule, value, callback) => {
-    const regex = /^[\u4e00-\u9fa5]+$/;
-    if (value && regex.test(value)) {
-      callback();
-    } else {
-      callback(new Error('中文名必须输入汉字'));
-    }
-  };
-
-  const validateEnglishnName = (rule, value, callback) => {
-    const regex = /^\w+$/;
-    if (value && regex.test(value)) {
-      callback();
-    } else {
-      callback(new Error('英文名必须输入字母或数字'));
-    }
-  };
-
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault();
-
-    form.validateFields((err, fieldsValue) => {
-      if (!err) {
-        console.log('fieldsValue', fieldsValue)
-        console.log('imgUrl', imageUrl)
-
-        delete fieldsValue['img'];
-        let params = fieldsValue;
-        params['remarkImg'] = imageUrl
-
-        pyramidUiService.sendMessageFn(new PyramidUISendProjectBlockCreateAction(params));
-
-        props.closeModal(true)
-      }
-    });
-  };
-
-
-  const handleSelectPath = () => {
-    // sendMessage({'open-file-dialog': true});
-    pyramidUiService.sendMessageFn(new PyramidUISendProjectChoosePathAction());
+  useEffect(() => {
     pyramidUiService.getMessageFn((action: PyramidUIReceiveProjectChoosePathAction) => {
       switch (action.type) {
         case PyramidUIActionTypes.RECEIVE_PROJECT_CHOOSE_PATH:
@@ -91,7 +34,54 @@ const Component: FunctionComponent<IProps> = props => {
           break;
       }
     });
+  }, []);
 
+  const {
+    form,
+    form: { getFieldDecorator },
+  } = props;
+
+  const templetOptions = BlockPackageEndType;
+  const pkgmtOptions = [
+    { label: 'yarn', value: 'yarn' }
+  ];
+
+  // /**
+  //  * 正则表达式
+  //  */
+  // const validateChineseName = (rule, value, callback) => {
+  //   const regex = /^[\u4e00-\u9fa5]+$/;
+  //   if (value && regex.test(value)) {
+  //     callback();
+  //   } else {
+  //     callback(new Error('中文名必须输入汉字'));
+  //   }
+  // };
+  //
+  // const validateEnglishnName = (rule, value, callback) => {
+  //   const regex = /^\w+$/;
+  //   if (value && regex.test(value)) {
+  //     callback();
+  //   } else {
+  //     callback(new Error('英文名必须输入字母或数字'));
+  //   }
+  // };
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    form.validateFields((err, fieldsValue) => {
+      if (!err) {
+        delete fieldsValue['img'];
+        const params = fieldsValue;
+        params['remarkImg'] = imageUrl;
+        pyramidUiService.sendMessageFn(new PyramidUISendProjectBlockCreateAction({blockPackageInfo: params}));
+        props.closeModal(true);
+      }
+    });
+  };
+
+  const handleSelectPath = () => {
+    pyramidUiService.sendMessageFn(new PyramidUISendProjectChoosePathAction());
   };
 
   // 将base64转换成formData
@@ -106,26 +96,24 @@ const Component: FunctionComponent<IProps> = props => {
     let fd = new FormData();
     fd.append('file', blob, Date.now() + '.jpg');
     return fd;
-  }
+  };
 
   const getBase64 = (img, callback) => {
     const reader = new FileReader();
     reader.addEventListener('load', () => callback(reader.result));
     reader.readAsDataURL(img);
-  }
+  };
 
   const handleChange = info => {
     if (info.file.status === 'uploading') {
-      setImgLoading(true)
+      setImgLoading(true);
       return;
     }
     if (info.file.status === 'done') {
-      // Get this url from response in real world.
       getBase64(info.file.originFileObj, imageUrl =>{
-          setImgLoading(false)
+          setImgLoading(false);
           mainRequest.uploadImg(toFromData(imageUrl)).then(res=>{
-            console.log('res', res)
-            setImageUrl(res.url)
+            setImageUrl(res.url);
           })
         }
       );
@@ -142,15 +130,14 @@ const Component: FunctionComponent<IProps> = props => {
       message.error('Image must smaller than 2MB!');
     }
     return isJpgOrPng && isLt2M;
-  }
+  };
 
   const uploadButton = (
     <div>
       <Icon type={imgLoading ? 'loading' : 'plus'} />
-      <div className="ant-upload-text">上传照片</div>
+      <div className="ant-upload-text">上传图片</div>
     </div>
   );
-
 
   return (
     <Modal
@@ -162,40 +149,41 @@ const Component: FunctionComponent<IProps> = props => {
       onCancel={() => props.closeModal()}>
 
       <Form onSubmit={handleSubmit}>
-        <FormItem>
-          中文名称{getFieldDecorator(`menuNameZh`, {
-          rules: [
-            { required: true, message: '必填' },
-            {
-              validator: validateChineseName,
-            }
-          ],
-        })(<Input placeholder="中文名称" />)}
-        </FormItem>
-        <FormItem>
-          英文名称 {getFieldDecorator(`menuNameEn`, {
-          rules: [
-            { required: true, message: '必填' },
-            {
-              validator: validateEnglishnName,
-            }
-          ],
-        })(<Input placeholder="英文名称" />)}
-        </FormItem>
-        <FormItem>
-          目录{getFieldDecorator(`filePath`, {
-          rules: [
-            { required: true, message: '必填' }
-          ],
-        })(<Input placeholder="目录" onClick={() => handleSelectPath()}/>)}
+        <FormItem label='英文名称'>
+          {getFieldDecorator(`menuNameEn`, {
+            rules: [
+              { required: true, message: '必填' },
+              // {
+              //   validator: validateEnglishnName,
+              // }
+            ],
+          })(<Input placeholder="英文名称" />)}
         </FormItem>
 
-        <FormItem>
-          包管理器
+        <FormItem label='中文名称'>
+          {getFieldDecorator(`menuNameZh`, {
+            rules: [
+              { required: true, message: '必填' },
+              // {
+              //   validator: validateChineseName,
+              // }
+            ],
+          })(<Input placeholder="请输入" />)}
+        </FormItem>
+
+        <FormItem label='目录'>
+          {getFieldDecorator(`filePath`, {
+            rules: [
+              { required: true, message: '必填' }
+            ],
+          })(<Input placeholder="请选择" onClick={() => handleSelectPath()}/>)}
+        </FormItem>
+
+        <FormItem label='包管理器'>
           {getFieldDecorator('package', { initialValue: pkgmtOptions[0].value })(
             <Select
-              placeholder="包管理器"
-              allowClear={true}
+              placeholder="请选择"
+              allowClear={false}
             >
               {pkgmtOptions.map(data => {
                 return (
@@ -208,16 +196,15 @@ const Component: FunctionComponent<IProps> = props => {
           )}
         </FormItem>
 
-        <FormItem>
-          类型
-          {getFieldDecorator('applyType', { initialValue: templetOptions[0].value })(
+        <FormItem label='类型'>
+          {getFieldDecorator('applyType', { initialValue: templetOptions[0].extraValue })(
             <Select
-              placeholder="类型"
-              allowClear={true}
+              placeholder="请选择"
+              allowClear={false}
             >
               {templetOptions.map(data => {
                 return (
-                  <Select.Option value={data.value} key={data.value}>
+                  <Select.Option value={data.extraValue} key={data.extraValue}>
                     {data.label}
                   </Select.Option>
                 );
@@ -226,33 +213,29 @@ const Component: FunctionComponent<IProps> = props => {
           )}
         </FormItem>
 
-        <FormItem className={styles.uploadImg}>
-          图片描述{getFieldDecorator(`img`, {
-   /*       rules: [
-            { required: true, message: '必填' }
-          ],*/
-        })(
-          <Upload
-            name="avatar"
-            listType="picture-card"
-            showUploadList={false}
-         /*   action={API_CONFIG.MAIN.UPLOAD_IMG}*/
-            beforeUpload={beforeUpload}
-            onChange={handleChange}
-          >
-            {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
-          </Upload>
-        )}
-        <div style={{fontSize:'12px', color:'rgba(1, 1, 1, 0.45)'}}>只支持.jpg格式</div>
+        <FormItem label='图片' extra='只支持.jpg格式'>
+          {getFieldDecorator(`img`)(
+            <Upload
+              name="avatar"
+              listType="picture-card"
+              showUploadList={false}
+              beforeUpload={beforeUpload}
+              onChange={handleChange}
+            >
+              {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
+            </Upload>
+          )}
         </FormItem>
+
         <FormItem >
-          <Button type="primary" htmlType="submit">
+          <Button type="primary" htmlType="submit" style={{marginRight: 10}}>
             确定
           </Button>
           <Button htmlType="reset" onClick={() => props.closeModal()}>
             取消
           </Button>
         </FormItem>
+
       </Form>
     </Modal>
   );

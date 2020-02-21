@@ -135,7 +135,7 @@ module.exports = (options) => {
         const args1 = program.args[1];
         const projectName = program.args[1][0];
 
-        let {initProjectUrl, initProjectType, initProjectGitUrl, initProjectChineseName} = options;
+        let {initProjectUrl, initProjectType, initProjectGitUrl, initProjectChineseName, initProjectCover, initProjectRemark} = options;
 
         // 默认初始化地址
         if (!initProjectUrl) {
@@ -150,6 +150,12 @@ module.exports = (options) => {
             initProjectType = 'pc'
         } else if (initProjectType === '2') {
             initProjectType = 'mobile';
+        }
+        if (!initProjectCover) {
+            initProjectCover = '';
+        }
+        if (!initProjectRemark) {
+            initProjectRemark = '';
         }
 
         if (!args1 || !projectName) {
@@ -186,7 +192,9 @@ module.exports = (options) => {
                 blockPackageName: projectName,
                 blockPackageType: initProjectType,
                 blockPackageGitUrl: initProjectGitUrl,
-                blockPackageChineseName: initProjectChineseName
+                blockPackageChineseName: initProjectChineseName,
+                blockPackageCover: initProjectCover,
+                blockPackageRemark: initProjectRemark
             };
             const pyramidBlockJsonFile = `${projectPath}/pyramid-blocks.json`;
             const pyramidBlockJsonContent = fs.readFileSync(pyramidBlockJsonFile).toString();

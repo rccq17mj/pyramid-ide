@@ -83,8 +83,7 @@ const PropertyLibraryBlock: FunctionComponent<IProps> = (props) => {
           // 数据转换保持和原来数据一致
           list.forEach(item => {
             item.id = item._id;
-            // todo 这里是否需要增加中文名称
-            item.chineseName = item.blockPackageName;
+            item.chineseName = item.blockPackageChineseName || item.blockPackageName;
             item.englishName = item.blockPackageName;
           });
           setCards(list);
