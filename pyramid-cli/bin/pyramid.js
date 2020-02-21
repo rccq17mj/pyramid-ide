@@ -58,6 +58,10 @@ program
     .option('--get-project-url <getProjectUrl>', 'query block template info with projectUrl')
     .option('--get-project-branch <getProjectBranch>', 'query block template info with projectBranch', 'master')
 
+    // update -- options（只能修改本地的）
+    .option('--update-project-path <updateProjectPath>', 'update block template info with projectPath')
+    .option('--update-project-git-url <updateProjectGitUrl>', 'update block template info with git url')
+
     .action((_a, _b, options) => {
         require('../commands/block-package')(options.opts());
     });

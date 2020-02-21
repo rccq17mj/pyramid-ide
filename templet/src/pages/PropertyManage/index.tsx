@@ -16,7 +16,7 @@ import {
   PyramidUIReceiveActionsUnion,
 } from "@/core/pyramid-ui/action/pyramid-ui-receive.action";
 import {PyramidUIActionTypes} from "@/core/pyramid-ui/action";
-import {EBlockPackageAssemblyType} from "@/dicts/block-package.dict";
+import {EBlockPackageAssemblyType, EBlockPackageEndNumberType} from "@/dicts/block-package.dict";
 
 interface ILeftBtn {
   name: string;
@@ -29,8 +29,13 @@ interface IProps {
       // 项目信息
       projectInfo: {
         _id: string;
-        applyType: string;
+        applyType: EBlockPackageEndNumberType;
         absolutePath: string;
+        package: string;
+        remarkImg: string;
+        filePath: string;
+        menuNameEn: string;
+        menuNameZh: string;
       },
       blockPackageAssemblyType: EBlockPackageAssemblyType
     }
@@ -191,7 +196,12 @@ const PropertyManage: FunctionComponent<IProps> = (props) => {
             <div style={{ float: 'right' }}>
               <Row gutter={[6, 18]}>
                 <Col span={13}>
-                  <Button onClick={()=>{setReleaseModalVisible(true)}} type="default" icon="build">发布</Button>
+                  <Button onClick={()=>{
+                    setModalParams({
+                      projectInfo: props.location.query.projectInfo
+                    });
+                    setReleaseModalVisible(true);
+                  }} type="default" icon="build">发布</Button>
                 </Col>
               </Row>
             </div>
@@ -248,11 +258,12 @@ const PropertyManage: FunctionComponent<IProps> = (props) => {
       {/* 发布 */}
       {releaseModalVisible ? (
         <Release
+          params={modalParams}
           modalVisible={releaseModalVisible}
           closeModal={success => {
+            setModalParams(modalParams);
             setReleaseModalVisible(false);
             if (success) {
-              //simpleTable.loadData();
             }
           }}
         />
