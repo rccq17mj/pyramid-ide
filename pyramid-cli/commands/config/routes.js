@@ -37,6 +37,7 @@ module.exports = (options) => {
     if (action === 'getPathTree') {// 获取 path 树
         // 还原真实的对象
         const pathTree = [];
+        let level = 1;
 
         traverse(ast, {
             ObjectExpression({ node, parent }) {
@@ -51,7 +52,7 @@ module.exports = (options) => {
 
                     if (t.isObjectProperty(p) && t.isIdentifier(key) && key.name === 'routes') {
                         // 递归遍历
-                        const recursionFn = (routes, pathTree) => {
+                        const recursionFn = (routes, pathTree, level) => {
                             const { elements } = routes;
 
                             // 遍历属性
@@ -67,6 +68,7 @@ module.exports = (options) => {
 
                                     if (rkey.name === 'path') {// TODO 保证 path 在 routes 上面
                                         routeObj.path = rvalue.value;
+                                        routeObj.level = level;
                                     }
 
                                     if (rkey.name === 'redirect') {
@@ -85,7 +87,7 @@ module.exports = (options) => {
 
                                 // 属性遍历完了，在遍历
                                 if (routeObj.children) {
-                                    recursionFn(routeObj.original, routeObj.children);
+                                    recursionFn(routeObj.original, routeObj.children, level + 1);
                                 }
 
                                 delete routeObj.original;
@@ -95,7 +97,7 @@ module.exports = (options) => {
                             });
                         };
 
-                        recursionFn(value, pathTree);
+                        recursionFn(value, pathTree, level);
                     }
                 });
             }
