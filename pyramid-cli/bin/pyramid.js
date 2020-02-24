@@ -116,7 +116,23 @@ program
 // 格式示列：pyramid config routes getPathTree
 program.command('config <attribute> <action> [options...]')
     .description('config actions')
+
+    // addRouteLayout --options
+    .option('--add-route-layout-level <addRouteLayoutLevel>', '', 1)
+    .option('--add-route-layout-path <addRouteLayoutPath>', '')
+    .option('--add-route-layout-parent-path <addRouteLayoutParentPath>', '')
+    .option('--add-route-layout-file-path <addRouteLayoutFilePath>', '')
+    .option('--add-route-layout-name <addRouteLayoutName>', '')
+    .option('--add-route-layout-icon <addRouteLayoutIcon>', '')
+    .option('--add-route-layout-component <addRouteLayoutComponent>', 'UserLayout | BasicLayout | BlankLayout')
+
     .action((_a, _b, _c, options) => {
+        require('../commands/config/index')(options.opts());
+    });
+
+program.command('util <action> [options...]')
+    .description('config actions')
+    .action((_a, _b, options) => {
         require('../commands/config/index')(options.opts());
     });
 
