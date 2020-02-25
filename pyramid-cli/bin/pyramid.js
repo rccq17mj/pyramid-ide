@@ -133,7 +133,7 @@ program.command('config <attribute> <action> [options...]')
 program.command('util <action> [options...]')
     .description('config actions')
     .action((_a, _b, options) => {
-        require('../commands/config/index')(options.opts());
+        require('../commands/util/index')(options.opts());
     });
 
 // 帮助
